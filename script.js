@@ -10,24 +10,25 @@ const productos = [
 ];
 
 function cargarProductos() {
-    const catalogo = document.getElementById('catalog');
+    const catalogo = document.getElementById('catalog'); 
     if (!catalogo) return;
 
     catalogo.innerHTML = ""; // Limpia el espacio blanco
 
     productos.forEach(p => {
         const tarjeta = document.createElement('div');
+        // Estilo rápido para que se vea ordenado
         tarjeta.style = "border: 1px solid #ddd; margin: 10px; padding: 15px; border-radius: 10px; text-align: center; background: white; width: 200px; display: inline-block; vertical-align: top;";
         tarjeta.innerHTML = `
             <img src="img/${p.foto}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px;" onerror="this.src='https://via.placeholder.com/150?text=EDP+Gourmet'">
             <h3 style="font-size: 16px; color: #630E16; margin: 10px 0;">${p.nombre}</h3>
             <p style="color: #666;">${p.presentacion}</p>
             <p style="font-weight: bold; color: #333;">$${p.precioUSD.toFixed(2)}</p>
-            <button style="background: #630E16; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Agregar</button>
+            <button style="background: #630E16; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; width: 100%;">Agregar</button>
         `;
         catalogo.appendChild(tarjeta);
     });
 }
 
-// Esto hace que los productos carguen apenas se abra la página
-window.addEventListener('load', cargarProductos);
+// Llama a la función cuando la página cargue
+window.addEventListener('DOMContentLoaded', cargarProductos);
