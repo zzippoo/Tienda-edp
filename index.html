@@ -3,59 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E.D.P. Gourmet | Salsas Artesanales</title>
-    <link rel="stylesheet" href="styles.css">
-    <meta name="theme-color" content="#630E16">
+    <title>E.D.P. Gourmet</title>
+    <style>
+        :root { --vinotinto: #630E16; --dorado: #FFD700; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #f0f0f0; color: #333; }
+        header { background: var(--vinotinto); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .btn-carrito { background: var(--dorado); border: none; padding: 10px 15px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        #catalog { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+        
+        /* TARJETA DE PRODUCTO */
+        .card { background: white; width: 320px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; display: flex; flex-direction: column; }
+        .img-container { width: 100%; height: 250px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #eee; }
+        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 10px; }
+        .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .titulo { font-size: 22px; color: var(--vinotinto); margin: 0; font-weight: 800; text-transform: uppercase; }
+        .presentacion { font-size: 16px; color: #666; margin: 5px 0 15px 0; font-weight: bold; }
+        .descripcion { font-size: 14px; line-height: 1.5; color: #444; margin-bottom: 15px; flex-grow: 1; }
+        .precios { background: #f9f9f9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; border: 1px solid #eee; }
+        .precio-usd { font-size: 24px; font-weight: 900; display: block; }
+        .precio-bs { font-size: 18px; color: var(--vinotinto); font-weight: bold; }
+        .chef-box { background: #fffde7; border-left: 5px solid var(--dorado); padding: 10px; font-size: 13px; border-radius: 4px; margin-bottom: 15px; }
+        .btn-agregar { background: var(--vinotinto); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: 0.3s; }
+        
+        /* MODALES */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1001; justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; overflow: hidden; max-height: 90vh; display: flex; flex-direction: column; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+    </style>
 </head>
 <body>
-    <header style="background: #630E16; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
-        <h1 style="margin: 0; font-size: 20px;">E.D.P.</h1>
-        <div id="tasa-display" style="font-size: 14px; color: #FFD700;">Tasa BCV: <span id="tasa-val">0.00</span> Bs.</div>
-        <button onclick="toggleCart()" style="background: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
-            🛒 <span id="cart-count">0</span>
-        </button>
+    <header>
+        <div style="font-size: 22px; font-weight: 900; letter-spacing: 1px;">E.D.P. GOURMET</div>
+        <button class="btn-carrito" onclick="toggleCart()">🛒 <span id="cart-count">0</span> PRODUCTOS</button>
     </header>
 
-    <div id="auth-wall" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 20px;">
-        <img src="img/logo.png" style="width: 100px; margin-bottom: 20px;" onerror="this.style.display='none'">
-        <h2 style="color: #FFD700;">¡Bienvenido a E.D.P. Gourmet!</h2>
-        <p>Ingresa tus datos para ver el catálogo:</p>
-        <form id="auth-form" style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px;">
-            <input type="text" id="user-name" placeholder="Nombre completo" required style="padding: 12px; border-radius: 5px; border: none;">
-            <input type="tel" id="user-phone" placeholder="Teléfono" required style="padding: 12px; border-radius: 5px; border: none;">
-            <button type="submit" style="background: #630E16; color: white; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">VER CATÁLOGO</button>
-        </form>
+    <div style="background: #e0e0e0; text-align: center; padding: 8px; font-weight: bold;">
+        Tasa BCV: <span id="tasa-val">0.00</span> Bs.
     </div>
 
-    <main id="catalog" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; background: #f4f4f4; min-height: 80vh;"></main>
+    <div id="auth-wall" class="modal" style="display: flex;">
+        <div class="modal-content" style="padding: 30px; text-align: center;">
+            <h2 style="color: var(--vinotinto); margin-top: 0;">¡Hola Alfredo!</h2>
+            <p>Por favor, regístrate para continuar al catálogo:</p>
+            <form id="auth-form">
+                <input type="text" id="user-name" placeholder="Nombre y Apellido" required>
+                <input type="email" id="user-email" placeholder="Correo Electrónico" required>
+                <input type="tel" id="user-phone" placeholder="Número de WhatsApp" required>
+                <button type="submit" class="btn-agregar">INGRESAR AHORA</button>
+            </form>
+        </div>
+    </div>
 
-    <div id="cart-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center; padding: 20px;">
-        <div style="background: white; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
-            <div style="background: #630E16; color: white; padding: 15px; display: flex; justify-content: space-between;">
+    <main id="catalog"></main>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div style="background: var(--vinotinto); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="margin:0;">Tu Pedido</h3>
-                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size: 20px; cursor:pointer;">✕</button>
+                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size: 24px; cursor:pointer;">✕</button>
             </div>
-            <div id="cart-items" style="padding: 15px; overflow-y: auto; flex-grow: 1;"></div>
-            <div style="padding: 15px; border-top: 1px solid #eee; background: #f9f9f9;">
-                <p style="margin: 0; display: flex; justify-content: space-between;"><strong>Total:</strong> <span id="total-usd">$0.00</span></p>
-                <p style="margin: 5px 0; display: flex; justify-content: space-between; color: #630E16;"><strong>En Bs:</strong> <span id="total-bs">Bs 0.00</span></p>
-                <hr>
+            <div id="cart-items" style="padding: 20px; overflow-y: auto; flex-grow: 1;"></div>
+            <div style="padding: 20px; border-top: 2px solid #eee; background: #f9f9f9;">
+                <p style="font-size: 18px; margin: 0 0 15px 0; display: flex; justify-content: space-between;">
+                    <strong>Total:</strong> <span id="total-info"></span>
+                </p>
                 <form id="checkout-form">
-                    <input type="text" id="shipping-address" placeholder="Dirección de entrega" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                    <select id="payment-method" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <select id="shipping-method" required>
+                        <option value="" disabled selected>Selecciona método de envío</option>
+                        <option value="MRW">MRW (Nacional)</option>
+                        <option value="Zoom">Zoom (Nacional)</option>
+                        <option value="Tealca">Tealca (Nacional)</option>
+                        <option value="Delivery">Delivery (Caracas)</option>
+                        <option value="Pickup">Pickup (Retiro en Persona)</option>
+                    </select>
+                    <select id="payment-method" required>
+                        <option value="" disabled selected>Selecciona método de pago</option>
                         <option value="Pago Móvil">Pago Móvil</option>
                         <option value="Zelle">Zelle</option>
                         <option value="Efectivo">Efectivo</option>
                     </select>
-                    <button type="submit" style="background: #28a745; color: white; width: 100%; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">ENVIAR PEDIDO POR WHATSAPP</button>
+                    <textarea id="shipping-address" placeholder="Dirección detallada de entrega..." required></textarea>
+                    <button type="submit" class="btn-agregar" style="background: #28a745;">FINALIZAR PEDIDO POR WHATSAPP</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <footer style="text-align: center; padding: 20px; color: #888; font-size: 12px;">
-        © 2026 E.D.P. Gourmet | Salsas Artesanales
-    </footer>
 
     <script src="script.js"></script>
 </body>
