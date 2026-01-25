@@ -1,0 +1,21 @@
+{
+  "name": "E.D.P. Gourmet",
+  "short_name": "EDP",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#630E16",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/630E16/C5A059?text=EDP",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/630E16/C5A059?text=EDP+Gourmet",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
