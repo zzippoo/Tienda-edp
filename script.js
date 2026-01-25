@@ -1,7 +1,8 @@
-// 1. CONFIGURACIÓN DE TASA
+// 1. CONFIGURACIÓN GLOBAL
 const tasaBCV = 54.50; 
+const WHATSAPP_DESTINO = "584123418345"; 
 
-// 2. BASE DE DATOS OFICIAL (35 PRODUCTOS - TEXTOS ORIGINALES EXCEL)
+// 2. BASE DE DATOS COMPLETA (35 PRODUCTOS CON TEXTOS ORIGINALES)
 const productos = [
     { id: 1, nombre: "Salsa Tamarindo Agridulce", presentacion: "150 ml", precioUSD: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo, langostinos, nuggets de pollo y las costillitas de cerdo a la barbacoa.", desc: "Nuestra Salsa de Tamarindo Agridulce es una explosión de sabores tropicales en cada gota. Elaborada con los tamarindos más frescos y selectos, esta salsa combina a la perfección la acidez natural de la fruta con un toque dulce artesanal." },
     { id: 2, nombre: "Salsa Tamarindo Agridulce", presentacion: "255 ml", precioUSD: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo, langostinos, nuggets de pollo y las costillitas de cerdo a la barbacoa.", desc: "Nuestra Salsa de Tamarindo Agridulce es una explosión de sabores tropicales en cada gota. Elaborada con los tamarindos más frescos y selectos, esta salsa combina a la perfección la acidez natural de la fruta con un toque dulce artesanal." },
@@ -42,95 +43,68 @@ const productos = [
 
 let carrito = [];
 
-// 3. INICIALIZACIÓN
 window.addEventListener('load', () => {
     document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
     renderizarCatalog();
     if(localStorage.getItem('edp_user_email')) {
         document.getElementById('auth-wall').style.display = 'none';
-    } else {
-        document.getElementById('auth-wall').style.display = 'flex';
     }
 });
 
-// 4. RENDERIZADO DEL CATÁLOGO (DIAGRAMACIÓN MEJORADA PARA TEXTO LARGO)
 function renderizarCatalog() {
     const catalog = document.getElementById('catalog');
     if(!catalog) return;
     
     catalog.innerHTML = productos.map(p => `
-        <div class="card" style="width: 350px; min-height: 750px; display: flex; flex-direction: column; background: white; border-radius: 15px; margin: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
-            <div class="img-container" style="width: 100%; height: 280px; background: white; display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="width: 350px; min-height: 750px; background: white; border-radius: 15px; margin: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column;">
+            <div style="width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: white;">
                 <img src="img/${p.foto}" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+GOURMET'">
             </div>
-            <div class="info" style="padding: 25px; flex-grow: 1; display: flex; flex-direction: column;">
-                <h3 class="titulo" style="color: #630E16; font-size: 24px; margin: 0; font-weight: 800; text-transform: uppercase;">${p.nombre}</h3>
-                <div class="presentacion" style="font-size: 18px; color: #666; font-weight: bold; margin: 5px 0 15px;">${p.presentacion}</div>
-                
-                <div class="descripcion" style="font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 15px; text-align: justify;">
-                    ${p.desc}
+            <div style="padding: 25px; flex-grow: 1; display: flex; flex-direction: column;">
+                <h3 style="color: #630E16; font-size: 24px; margin: 0; font-weight: 800; text-transform: uppercase;">${p.nombre}</h3>
+                <div style="font-size: 18px; color: #666; font-weight: bold; margin: 5px 0 15px;">${p.presentacion}</div>
+                <div style="font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 15px; text-align: justify;">${p.desc}</div>
+                <div style="background: #fffde7; border-left: 5px solid #FFD700; padding: 15px; font-size: 14px; border-radius: 5px; margin-bottom: 20px;">
+                    <strong style="color: #630E16;">👨‍🍳 Sugerencia:</strong><br>${p.chef}
                 </div>
-                
-                <div class="chef-box" style="background: #fffde7; border-left: 5px solid #FFD700; padding: 15px; font-size: 14px; border-radius: 5px; margin-bottom: 20px; color: #444;">
-                    <strong style="color: #630E16;">👨‍🍳 Sugerencia del Chef:</strong><br>${p.chef}
-                </div>
-
                 <div style="margin-top: auto;">
-                    <div class="precios" style="background: #f9f9f9; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #eee; margin-bottom: 15px;">
-                        <div style="font-size: 28px; font-weight: 900; color: #222;">$${p.precioUSD.toFixed(2)}</div>
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #eee; margin-bottom: 15px;">
+                        <div style="font-size: 28px; font-weight: 900;">$${p.precioUSD.toFixed(2)}</div>
                         <div style="font-size: 18px; color: #630E16; font-weight: bold;">Bs ${(p.precioUSD * tasaBCV).toFixed(2)}</div>
                     </div>
-                    <button class="btn-agregar" onclick="addToCart(${p.id})" style="background: #630E16; color: white; border: none; padding: 18px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%;">AÑADIR AL PEDIDO</button>
+                    <button onclick="addToCart(${p.id})" style="background: #630E16; color: white; border: none; padding: 18px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer;">AÑADIR AL PEDIDO</button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-// 5. LÓGICA DEL CARRITO
 window.addToCart = function(id) {
     const prod = productos.find(x => x.id === id);
     carrito.push(prod);
     updateUI();
-    const btn = event.target;
-    btn.innerText = "¡AÑADIDO!";
-    btn.style.background = "#28a745";
-    setTimeout(() => {
-        btn.innerText = "AÑADIR AL PEDIDO";
-        btn.style.background = "#630E16";
-    }, 1000);
 };
 
 function updateUI() {
     document.getElementById('cart-count').innerText = carrito.length;
     const total = carrito.reduce((s, p) => s + p.precioUSD, 0);
-    document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
+    const totalBS = (total * tasaBCV).toFixed(2);
+    document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${totalBS}`;
     
-    const container = document.getElementById('cart-items');
-    if(container) {
-        container.innerHTML = carrito.map((p, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                <div style="text-align:left;">
-                    <b style="font-size:14px;">${p.nombre}</b><br>
-                    <small>${p.presentacion} - $${p.precioUSD.toFixed(2)}</small>
-                </div>
-                <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer; font-size:18px;">✕</button>
-            </div>
-        `).join('');
-    }
+    document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+            <span style="font-size:14px;">${p.nombre} (${p.presentacion})</span>
+            <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
+        </div>
+    `).join('');
 }
 
-window.remove = function(i) {
-    carrito.splice(i, 1);
-    updateUI();
-};
-
-window.toggleCart = function() {
+window.remove = (i) => { carrito.splice(i, 1); updateUI(); };
+window.toggleCart = () => { 
     const m = document.getElementById('cart-modal');
     m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
 };
 
-// 6. FORMULARIOS
 document.getElementById('auth-form').onsubmit = (e) => {
     e.preventDefault();
     localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
@@ -144,19 +118,19 @@ document.getElementById('checkout-form').onsubmit = (e) => {
     if(carrito.length === 0) return alert("El carrito está vacío.");
 
     const user = localStorage.getItem('edp_user_name');
-    const ship = document.getElementById('shipping-method').value;
     const pay = document.getElementById('payment-method').value;
+    const ship = document.getElementById('shipping-method').value;
     const addr = document.getElementById('shipping-address').value;
     
     const totalUSD = carrito.reduce((s, p) => s + p.precioUSD, 0).toFixed(2);
     const totalBS = (totalUSD * tasaBCV).toFixed(2);
 
-    let msg = `*NUEVO PEDIDO EDP GOURMET*\n`;
+    let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
     msg += `--------------------------\n`;
-    msg += `*Cliente:* ${user}\n`;
-    msg += `*Envío:* ${ship}\n`;
-    msg += `*Pago:* ${pay}\n`;
-    msg += `*Dirección:* ${addr}\n\n`;
+    msg += `👤 *Cliente:* ${user}\n`;
+    msg += `💰 *Pago:* ${pay}\n`;
+    msg += `🚚 *Envío:* ${ship}\n`;
+    msg += `📍 *Dirección:* ${addr}\n\n`;
     msg += `*PRODUCTOS:*\n`;
     
     const resumen = {};
@@ -169,7 +143,9 @@ document.getElementById('checkout-form').onsubmit = (e) => {
         msg += `• ${cant}x ${prod}\n`;
     }
     
-    msg += `\n*TOTAL:* $${totalUSD} / Bs ${totalBS}\n`;
+    msg += `\n💵 *TOTAL:* $${totalUSD} / Bs ${totalBS}\n`;
+    msg += `--------------------------\n`;
+    msg += `_Hola Alfredo, ya realicé mi pago. Adjunto el comprobante._`;
     
-    window.open(`https://wa.me/584124110300?text=${encodeURIComponent(msg)}`);
+    window.open(`https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(msg)}`);
 };
