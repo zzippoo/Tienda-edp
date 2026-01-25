@@ -84,3 +84,27 @@
     </script>
 </body>
 </html>
+// CÓDIGO DE EMERGENCIA PARA EL FORMULARIO
+document.addEventListener('submit', function(e) {
+    // Buscamos cualquier formulario que sea el de registro
+    if (e.target.id === 'registro-form' || e.target.closest('form')) {
+        e.preventDefault();
+        console.log("Entrando a la tienda...");
+        
+        // Buscamos el modal de bienvenida
+        const modal = document.getElementById('bienvenida-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            // Guardamos que ya entró para que no pida los datos otra vez
+            localStorage.setItem('usuario_registrado', 'true');
+        }
+    }
+});
+
+// Si el usuario ya entró antes, cerramos el modal apenas cargue la página
+window.addEventListener('load', function() {
+    if (localStorage.getItem('usuario_registrado') === 'true') {
+        const modal = document.getElementById('bienvenida-modal');
+        if (modal) modal.style.display = 'none';
+    }
+});
