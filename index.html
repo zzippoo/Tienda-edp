@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- Auth Wall -->
     <div id="auth-wall" class="overlay">
         <div class="modal">
             <h1>E.D.P.</h1>
@@ -19,12 +18,11 @@
                 <input type="text" id="user-name" placeholder="Nombre Completo" required>
                 <input type="email" id="user-email" placeholder="Correo Electrónico" required>
                 <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 0412...)" required>
-                <button type="submit" class="btn-primary">Entrar al Catálogo</button>
+                <button type="submit" onclick="cerrarMuro()" class="btn-primary">Entrar al Catálogo</button>
             </form>
         </div>
     </div>
 
-    <!-- Main App -->
     <header>
         <div class="logo">E.D.P.</div>
         <div class="bcv-badge">Tasa BCV: <span id="tasa-val">0.00</span> Bs.</div>
@@ -32,10 +30,8 @@
     </header>
 
     <main id="catalog">
-        <!-- Renderizado dinámico de productos -->
-    </main>
+        </main>
 
-    <!-- Modal Carrito/Checkout -->
     <div id="cart-modal" class="overlay hidden">
         <div class="modal cart-view">
             <button class="close-btn" onclick="toggleCart()">×</button>
@@ -77,34 +73,28 @@
     </footer>
 
     <script src="script.js"></script>
+    
     <script>
+        // Función para cerrar el muro manualmente
+        function cerrarMuro() {
+            const wall = document.getElementById('auth-wall');
+            if (wall) {
+                wall.style.display = 'none';
+                localStorage.setItem('usuario_registrado', 'true');
+            }
+        }
+
+        // Si ya entró antes, ocultar al cargar
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('usuario_registrado') === 'true') {
+                const wall = document.getElementById('auth-wall');
+                if (wall) wall.style.display = 'none';
+            }
+        });
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./service-worker.js');
         }
     </script>
 </body>
 </html>
-// CÓDIGO DE EMERGENCIA PARA EL FORMULARIO
-document.addEventListener('submit', function(e) {
-    // Buscamos cualquier formulario que sea el de registro
-    if (e.target.id === 'registro-form' || e.target.closest('form')) {
-        e.preventDefault();
-        console.log("Entrando a la tienda...");
-        
-        // Buscamos el modal de bienvenida
-        const modal = document.getElementById('bienvenida-modal');
-        if (modal) {
-            modal.style.display = 'none';
-            // Guardamos que ya entró para que no pida los datos otra vez
-            localStorage.setItem('usuario_registrado', 'true');
-        }
-    }
-});
-
-// Si el usuario ya entró antes, cerramos el modal apenas cargue la página
-window.addEventListener('load', function() {
-    if (localStorage.getItem('usuario_registrado') === 'true') {
-        const modal = document.getElementById('bienvenida-modal');
-        if (modal) modal.style.display = 'none';
-    }
-});
