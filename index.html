@@ -5,96 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>E.D.P. Gourmet | Salsas Artesanales</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#630E16">
 </head>
 <body>
-
-    <div id="auth-wall" class="overlay">
-        <div class="modal">
-            <h1>E.D.P.</h1>
-            <p>Salsas y Aderezos Gourmet</p>
-            <form id="auth-form">
-                <input type="text" id="user-name" placeholder="Nombre Completo" required>
-                <input type="email" id="user-email" placeholder="Correo Electrónico" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 0412...)" required>
-                <button type="submit" onclick="cerrarMuro()" class="btn-primary">Entrar al Catálogo</button>
-            </form>
-        </div>
-    </div>
-
-    <header>
-        <div class="logo">E.D.P.</div>
-        <div class="bcv-badge">Tasa BCV: <span id="tasa-val">0.00</span> Bs.</div>
-        <button id="cart-toggle" class="btn-cart">🛒 <span id="cart-count">0</span></button>
+    <header style="background: #630E16; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+        <h1 style="margin: 0; font-size: 20px;">E.D.P.</h1>
+        <div id="tasa-display" style="font-size: 14px; color: #FFD700;">Tasa BCV: <span id="tasa-val">0.00</span> Bs.</div>
+        <button onclick="toggleCart()" style="background: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            🛒 <span id="cart-count">0</span>
+        </button>
     </header>
 
-    <main id="catalog">
-        </main>
+    <div id="auth-wall" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 20px;">
+        <img src="img/logo.png" style="width: 100px; margin-bottom: 20px;" onerror="this.style.display='none'">
+        <h2 style="color: #FFD700;">¡Bienvenido a E.D.P. Gourmet!</h2>
+        <p>Ingresa tus datos para ver el catálogo:</p>
+        <form id="auth-form" style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px;">
+            <input type="text" id="user-name" placeholder="Nombre completo" required style="padding: 12px; border-radius: 5px; border: none;">
+            <input type="tel" id="user-phone" placeholder="Teléfono" required style="padding: 12px; border-radius: 5px; border: none;">
+            <button type="submit" style="background: #630E16; color: white; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">VER CATÁLOGO</button>
+        </form>
+    </div>
 
-    <div id="cart-modal" class="overlay hidden">
-        <div class="modal cart-view">
-            <button class="close-btn" onclick="toggleCart()">×</button>
-            <h2>Tu Pedido</h2>
-            <div id="cart-items"></div>
-            <hr>
-            <div class="totals">
-                <p>Total USD: <strong id="total-usd">$0.00</strong></p>
-                <p>Total Bs: <strong id="total-bs">Bs 0.00</strong></p>
+    <main id="catalog" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; background: #f4f4f4; min-height: 80vh;"></main>
+
+    <div id="cart-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: white; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
+            <div style="background: #630E16; color: white; padding: 15px; display: flex; justify-content: space-between;">
+                <h3 style="margin:0;">Tu Pedido</h3>
+                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size: 20px; cursor:pointer;">✕</button>
             </div>
-            
-            <form id="checkout-form">
-                <h3>Datos de Envío</h3>
-                <input type="text" id="shipping-id" placeholder="Cédula de Identidad" required>
-                <select id="shipping-method" required>
-                    <option value="">Seleccione Agencia</option>
-                    <option value="MRW">MRW</option>
-                    <option value="Zoom">Zoom</option>
-                    <option value="Tealca">Tealca</option>
-                    <option value="Entrega Personal">Entrega Personal (Valencia)</option>
-                </select>
-                <textarea id="shipping-address" placeholder="Dirección detallada o Agencia destino" required></textarea>
-                
-                <h3>Método de Pago</h3>
-                <select id="payment-method" required onchange="updatePaymentDetails(this.value)">
-                    <option value="Pago Móvil">Pago Móvil</option>
-                    <option value="Efectivo">Efectivo ($)</option>
-                    <option value="Transferencia">Transferencia Bancaria</option>
-                </select>
-                <div id="payment-instructions" class="info-box"></div>
-                
-                <button type="submit" class="btn-finalize">Finalizar Pedido por WhatsApp</button>
-            </form>
+            <div id="cart-items" style="padding: 15px; overflow-y: auto; flex-grow: 1;"></div>
+            <div style="padding: 15px; border-top: 1px solid #eee; background: #f9f9f9;">
+                <p style="margin: 0; display: flex; justify-content: space-between;"><strong>Total:</strong> <span id="total-usd">$0.00</span></p>
+                <p style="margin: 5px 0; display: flex; justify-content: space-between; color: #630E16;"><strong>En Bs:</strong> <span id="total-bs">Bs 0.00</span></p>
+                <hr>
+                <form id="checkout-form">
+                    <input type="text" id="shipping-address" placeholder="Dirección de entrega" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <select id="payment-method" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Zelle">Zelle</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                    <button type="submit" style="background: #28a745; color: white; width: 100%; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">ENVIAR PEDIDO POR WHATSAPP</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <p>© 2024 E.D.P. Gourmet | <a href="#">Política de Privacidad</a></p>
+    <footer style="text-align: center; padding: 20px; color: #888; font-size: 12px;">
+        © 2026 E.D.P. Gourmet | Salsas Artesanales
     </footer>
 
     <script src="script.js"></script>
-    
-    <script>
-        // Función para cerrar el muro manualmente
-        function cerrarMuro() {
-            const wall = document.getElementById('auth-wall');
-            if (wall) {
-                wall.style.display = 'none';
-                localStorage.setItem('usuario_registrado', 'true');
-            }
-        }
-
-        // Si ya entró antes, ocultar al cargar
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('usuario_registrado') === 'true') {
-                const wall = document.getElementById('auth-wall');
-                if (wall) wall.style.display = 'none';
-            }
-        });
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js');
-        }
-    </script>
 </body>
 </html>
