@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E.D.P. Gourmet | Salsas Artesanales</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#630E16">
+</head>
+<body>
+
+    <!-- Auth Wall -->
+    <div id="auth-wall" class="overlay">
+        <div class="modal">
+            <h1>E.D.P.</h1>
+            <p>Salsas y Aderezos Gourmet</p>
+            <form id="auth-form">
+                <input type="text" id="user-name" placeholder="Nombre Completo" required>
+                <input type="email" id="user-email" placeholder="Correo Electrónico" required>
+                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 0412...)" required>
+                <button type="submit" class="btn-primary">Entrar al Catálogo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <header>
+        <div class="logo">E.D.P.</div>
+        <div class="bcv-badge">Tasa BCV: <span id="tasa-val">0.00</span> Bs.</div>
+        <button id="cart-toggle" class="btn-cart">🛒 <span id="cart-count">0</span></button>
+    </header>
+
+    <main id="catalog">
+        <!-- Renderizado dinámico de productos -->
+    </main>
+
+    <!-- Modal Carrito/Checkout -->
+    <div id="cart-modal" class="overlay hidden">
+        <div class="modal cart-view">
+            <button class="close-btn" onclick="toggleCart()">×</button>
+            <h2>Tu Pedido</h2>
+            <div id="cart-items"></div>
+            <hr>
+            <div class="totals">
+                <p>Total USD: <strong id="total-usd">$0.00</strong></p>
+                <p>Total Bs: <strong id="total-bs">Bs 0.00</strong></p>
+            </div>
+            
+            <form id="checkout-form">
+                <h3>Datos de Envío</h3>
+                <input type="text" id="shipping-id" placeholder="Cédula de Identidad" required>
+                <select id="shipping-method" required>
+                    <option value="">Seleccione Agencia</option>
+                    <option value="MRW">MRW</option>
+                    <option value="Zoom">Zoom</option>
+                    <option value="Tealca">Tealca</option>
+                    <option value="Entrega Personal">Entrega Personal (Valencia)</option>
+                </select>
+                <textarea id="shipping-address" placeholder="Dirección detallada o Agencia destino" required></textarea>
+                
+                <h3>Método de Pago</h3>
+                <select id="payment-method" required onchange="updatePaymentDetails(this.value)">
+                    <option value="Pago Móvil">Pago Móvil</option>
+                    <option value="Efectivo">Efectivo ($)</option>
+                    <option value="Transferencia">Transferencia Bancaria</option>
+                </select>
+                <div id="payment-instructions" class="info-box"></div>
+                
+                <button type="submit" class="btn-finalize">Finalizar Pedido por WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 E.D.P. Gourmet | <a href="#">Política de Privacidad</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js');
+        }
+    </script>
+</body>
+</html>
