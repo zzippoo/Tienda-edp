@@ -19,7 +19,9 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
+            /* ALFREDO: Fondo con textura de papel artesanal premium */
             background-color: var(--crema);
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
             color: #333;
             scroll-behavior: smooth;
         }
@@ -68,26 +70,39 @@
             background-position: center;
             color: white;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
+            border-bottom: 4px solid var(--dorado);
         }
 
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
-        .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; line-height: 1.4; }
+        
+        /* ALFREDO: Eslogan con más puntos y visible */
+        .hero p { 
+            font-style: italic; 
+            font-size: 26px; 
+            max-width: 800px; 
+            margin: 25px auto; 
+            font-weight: 600; 
+            line-height: 1.5; 
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
 
         /* --- TASA BAR --- */
         .tasa-bar {
-            background: white;
+            background: rgba(255,255,255,0.9);
             text-align: center;
             padding: 10px;
             font-size: 13px;
             font-weight: 700;
             border-bottom: 1px solid #eee;
+            backdrop-filter: blur(5px);
         }
         #tasa-val { color: var(--vinotinto); text-decoration: underline; cursor: pointer; }
 
         /* --- CATEGORÍAS --- */
         .cat-bar {
-            background: white;
+            background: rgba(255,255,255,0.95);
             padding: 15px;
             display: flex;
             justify-content: flex-start;
@@ -97,7 +112,6 @@
             top: 68px;
             z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            -webkit-overflow-scrolling: touch;
         }
 
         .cat-btn {
@@ -130,10 +144,9 @@
             display: flex;
             flex-direction: column;
             transition: 0.3s;
-            border: 1px solid #eee;
+            border: 1px solid rgba(184, 134, 11, 0.15);
         }
-        .card.agotado { opacity: 0.6; filter: grayscale(0.8); }
-        .card:hover { transform: translateY(-5px); border-color: var(--dorado); }
+        .card:hover { transform: translateY(-5px); border-color: var(--dorado); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
         .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; background: #fff; display: flex; align-items: center; justify-content: center; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -142,11 +155,11 @@
         .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; }
         .titulo { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 5px; color: var(--vinotinto); font-weight: 700; }
         .pres { font-size: 15px; color: #777; font-weight: 600; margin-bottom: 10px; }
-        .desc { font-size: 13px; line-height: 1.5; color: #555; margin-bottom: 15px; flex-grow: 1; }
+        .desc { font-size: 13px; line-height: 1.5; color: #555; margin-bottom: 15px; flex-grow: 1; text-align: justify;}
         
-        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; }
+        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; border-radius: 4px; }
 
-        .price-box { margin-bottom: 15px; padding: 12px; background: #f9f9f9; border-radius: 8px; text-align: center; }
+        .price-box { margin-bottom: 15px; padding: 12px; background: #f9f9f9; border-radius: 8px; text-align: center; border: 1px dashed var(--dorado); }
         .usd { font-size: 24px; font-weight: 800; display: block; color: var(--oscuro); }
         .bs { font-size: 15px; color: var(--vinotinto); font-weight: 700; }
 
@@ -162,6 +175,22 @@
             transition: 0.3s;
         }
         .btn-add:hover { background: var(--oscuro); }
+
+        /* ALFREDO: Estilo para el Checkbox de Políticas */
+        .policy-container {
+            margin: 15px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            font-size: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        .policy-container input { width: auto; margin-top: 2px; }
 
         /* --- FOOTER & POLÍTICAS --- */
         footer { background: var(--oscuro); color: #bbb; padding: 60px 5% 30px; font-size: 13px; }
@@ -181,6 +210,7 @@
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 30px; }
+            .hero p { font-size: 20px; }
             #catalog { grid-template-columns: 1fr; }
         }
     </style>
@@ -221,7 +251,7 @@
             <div>
                 <h4 class="footer-h4">E.D.P. GOURMET</h4>
                 <p>Artesanía culinaria desde Valencia, Venezuela. Fusionamos tradición e innovación.</p>
-                <p id="rif-display">RIF: (Pendiente)</p>
+                <p>RIF: J-505626572</p>
             </div>
             <div>
                 <h4 class="footer-h4">ENVÍOS</h4>
@@ -261,11 +291,6 @@
             </div>
             <div id="cart-items" class="scroll-area"></div>
             
-            <div style="padding: 15px; background: #fffde7; border-top: 1px solid #eee;">
-                <h4 style="margin:0 0 5px 0; font-size: 14px; color: var(--vinotinto);">💳 PAGO MÓVIL:</h4>
-                <div style="font-size: 12px;">Banesco | CI 5.375.295 | 0412-3418345</div>
-            </div>
-
             <div style="padding: 20px; background: #f9f9f9;">
                 <p style="font-size: 18px; margin: 0 0 15px 0; font-weight: bold; display: flex; justify-content: space-between;">
                     <span>Total:</span> <span id="total-info">$0.00</span>
@@ -278,6 +303,12 @@
                         <option value="Pickup">Pickup</option>
                     </select>
                     <textarea id="shipping-address" placeholder="Dirección exacta o punto de referencia..." required></textarea>
+                    
+                    <label class="policy-container">
+                        <input type="checkbox" id="policy-accept" required>
+                        <span>He leído y acepto las <b>políticas de envío y condiciones</b> de E.D.P. Gourmet indicadas en el pie de página.</span>
+                    </label>
+
                     <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO POR WHATSAPP</button>
                 </form>
             </div>
@@ -316,7 +347,7 @@
         let catActual = 'todos';
         let clicksLogo = 0;
 
-        // BASE DE DATOS COMPLETA - 35 PRODUCTOS
+        // ALFREDO: Base de datos corregida (Onoto ID 22 y 23 ahora son Salsa sin picante)
         const productosBase = [
             { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo y langostinos.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural con un toque artesanal." },
             { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo a la barbacoa.", desc: "Versión familiar de nuestra explosión tropical." },
@@ -339,8 +370,9 @@
             { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping perfecto para tequeños.", desc: "Captura el aroma más emblemático de Venezuela." },
             { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base ideal para rellenos de sándwiches.", desc: "Suavidad artesanal con fragancia de ají dulce." },
             { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base para sofritos y hallacas.", desc: "Color y aroma natural sin colorantes artificiales." },
-            { id: 22, cat: "aceite", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Indispensable para guisos criollos.", desc: "Concentración superior de color tradicional." },
-            { id: 23, cat: "aceite", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor para restaurantes.", desc: "Máxima eficiencia para grandes preparaciones." },
+            // RECLASIFICADO POR ALFREDO
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Indispensable para guisos criollos.", desc: "Concentración superior de color tradicional. Salsa sin picante." },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor para restaurantes.", desc: "Máxima eficiencia para grandes preparaciones tradicionales sin picante." },
             { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Secreto de hallacas industriales.", desc: "Nuestra presentación más concentrada." },
             { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Perfecta para el uso cotidiano en casa.", desc: "Toque de color tradicional fácil de usar." },
             { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar carnes.", desc: "Consistencia perfecta para aplicaciones directas." },
@@ -381,7 +413,7 @@
                             <h3 class="titulo">${p.nombre}</h3>
                             <div class="pres">${p.pres}</div>
                             <div class="desc">${p.desc}</div>
-                            <div class="chef-hint">👨‍🍳 ${p.chef}</div>
+                            <div class="chef-hint">👨‍🍳 Sugerencia: ${p.chef}</div>
                             <div class="price-box">
                                 <span class="usd">$${conf.precio.toFixed(2)}</span>
                                 <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
@@ -408,7 +440,7 @@
             document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
             document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                    <span style="font-size:13px;">${p.nombre} (${p.pres})</span>
+                    <span style="font-size:13px; font-weight:600;">${p.nombre} (${p.pres})</span>
                     <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
                 </div>
             `).join('');
@@ -480,6 +512,18 @@
 
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
+            
+            // Verificación del Checkbox Legal
+            if(!document.getElementById('policy-accept').checked) {
+                alert("Por favor, acepte nuestras políticas de envío antes de continuar.");
+                return;
+            }
+
+            if(carrito.length === 0) {
+                alert("Tu carrito está vacío.");
+                return;
+            }
+
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
             metricas.pedidos += 1; metricas.totalUSD += total;
             localStorage.setItem('edp_metrics', JSON.stringify(metricas));
@@ -491,6 +535,7 @@
             msg += `*PRODUCTOS:*\n`;
             carrito.forEach(p => msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`);
             msg += `\n💵 *TOTAL:* $${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
+            msg += `\n\n_Acepto las políticas de envío y condiciones._`;
             
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
         };
