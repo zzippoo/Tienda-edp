@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="EDP Gourmet">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#5a0d15">
@@ -483,7 +483,12 @@
             const p = prompt("Clave Tasa:");
             if(p === CLAVE_ADMIN) {
                 const n = prompt("Nueva Tasa BCV:", tasaBCV);
-                if(n) { tasaBCV = parseFloat(n); localStorage.setItem('edp_tasa_manual', tasaBCV); location.reload(); }
+                if(n) { 
+                    tasaBCV = parseFloat(n); 
+                    localStorage.setItem('edp_tasa_manual', tasaBCV); 
+                    render(); // Renderiza de una vez
+                    document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+                }
             }
         };
 
@@ -518,6 +523,8 @@
 
         // INICIO
         window.onload = async () => {
+            // Forzar lectura de la tasa más reciente al cargar
+            tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 55.50;
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
             render();
