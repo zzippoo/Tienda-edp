@@ -185,7 +185,7 @@
         </button>
     </header>
 
-    <div class="tasa-bar">Tasa del día (BCV): <span id="tasa-val">0.00</span> Bs/USD</div>
+    <div class="tasa-bar">Tasa del día (BCV): <span id="tasa-val">Cargando...</span> Bs/USD</div>
 
     <main id="catalog"></main>
 
@@ -249,7 +249,8 @@
     </div>
 
     <script>
-        const tasaBCV = 54.50; 
+        // CONFIGURACIÓN DE TASA CON MEMORIA
+        let tasaBCV = parseFloat(localStorage.getItem('ultima_tasa_exitosa')) || 54.50; 
         const WHATSAPP_ALFREDO = "584123418345"; 
 
         const productos = [
@@ -292,9 +293,29 @@
 
         let carrito = [];
 
-        window.addEventListener('load', () => {
+        // FUNCIÓN PARA OBTENER TASA BCV DINÁMICA
+        async function actualizarTasa() {
+            try {
+                const response = await fetch('https://pydolarve.org/api/v1/dollar?page=bcv');
+                const data = await response.json();
+                
+                if (data && data.monitors && data.monitors.bcv) {
+                    const precioActual = parseFloat(data.monitors.bcv.price);
+                    tasaBCV = precioActual;
+                    localStorage.setItem('ultima_tasa_exitosa', precioActual);
+                    console.log("Tasa actualizada desde servidor: " + tasaBCV);
+                }
+            } catch (error) {
+                console.warn("Usando última tasa guardada en memoria: " + tasaBCV);
+            }
+            
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             renderizarCatalog();
+        }
+
+        window.addEventListener('load', () => {
+            actualizarTasa(); // Llamada inicial a la tasa dinámica
+            
             if(localStorage.getItem('edp_user_email')) {
                 document.getElementById('auth-wall').style.display = 'none';
             }
@@ -379,7 +400,8 @@
             });
             for (const [prod, cant] of Object.entries(resumen)) { msg += `• ${cant}x ${prod}\n`; }
             
-            msg += `\n💵 *TOTAL:* $${carrito.reduce((s,p)=>s+p.precioUSD,0).toFixed(2)}\n`;
+            const totalUSD = carrito.reduce((s,p)=>s+p.precioUSD,0);
+            msg += `\n💵 *TOTAL:* $${totalUSD.toFixed(2)} / Bs ${(totalUSD * tasaBCV).toFixed(2)}\n`;
             msg += `_Hola Alfredo, envío mi comprobante de pago._`;
             
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
