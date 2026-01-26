@@ -19,14 +19,12 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
-            /* ALFREDO: Fondo con textura de papel artesanal premium */
             background-color: var(--crema);
             background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
             color: #333;
             scroll-behavior: smooth;
         }
 
-        /* --- HEADER & NAVIGATION --- */
         header {
             background: var(--oscuro);
             color: white;
@@ -57,13 +55,11 @@
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        /* --- HERO BANNER --- */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
@@ -76,19 +72,20 @@
 
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
         
-        /* ALFREDO: Eslogan con más puntos y visible */
+        /* PUNTO 2: ESCOGAN EN UNA SOLA LÍNEA */
         .hero p { 
             font-style: italic; 
-            font-size: 26px; 
-            max-width: 800px; 
+            font-size: clamp(14px, 2.3vw, 26px); 
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 95%; 
             margin: 25px auto; 
             font-weight: 600; 
-            line-height: 1.5; 
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* --- TASA BAR --- */
         .tasa-bar {
             background: rgba(255,255,255,0.9);
             text-align: center;
@@ -96,16 +93,12 @@
             font-size: 13px;
             font-weight: 700;
             border-bottom: 1px solid #eee;
-            backdrop-filter: blur(5px);
         }
-        #tasa-val { color: var(--vinotinto); text-decoration: underline; cursor: pointer; }
 
-        /* --- CATEGORÍAS --- */
         .cat-bar {
             background: rgba(255,255,255,0.95);
             padding: 15px;
             display: flex;
-            justify-content: flex-start;
             gap: 10px;
             overflow-x: auto;
             position: sticky;
@@ -123,17 +116,17 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            transition: 0.3s;
         }
 
         .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
 
-        /* --- GRID DE PRODUCTOS --- */
+        /* PUNTO 3: ELIMINADO EL GRIS DEL FONDO */
         #catalog {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
             padding: 30px 5%;
+            background: transparent; /* Permite ver el fondo crema del body */
         }
 
         .card {
@@ -143,19 +136,17 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            transition: 0.3s;
             border: 1px solid rgba(184, 134, 11, 0.15);
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--dorado); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-        .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; background: #fff; display: flex; align-items: center; justify-content: center; }
+        .img-box { width: 100%; height: 260px; padding: 15px; display: flex; align-items: center; justify-content: center; background: #fff; box-sizing: border-box; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; }
+        .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; margin-bottom: 5px; }
         .titulo { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 5px; color: var(--vinotinto); font-weight: 700; }
         .pres { font-size: 15px; color: #777; font-weight: 600; margin-bottom: 10px; }
-        .desc { font-size: 13px; line-height: 1.5; color: #555; margin-bottom: 15px; flex-grow: 1; text-align: justify;}
+        .desc { font-size: 13px; line-height: 1.5; color: #555; margin-bottom: 15px; text-align: justify; }
         
         .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; border-radius: 4px; }
 
@@ -172,47 +163,20 @@
             font-weight: 800;
             border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
         }
-        .btn-add:hover { background: var(--oscuro); }
 
-        /* ALFREDO: Estilo para el Checkbox de Políticas */
-        .policy-container {
-            margin: 15px 0;
-            padding: 10px;
-            background: #fff;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            font-size: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            cursor: pointer;
-            line-height: 1.4;
-        }
-        .policy-container input { width: auto; margin-top: 2px; }
-
-        /* --- FOOTER & POLÍTICAS --- */
-        footer { background: var(--oscuro); color: #bbb; padding: 60px 5% 30px; font-size: 13px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .footer-h4 { color: var(--dorado-luz); font-family: 'Playfair Display', serif; margin-bottom: 15px; font-size: 18px; text-transform: uppercase; }
-        .policy-item { margin-bottom: 8px; display: block; line-height: 1.4; }
-
-        /* --- MODALES --- */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding: 10px; box-sizing: border-box; }
-        .modal-content { background:white; width:100%; max-width:500px; border-radius:15px; overflow:hidden; position:relative; max-height: 90vh; display: flex; flex-direction: column; }
+        /* MODALES */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding: 10px; }
+        .modal-content { background:white; width:100%; max-width:500px; border-radius:15px; overflow:hidden; max-height: 90vh; display: flex; flex-direction: column; }
         .modal-header { background:var(--vinotinto); color:white; padding:18px; display:flex; justify-content:space-between; align-items: center; }
         .scroll-area { padding:20px; overflow-y:auto; flex-grow: 1; }
 
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
         
-        .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
+        .policy-container { margin: 15px 0; font-size: 12px; display: flex; align-items: flex-start; gap: 10px; }
+        .policy-container input { width: auto; }
 
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 30px; }
-            .hero p { font-size: 20px; }
-            #catalog { grid-template-columns: 1fr; }
-        }
+        footer { background: var(--oscuro); color: #bbb; padding: 60px 5% 30px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -241,47 +205,9 @@
         <button class="cat-btn" onclick="filtrar('en pasta')">En Pasta</button>
         <button class="cat-btn" onclick="filtrar('vinagre')">Vinagre</button>
         <button class="cat-btn" onclick="filtrar('dulce untable')">Dulce Untable</button>
-        <button class="cat-btn" onclick="filtrar('dulce en almibar')">Dulce en Almíbar</button>
     </nav>
 
     <main id="catalog"></main>
-
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <h4 class="footer-h4">E.D.P. GOURMET</h4>
-                <p>Artesanía culinaria desde Valencia, Venezuela. Fusionamos tradición e innovación.</p>
-                <p>RIF: J-505626572</p>
-            </div>
-            <div>
-                <h4 class="footer-h4">ENVÍOS</h4>
-                <span class="policy-item">📦 Nacional: MRW, Zoom, Tealca (COD).</span>
-                <span class="policy-item">🛵 Local: Delivery Valencia / Pickup.</span>
-                <span class="policy-item">⏳ Despacho: 24-48h hábiles.</span>
-            </div>
-            <div>
-                <h4 class="footer-h4">CALIDAD</h4>
-                <span class="policy-item">🧪 Sin conservantes artificiales.</span>
-                <span class="policy-item">❄️ Refrigerar después de abrir.</span>
-                <span class="policy-item">⚠️ Garantía: 24h para reportes.</span>
-            </div>
-        </div>
-        <div style="text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid #333; opacity: 0.6;">
-            &copy; 2026 E.D.P. Gourmet. Todos los derechos reservados.
-        </div>
-    </footer>
-
-    <div id="auth-wall" class="modal">
-        <div class="modal-content" style="padding: 25px;">
-            <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
-            <p style="text-align:center; margin-bottom: 20px; font-size: 14px;">Para una atención personalizada, ingresa tus datos:</p>
-            <form id="auth-form">
-                <input type="text" id="user-name" placeholder="Nombre Completo" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 04121234567)" required>
-                <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
-            </form>
-        </div>
-    </div>
 
     <div id="cart-modal" class="modal">
         <div class="modal-content">
@@ -289,12 +215,19 @@
                 <h3 style="margin:0; font-family: 'Playfair Display';">Tu Pedido</h3>
                 <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
             </div>
+            
             <div id="cart-items" class="scroll-area"></div>
             
+            <div style="padding: 15px; background: #fffde7; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+                <h4 style="margin:0 0 5px 0; font-size: 14px; color: var(--vinotinto);">💳 PAGO MÓVIL:</h4>
+                <div style="font-size: 12px; font-weight: bold;">Banesco | CI 5.375.295 | 0412-3418345</div>
+            </div>
+
             <div style="padding: 20px; background: #f9f9f9;">
-                <p style="font-size: 18px; margin: 0 0 15px 0; font-weight: bold; display: flex; justify-content: space-between;">
+                <p style="font-size: 18px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between;">
                     <span>Total:</span> <span id="total-info">$0.00</span>
                 </p>
+                
                 <form id="checkout-form">
                     <select id="shipping-method" required>
                         <option value="" disabled selected>Método de envío</option>
@@ -302,11 +235,12 @@
                         <option value="Delivery">Delivery (Valencia)</option>
                         <option value="Pickup">Pickup</option>
                     </select>
-                    <textarea id="shipping-address" placeholder="Dirección exacta o punto de referencia..." required></textarea>
+                    
+                    <textarea id="shipping-address" placeholder="Escribe aquí tu dirección exacta o punto de referencia para la entrega..." required style="height: 80px;"></textarea>
                     
                     <label class="policy-container">
                         <input type="checkbox" id="policy-accept" required>
-                        <span>He leído y acepto las <b>políticas de envío y condiciones</b> de E.D.P. Gourmet indicadas en el pie de página.</span>
+                        <span>Acepto las políticas de envío y calidad.</span>
                     </label>
 
                     <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO POR WHATSAPP</button>
@@ -315,99 +249,57 @@
         </div>
     </div>
 
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header" style="background: #333;">
-                <h3 style="margin:0;">⚙️ Panel Admin</h3>
-                <button onclick="document.getElementById('admin-modal').style.display='none'" style="color:white; background:none; border:none; font-size:20px;">✕</button>
-            </div>
-            <div class="scroll-area">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <div style="background:var(--vinotinto); color:white; padding:15px; border-radius:10px; text-align:center;">
-                        <small>PEDIDOS</small><div id="stat-pedidos" style="font-size:20px; font-weight:bold;">0</div>
-                    </div>
-                    <div style="background:var(--dorado); color:var(--vinotinto); padding:15px; border-radius:10px; text-align:center;">
-                        <small>TOTAL USD</small><div id="stat-dinero" style="font-size:20px; font-weight:bold;">0</div>
-                    </div>
-                </div>
-                <div id="admin-product-list"></div>
-                <button onclick="reiniciarMetricas()" style="margin-top:20px; color:red; background:none; border:none; width:100%; cursor:pointer;">Reiniciar Métricas</button>
-            </div>
+    <div id="auth-wall" class="modal">
+        <div class="modal-content" style="padding: 25px;">
+            <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
+            <p style="text-align:center; font-size: 14px; margin-bottom: 20px;">Ingresa tus datos para continuar:</p>
+            <form id="auth-form">
+                <input type="text" id="user-name" placeholder="Nombre Completo" required>
+                <input type="tel" id="user-phone" placeholder="WhatsApp" required>
+                <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
+            </form>
         </div>
     </div>
+
+    <footer>
+        <div style="text-align:center; opacity: 0.6;">
+            &copy; 2026 E.D.P. Gourmet. Valencia, Venezuela.
+        </div>
+    </footer>
 
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
-        
         let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 55.50;
-        let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
-        let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
         let catActual = 'todos';
+        let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let clicksLogo = 0;
 
-        // ALFREDO: Base de datos corregida (Onoto ID 22 y 23 ahora son Salsa sin picante)
         const productosBase = [
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo y langostinos.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural con un toque artesanal." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo a la barbacoa.", desc: "Versión familiar de nuestra explosión tropical." },
-            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Perfecta para alitas de pollo y tacos.", desc: "Fusionamos la base agridulce con ajíes seleccionados." },
-            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Dale un toque exótico a tus vegetales salteados.", desc: "Equilibrio perfecto entre picor y dulzor." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Úsala en ensaladas tropicales.", desc: "Opción ligera y fresca con notas cítricas." },
-            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón a la plancha.", desc: "Intensidad ácida de la parchita con el toque del jengibre." },
-            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Elegante para quesos madurados.", desc: "Sofisticación tropical en formato grande." },
-            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Acompáñala con camarones rebozados.", desc: "Pulpa de mango dulce con el carácter del jalapeño." },
-            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Vibrante para carnes de cerdo.", desc: "Sabor audaz que recorre todo el paladar." },
-            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Excelente para empanadas y tequeños.", desc: "Sabor profundo andino con un toque gourmet." },
-            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Rescata lo tradicional con un picor audaz." },
-            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Maravillosa con queso crema y galletas.", desc: "Dulzor de guayaba roja con chispa de jengibre." },
-            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Acompañante único para jamón horneado.", desc: "Una joya artesanal para tus carnes blancas." },
-            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Indispensable en hamburguesas gourmet.", desc: "Cocción lenta para un sabor profundo y sedoso." },
-            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Ideal para tablas de quesos.", desc: "El dulzor natural de la cebolla hecho crema." },
-            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo Española", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Perfecta para papas bravas.", desc: "Emulsión clásica mediterránea intensa y cremosa." },
-            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Ideal para choripanes y carnes rojas.", desc: "Cremosidad del ajo con mezcla secreta de ajíes." },
-            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro y Perejil", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Ideal para yuca hervida y carnes.", desc: "Hierbas frescas y especias para resaltar sabores." },
-            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping perfecto para tequeños.", desc: "Captura el aroma más emblemático de Venezuela." },
-            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base ideal para rellenos de sándwiches.", desc: "Suavidad artesanal con fragancia de ají dulce." },
-            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base para sofritos y hallacas.", desc: "Color y aroma natural sin colorantes artificiales." },
-            // RECLASIFICADO POR ALFREDO
-            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Indispensable para guisos criollos.", desc: "Concentración superior de color tradicional. Salsa sin picante." },
-            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor para restaurantes.", desc: "Máxima eficiencia para grandes preparaciones tradicionales sin picante." },
-            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Secreto de hallacas industriales.", desc: "Nuestra presentación más concentrada." },
-            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Perfecta para el uso cotidiano en casa.", desc: "Toque de color tradicional fácil de usar." },
-            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar carnes.", desc: "Consistencia perfecta para aplicaciones directas." },
-            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "El aliado número uno de la cocina criolla.", desc: "El formato favorito de los cocineros profesionales." },
-            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Crea vinagretas únicas.", desc: "Vinagre artesanal con notas frutales refrescantes." },
-            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Para marinar pescados blancos.", desc: "Acidez natural del tamarindo embotellada." },
-            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Deliciosa con pan tostado.", desc: "Versión dulce y cremosa de nuestra fruta estrella." },
-            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno exquisito para repostería.", desc: "Sabor exótico equilibrado para meriendas." },
-            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Ideal para untar en pan dulce.", desc: "Esencia vibrante de la fruta de la pasión." },
-            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping ideal para helados.", desc: "Combinación cremosa con toque ácido único." },
-            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Acompaña quesos blancos frescos.", desc: "Pulpa de mango maduro suave y aromática." },
-            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar.", desc: "Sabor profundamente dulce y natural." }
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Carnes blancas.", desc: "Acidez natural con toque artesanal." },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Costillitas de cerdo.", desc: "Versión familiar." },
+            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Alitas de pollo.", desc: "Toque picante artesanal." },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Ensaladas.", desc: "Ligera y fresca." },
+            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Sofritos.", desc: "Color natural." },
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Guisos.", desc: "Tradición pura." },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Restaurantes.", desc: "Máximo rendimiento." }
         ];
-
-        // --- LÓGICA DE LA APP ---
 
         function filtrar(c) {
             catActual = c;
-            document.querySelectorAll('.cat-btn').forEach(b => {
-                const txt = b.innerText.toLowerCase();
-                b.classList.toggle('active', txt === c || (c === 'todos' && txt === 'todos'));
-            });
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase() === c));
             render();
         }
 
         function render() {
             const container = document.getElementById('catalog');
             const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
-            
             container.innerHTML = lista.map(p => {
                 const conf = configProductos[p.id] || { activo: true, precio: p.usd };
                 return `
-                    <div class="card ${conf.activo ? '' : 'agotado'}">
-                        ${conf.activo ? '' : '<div class="badge-agotado">PRODUCTO AGOTADO</div>'}
-                        <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+GOURMET'"></div>
+                    <div class="card">
+                        <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300x300?text=EDP'"></div>
                         <div class="info">
                             <span class="tag">${p.cat}</span>
                             <h3 class="titulo">${p.nombre}</h3>
@@ -418,9 +310,7 @@
                                 <span class="usd">$${conf.precio.toFixed(2)}</span>
                                 <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
                             </div>
-                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? 'var(--vinotinto)' : '#ccc'}">
-                                ${conf.activo ? 'AÑADIR AL PEDIDO' : 'AGOTADO'}
-                            </button>
+                            <button class="btn-add" onclick="addToCart(${p.id})">AÑADIR AL PEDIDO</button>
                         </div>
                     </div>
                 `;
@@ -429,14 +319,13 @@
 
         function addToCart(id) {
             const p = productosBase.find(x => x.id === id);
-            const conf = configProductos[id] || { precio: p.usd };
-            carrito.push({...p, precioUSD: conf.precio});
+            carrito.push(p);
             updateUI();
         }
 
         function updateUI() {
             document.getElementById('cart-count').innerText = carrito.length;
-            const total = carrito.reduce((s, p) => s + p.precioUSD, 0);
+            const total = carrito.reduce((s, p) => s + p.usd, 0);
             document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
             document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
@@ -449,47 +338,14 @@
         function remove(i) { carrito.splice(i, 1); updateUI(); }
         function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
 
-        // --- ADMINISTRACIÓN ---
-
         function contarClicks() {
             clicksLogo++;
             if(clicksLogo >= 5) {
                 const p = prompt("Clave Admin:");
-                if(p === CLAVE_ADMIN) abrirAdmin();
+                if(p === CLAVE_ADMIN) alert("Modo Admin (Próximamente)");
                 clicksLogo = 0;
             }
         }
-
-        function abrirAdmin() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('stat-pedidos').innerText = metricas.pedidos;
-            document.getElementById('stat-dinero').innerText = metricas.totalUSD.toFixed(2);
-            const list = document.getElementById('admin-product-list');
-            list.innerHTML = productosBase.map(p => {
-                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
-                return `
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; align-items:center;">
-                        <span style="font-size:11px; width:40%">${p.nombre}</span>
-                        <input type="number" step="0.01" value="${conf.precio}" onchange="cambiarPrecio(${p.id}, this.value)" style="width:60px; margin:0; padding:2px;">
-                        <button onclick="toggleActivo(${p.id})" style="background:${conf.activo ? 'green' : 'red'}; color:white; border:none; padding:4px; font-size:10px; border-radius:4px;">${conf.activo ? 'ACT' : 'AGOT'}</button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        window.toggleActivo = (id) => {
-            if(!configProductos[id]) configProductos[id] = { activo: true, precio: productosBase.find(x=>x.id==id).usd };
-            configProductos[id].activo = !configProductos[id].activo;
-            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
-            abrirAdmin(); render();
-        };
-
-        window.cambiarPrecio = (id, v) => {
-            if(!configProductos[id]) configProductos[id] = { activo: true, precio: 0 };
-            configProductos[id].precio = parseFloat(v);
-            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
-            render();
-        };
 
         window.adminTasa = function() {
             const p = prompt("Clave Tasa:");
@@ -499,49 +355,20 @@
             }
         };
 
-        window.reiniciarMetricas = () => { if(confirm("¿Borrar ventas?")) { metricas={pedidos:0,totalUSD:0}; localStorage.setItem('edp_metrics', JSON.stringify(metricas)); abrirAdmin(); } };
-
-        // --- ENVIAR PEDIDO ---
-
         document.getElementById('auth-form').onsubmit = (e) => {
             e.preventDefault();
             localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
-            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
             document.getElementById('auth-wall').style.display = 'none';
         };
 
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
-            
-            // Verificación del Checkbox Legal
-            if(!document.getElementById('policy-accept').checked) {
-                alert("Por favor, acepte nuestras políticas de envío antes de continuar.");
-                return;
-            }
-
-            if(carrito.length === 0) {
-                alert("Tu carrito está vacío.");
-                return;
-            }
-
-            const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
-            metricas.pedidos += 1; metricas.totalUSD += total;
-            localStorage.setItem('edp_metrics', JSON.stringify(metricas));
-
-            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
-            msg += `👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n`;
-            msg += `🚚 *Método:* ${document.getElementById('shipping-method').value}\n`;
-            msg += `📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n`;
-            msg += `*PRODUCTOS:*\n`;
-            carrito.forEach(p => msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`);
-            msg += `\n💵 *TOTAL:* $${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
-            msg += `\n\n_Acepto las políticas de envío y condiciones._`;
-            
+            const total = carrito.reduce((s,p)=>s+p.usd,0);
+            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\nCliente: ${localStorage.getItem('edp_user_name')}\nMétodo: ${document.getElementById('shipping-method').value}\nDirección: ${document.getElementById('shipping-address').value}\nTotal: $${total.toFixed(2)}`;
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
         };
 
-        // INICIO
-        window.onload = async () => {
+        window.onload = () => {
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
             render();
