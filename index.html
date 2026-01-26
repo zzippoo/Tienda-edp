@@ -277,7 +277,20 @@
                         <option value="Delivery">Delivery (Valencia)</option>
                         <option value="Pickup">Pickup</option>
                     </select>
+                    <select id="payment-method" required>
+                        <option value="" disabled selected>Método de pago</option>
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Zelle">Zelle</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transferencia">Transferencia Banesco</option>
+                    </select>
                     <textarea id="shipping-address" placeholder="Dirección exacta o punto de referencia..." required></textarea>
+                    
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
+                        <input type="checkbox" id="terms-check" style="width: auto; margin-top: 4px;" required>
+                        <label for="terms-check" style="font-size: 11px; color: #666; cursor: pointer;">Acepto las condiciones de compra, garantía de 24h y tiempos de despacho (24-48h).</label>
+                    </div>
+
                     <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO POR WHATSAPP</button>
                 </form>
             </div>
@@ -487,6 +500,7 @@
             let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
             msg += `👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n`;
             msg += `🚚 *Método:* ${document.getElementById('shipping-method').value}\n`;
+            msg += `💳 *Pago:* ${document.getElementById('payment-method').value}\n`;
             msg += `📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n`;
             msg += `*PRODUCTOS:*\n`;
             carrito.forEach(p => msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`);
