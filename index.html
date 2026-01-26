@@ -71,7 +71,6 @@
 
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(30px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
         
-        /* AJUSTE ESLOGAN: Ahora se adapta sin cortarse */
         .hero p { 
             font-style: italic; 
             font-size: clamp(16px, 2.5vw, 24px); 
@@ -116,7 +115,6 @@
 
         .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
 
-        /* AJUSTE FONDO: Sin gris, totalmente limpio */
         #catalog {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -251,54 +249,42 @@
         let carrito = [];
         let catActual = 'todos';
 
-        // LOS 35 PRODUCTOS
         const productosBase = [
-            // SALSAS SIN PICANTE
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, chef: "Carnes blancas.", desc: "Acidez natural artesanal." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, chef: "Costillitas de cerdo.", desc: "Versión familiar." },
-            { id: 3, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, chef: "Ensaladas frescas.", desc: "Ligera y tropical." },
-            { id: 4, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "255 ml", usd: 3.72, chef: "Pescados al vapor.", desc: "Sabor suave." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, chef: "Guisos criollos.", desc: "Tradición pura." },
-            { id: 6, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, chef: "Uso profesional.", desc: "Máximo rendimiento." },
-            { id: 7, cat: "salsa sin picante", nombre: "BBQ Artesanal", pres: "150 ml", usd: 3.00, chef: "Parrilladas.", desc: "Ahumado natural." },
-            { id: 8, cat: "salsa sin picante", nombre: "BBQ Artesanal", pres: "255 ml", usd: 4.50, chef: "Hamburguesas.", desc: "Textura espesa." },
-            
-            // SALSAS CON PICANTE
-            { id: 9, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, chef: "Alitas de pollo.", desc: "Picante nivel medio." },
-            { id: 10, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, chef: "Costillas picantes.", desc: "Equilibrio ideal." },
-            { id: 11, cat: "salsa con picante", nombre: "Ají Dulce Picante", pres: "150 ml", usd: 3.00, chef: "Pasapalos.", desc: "Esencia venezolana." },
-            { id: 12, cat: "salsa con picante", nombre: "Ají Dulce Picante", pres: "255 ml", usd: 4.50, chef: "Tacos y arepas.", desc: "Sabor intenso." },
-            { id: 13, cat: "salsa con picante", nombre: "Habanero Infierno", pres: "150 ml", usd: 4.00, chef: "Valientes.", desc: "Picante extremo." },
-            { id: 14, cat: "salsa con picante", nombre: "Salsa de Ajo Picante", pres: "150 ml", usd: 3.20, chef: "Pizzas.", desc: "Aroma y calor." },
-            { id: 15, cat: "salsa con picante", nombre: "Mostaza Picante", pres: "150 ml", usd: 3.50, chef: "Embutidos.", desc: "Toque gourmet." },
-
-            // ACEITES
-            { id: 16, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, chef: "Arroz y sofritos.", desc: "Color vibrante." },
-            { id: 17, cat: "aceite", nombre: "Aceite de Onoto", pres: "255 ml", usd: 4.80, chef: "Hallacas.", desc: "Indispensable." },
-            { id: 18, cat: "aceite", nombre: "Aceite Picante", pres: "150 ml", usd: 4.20, chef: "Pastas y pizzas.", desc: "Infusión artesanal." },
-            { id: 19, cat: "aceite", nombre: "Aceite de Ajo", pres: "150 ml", usd: 4.00, chef: "Pan tostado.", desc: "Sabor concentrado." },
-
-            // EN PASTA
-            { id: 20, cat: "en pasta", nombre: "Ajo en Pasta", pres: "150 ml", usd: 3.20, chef: "Adobos rápidos.", desc: "100% natural." },
-            { id: 21, cat: "en pasta", nombre: "Ajo en Pasta", pres: "500 ml", usd: 7.50, chef: "Cocina diaria.", desc: "Ahorra tiempo." },
-            { id: 22, cat: "en pasta", nombre: "Pasta de Ají Dulce", pres: "150 ml", usd: 3.50, chef: "Bases de guiso.", desc: "Sin semillas." },
-            { id: 23, cat: "en pasta", nombre: "Pasta de Jengibre", pres: "150 ml", usd: 4.00, chef: "Comida asiática.", desc: "Frescura pura." },
-
-            // DULCES UNTABLES
-            { id: 24, cat: "dulce untable", nombre: "Mermelada de Pimentón", pres: "150 ml", usd: 3.80, chef: "Quesos maduros.", desc: "Dulce y vibrante." },
-            { id: 25, cat: "dulce untable", nombre: "Mermelada de Pimentón", pres: "255 ml", usd: 5.50, chef: "Eventos.", desc: "Favorita de todos." },
-            { id: 26, cat: "dulce untable", nombre: "Dulce de Papaya", pres: "150 ml", usd: 3.00, chef: "Desayunos.", desc: "Fruta seleccionada." },
-            { id: 27, cat: "dulce untable", nombre: "Dulce de Papaya", pres: "255 ml", usd: 4.50, chef: "Meriendas.", desc: "Textura suave." },
-            { id: 28, cat: "dulce untable", nombre: "Mermelada de Ají Dulce", pres: "150 ml", usd: 3.80, chef: "Galletas saladas.", desc: "Sorprendente." },
-            { id: 29, cat: "dulce untable", nombre: "Dulce de Lechoza", pres: "500 ml", usd: 7.00, chef: "Tradición.", desc: "Sabor casero." },
-
-            // VINAGRES Y OTROS
-            { id: 30, cat: "vinagre", nombre: "Vinagre de Piña", pres: "150 ml", usd: 2.50, chef: "Ensaladas.", desc: "Artesanal." },
-            { id: 31, cat: "vinagre", nombre: "Vinagre Macho", pres: "150 ml", usd: 3.50, chef: "Legumbres.", desc: "Fuerte y aromático." },
-            { id: 32, cat: "salsa sin picante", nombre: "Salsa de Soya Artesanal", pres: "150 ml", usd: 3.00, chef: "Salteados.", desc: "Baja en sodio." },
-            { id: 33, cat: "salsa sin picante", nombre: "Salsa Inglesa EDP", pres: "150 ml", usd: 3.00, chef: "Carnes rojas.", desc: "Fórmula única." },
-            { id: 34, cat: "aceite", nombre: "Aceite de Albahaca", pres: "150 ml", usd: 4.50, chef: "Capresa.", desc: "Especialidad." },
-            { id: 35, cat: "en pasta", nombre: "Cebolla en Pasta", pres: "150 ml", usd: 3.00, chef: "Salsas base.", desc: "Práctico." }
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Carnes blancas.", desc: "Acidez natural artesanal." },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Costillitas de cerdo.", desc: "Versión familiar." },
+            { id: 3, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Ensaladas frescas.", desc: "Ligera y tropical." },
+            { id: 4, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "255 ml", usd: 3.72, foto: "salsa-papaya-255-ml.jpg", chef: "Pescados al vapor.", desc: "Sabor suave." },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Guisos criollos.", desc: "Tradición pura." },
+            { id: 6, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Uso profesional.", desc: "Máximo rendimiento." },
+            { id: 7, cat: "salsa sin picante", nombre: "BBQ Artesanal", pres: "150 ml", usd: 3.00, foto: "bbq-150.jpg", chef: "Parrilladas.", desc: "Ahumado natural." },
+            { id: 8, cat: "salsa sin picante", nombre: "BBQ Artesanal", pres: "255 ml", usd: 4.50, foto: "bbq-255.jpg", chef: "Hamburguesas.", desc: "Textura espesa." },
+            { id: 9, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Alitas de pollo.", desc: "Picante nivel medio." },
+            { id: 10, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-picante-255-ml.jpg", chef: "Costillas picantes.", desc: "Equilibrio ideal." },
+            { id: 11, cat: "salsa con picante", nombre: "Ají Dulce Picante", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-picante-150-ml.jpg", chef: "Pasapalos.", desc: "Esencia venezolana." },
+            { id: 12, cat: "salsa con picante", nombre: "Ají Dulce Picante", pres: "255 ml", usd: 4.50, foto: "salsa-aji-dulce-255-ml.jpg", chef: "Tacos y arepas.", desc: "Sabor intenso." },
+            { id: 13, cat: "salsa con picante", nombre: "Habanero Infierno", pres: "150 ml", usd: 4.00, foto: "habanero-150.jpg", chef: "Valientes.", desc: "Picante extremo." },
+            { id: 14, cat: "salsa con picante", nombre: "Salsa de Ajo Picante", pres: "150 ml", usd: 3.20, foto: "ajo-picante-150.jpg", chef: "Pizzas.", desc: "Aroma y calor." },
+            { id: 15, cat: "salsa con picante", nombre: "Mostaza Picante", pres: "150 ml", usd: 3.50, foto: "mostaza-picante-150.jpg", chef: "Embutidos.", desc: "Toque gourmet." },
+            { id: 16, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Arroz y sofritos.", desc: "Color vibrante." },
+            { id: 17, cat: "aceite", nombre: "Aceite de Onoto", pres: "255 ml", usd: 4.80, foto: "aceite-onoto-255.jpg", chef: "Hallacas.", desc: "Indispensable." },
+            { id: 18, cat: "aceite", nombre: "Aceite Picante", pres: "150 ml", usd: 4.20, foto: "aceite-picante-150.jpg", chef: "Pastas y pizzas.", desc: "Infusión artesanal." },
+            { id: 19, cat: "aceite", nombre: "Aceite de Ajo", pres: "150 ml", usd: 4.00, foto: "aceite-ajo-150.jpg", chef: "Pan tostado.", desc: "Sabor concentrado." },
+            { id: 20, cat: "en pasta", nombre: "Ajo en Pasta", pres: "150 ml", usd: 3.20, foto: "ajo-pasta-150-ml.jpg", chef: "Adobos rápidos.", desc: "100% natural." },
+            { id: 21, cat: "en pasta", nombre: "Ajo en Pasta", pres: "500 ml", usd: 7.50, foto: "ajo-pasta-500.jpg", chef: "Cocina diaria.", desc: "Ahorra tiempo." },
+            { id: 22, cat: "en pasta", nombre: "Pasta de Ají Dulce", pres: "150 ml", usd: 3.50, foto: "pasta-aji-dulce-150.jpg", chef: "Bases de guiso.", desc: "Sin semillas." },
+            { id: 23, cat: "en pasta", nombre: "Pasta de Jengibre", pres: "150 ml", usd: 4.00, foto: "jengibre-150.jpg", chef: "Comida asiática.", desc: "Frescura pura." },
+            { id: 24, cat: "dulce untable", nombre: "Mermelada de Pimentón", pres: "150 ml", usd: 3.80, foto: "mermelada-pimenton-150-ml.jpg", chef: "Quesos maduros.", desc: "Dulce y vibrante." },
+            { id: 25, cat: "dulce untable", nombre: "Mermelada de Pimentón", pres: "255 ml", usd: 5.50, foto: "mermelada-pimenton-255.jpg", chef: "Eventos.", desc: "Favorita de todos." },
+            { id: 26, cat: "dulce untable", nombre: "Dulce de Papaya", pres: "150 ml", usd: 3.00, foto: "dulce-papaya-150.jpg", chef: "Desayunos.", desc: "Fruta seleccionada." },
+            { id: 27, cat: "dulce untable", nombre: "Dulce de Papaya", pres: "255 ml", usd: 4.50, foto: "dulce-papaya-255-ml.jpg", chef: "Meriendas.", desc: "Textura suave." },
+            { id: 28, cat: "dulce untable", nombre: "Mermelada de Ají Dulce", pres: "150 ml", usd: 3.80, foto: "mermelada-aji-dulce-150.jpg", chef: "Galletas saladas.", desc: "Sorprendente." },
+            { id: 29, cat: "dulce untable", nombre: "Dulce de Lechoza", pres: "500 ml", usd: 7.00, foto: "dulce-lechoza-500-ml.jpg", chef: "Tradición.", desc: "Sabor casero." },
+            { id: 30, cat: "vinagre", nombre: "Vinagre de Piña", pres: "150 ml", usd: 2.50, foto: "vinagre-pina-150-ml.jpg", chef: "Ensaladas.", desc: "Artesanal." },
+            { id: 31, cat: "vinagre", nombre: "Vinagre Macho", pres: "150 ml", usd: 3.50, foto: "vinagre-macho-150.jpg", chef: "Legumbres.", desc: "Fuerte y aromático." },
+            { id: 32, cat: "salsa sin picante", nombre: "Salsa de Soya Artesanal", pres: "150 ml", usd: 3.00, foto: "soya-150.jpg", chef: "Salteados.", desc: "Baja en sodio." },
+            { id: 33, cat: "salsa sin picante", nombre: "Salsa Inglesa EDP", pres: "150 ml", usd: 3.00, foto: "inglesa-150.jpg", chef: "Carnes rojas.", desc: "Fórmula única." },
+            { id: 34, cat: "aceite", nombre: "Aceite de Albahaca", pres: "150 ml", usd: 4.50, foto: "albahaca-150.jpg", chef: "Capresa.", desc: "Especialidad." },
+            { id: 35, cat: "en pasta", nombre: "Cebolla en Pasta", pres: "150 ml", usd: 3.00, foto: "cebolla-150.jpg", chef: "Salsas base.", desc: "Práctico." }
         ];
 
         function filtrar(c) {
@@ -315,7 +301,7 @@
             const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
             container.innerHTML = lista.map(p => `
                 <div class="card">
-                    <div class="img-box"><img src="img/${p.id}.jpg" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+Gourmet'"></div>
+                    <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+Gourmet'"></div>
                     <div class="info">
                         <span class="tag">${p.cat}</span>
                         <h3 class="titulo">${p.nombre}</h3>
