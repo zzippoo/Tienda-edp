@@ -3,41 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>E.D.P. Gourmet | Pedidos</title>
+    <title>E.D.P. Gourmet | Catálogo</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --vinotinto: #5a0d15; --dorado: #b8860b; --dorado-luz: #f1d592; --oscuro: #000000; --crema: #fdfaf5; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--crema); color: #333; }
-        
         header { background: var(--oscuro); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--dorado); }
         .logo-txt { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 24px; color: var(--dorado-luz); }
-
         .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; color: white; text-align: center; padding: 70px 20px; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin: 0; color: var(--dorado-luz); }
         .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; }
-
         .tasa-bar { background: white; text-align: center; padding: 12px; font-weight: 800; border-bottom: 1px solid #ddd; }
         #tasa-val { color: var(--vinotinto); text-decoration: underline; cursor: pointer; padding: 4px 10px; background: #fff8f8; border-radius: 5px; }
-
         .cat-bar { background: white; padding: 15px; display: flex; gap: 10px; overflow-x: auto; position: sticky; top: 68px; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .cat-btn { padding: 8px 18px; border: 1px solid #ddd; background: white; border-radius: 20px; white-space: nowrap; font-size: 13px; font-weight: 600; cursor: pointer; }
         .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
-
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; padding: 30px 5%; }
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid #eee; }
-        .img-box { width: 100%; height: 260px; padding: 15px; display: flex; align-items: center; justify-content: center; }
+        .img-box { width: 100%; height: 260px; padding: 15px; display: flex; align-items: center; justify-content: center; background: #fff; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        
         .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .titulo { font-family: 'Playfair Display', serif; font-size: 21px; margin: 5px 0; color: var(--vinotinto); font-weight: 700; }
         .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin: 10px 0; font-style: italic; }
-        
         .price-box { padding: 10px; background: #f9f9f9; border-radius: 8px; text-align: center; margin-top: auto; }
         .btn-add { background: var(--vinotinto); color: white; border: none; padding: 15px; width: 100%; font-weight: 800; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-
-        #cart-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; overflow-y:auto; padding: 20px; box-sizing: border-box; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--vinotinto); padding-bottom: 10px; }
-        .pago-box { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #ddd; }
+        #cart-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; overflow-y:auto; padding: 20px; }
     </style>
 </head>
 <body>
@@ -56,7 +46,7 @@
         Tasa Oficial BCV: <span id="tasa-val" onclick="accesoAdmin()">Cargando...</span> Bs/USD
     </div>
 
-    <nav class="cat-bar">
+    <nav class="cat-bar" id="cat-nav">
         <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
         <button class="cat-btn" onclick="filtrar('salsa sin picante')">Salsas sin Picante</button>
         <button class="cat-btn" onclick="filtrar('salsa con picante')">Salsas con Picante</button>
@@ -68,29 +58,29 @@
     <main id="catalog"></main>
 
     <div id="cart-modal">
-        <div class="cart-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2 style="color:var(--vinotinto)">Mi Pedido</h2>
-            <button onclick="cerrarCarrito()" style="background:var(--vinotinto); color:white; border:none; padding:10px 15px; border-radius:5px;">CERRAR</button>
+            <button onclick="cerrarCarrito()" style="background:var(--vinotinto); color:white; border:none; padding:10px 20px; border-radius:5px;">REGRESAR</button>
         </div>
-        <div id="cart-items" style="margin-top:20px;"></div>
-        <div id="cart-total" style="font-size:20px; font-weight:800; margin-top:15px; text-align:right;"></div>
+        <div id="cart-items" style="margin:20px 0;"></div>
+        <div id="cart-total" style="font-size:22px; font-weight:900; text-align:right;"></div>
         
-        <div class="pago-box">
-            <h3>💳 Pago Móvil</h3>
-            <p>Bancamiga (0172)<br>C.I. 12.345.678<br>Tlf: 0412-1234567</p>
+        <div style="background:#f1f1f1; padding:20px; border-radius:10px; margin-top:20px;">
+            <h3 style="margin-top:0">💳 Pago Móvil</h3>
+            <p><b>Banco:</b> Bancamiga (0172)<br><b>C.I.:</b> 10.123.456<br><b>Teléfono:</b> 0412-9876543</p>
             <hr>
-            <h3>🚚 Método de Envío</h3>
-            <select id="envio" style="width:100%; padding:12px; border-radius:5px;">
-                <option value="Pick up (Altamira)">Pick up (Altamira)</option>
-                <option value="Delivery (Costo según zona)">Delivery (Costo según zona)</option>
+            <h3>🚚 Entrega</h3>
+            <select id="envio" style="width:100%; padding:10px; font-size:16px;">
+                <option value="Pick Up">Retiro Personal (Pick Up)</option>
+                <option value="Delivery">Delivery Caracas</option>
             </select>
         </div>
-        <button class="btn-add" style="background:#25d366; font-size:18px; margin-top:20px;" onclick="enviarWhatsApp()">FINALIZAR POR WHATSAPP</button>
+        <button class="btn-add" style="background:#25d366; font-size:18px; margin-top:30px;" onclick="enviarWhatsApp()">PEDIR POR WHATSAPP</button>
     </div>
 
     <script>
         const CLAVE_ADMIN = "edp2026";
-        let tasaBCV = parseFloat(localStorage.getItem('EDP_TASA_FINAL')) || 55.50;
+        let tasaBCV = parseFloat(localStorage.getItem('EDP_TASA_MOBILE')) || 55.50;
         let carrito = [];
         let catActual = 'todos';
 
@@ -139,16 +129,14 @@
                 <div class="card">
                     <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300?text=EDP+Gourmet'"></div>
                     <div class="info">
-                        <span style="font-size:10px; color:var(--dorado); font-weight:800; text-transform:uppercase">${p.cat}</span>
                         <h3 class="titulo">${p.nombre}</h3>
-                        <div style="font-size:14px; color:#666; font-weight:600;">Presentación: ${p.pres}</div>
-                        <div style="font-size:13px; margin:8px 0; color:#444;">${p.desc}</div>
-                        <div class="chef-hint">👨‍🍳 <b>Tip del Chef:</b> ${p.chef}</div>
+                        <div style="font-size:14px; font-weight:600; color:#666;">${p.pres}</div>
+                        <div class="chef-hint">👨‍🍳 <b>Tip:</b> ${p.chef}</div>
                         <div class="price-box">
-                            <span style="font-size:24px; font-weight:800; display:block;">$${p.usd.toFixed(2)}</span>
-                            <span style="color:var(--vinotinto); font-weight:700; font-size:15px;">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
+                            <span style="font-size:24px; font-weight:800;">$${p.usd.toFixed(2)}</span><br>
+                            <span style="color:var(--vinotinto); font-weight:700;">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
                         </div>
-                        <button class="btn-add" onclick="agregar(${p.id})">AÑADIR AL PEDIDO</button>
+                        <button class="btn-add" onclick="agregar(${p.id})">AÑADIR</button>
                     </div>
                 </div>
             `).join('');
@@ -157,62 +145,48 @@
         }
 
         window.accesoAdmin = function() {
-            const pass = prompt("Clave de Administrador:");
-            if(pass === CLAVE_ADMIN) {
-                const nueva = prompt("Nueva Tasa BCV:", tasaBCV);
-                if(nueva && !isNaN(nueva)) {
-                    tasaBCV = parseFloat(nueva);
-                    localStorage.setItem('EDP_TASA_FINAL', tasaBCV);
+            const p = prompt("Contraseña:");
+            if(p === CLAVE_ADMIN) {
+                const n = prompt("Nueva Tasa:", tasaBCV);
+                if(n && !isNaN(n)) {
+                    tasaBCV = parseFloat(n);
+                    localStorage.setItem('EDP_TASA_MOBILE', tasaBCV);
                     render();
                 }
-            } else if(pass !== null) { alert("Acceso Denegado"); }
+            }
         };
 
         function filtrar(c) {
             catActual = c;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(c) || (c==='todos' && b.innerText==='Todos')));
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(c)));
             render();
         }
 
-        function agregar(id) {
-            carrito.push(productos.find(p => p.id === id));
-            render();
+        function agregar(id) { carrito.push(productos.find(p => p.id === id)); render(); }
+        function abrirCarrito() { document.getElementById('cart-modal').style.display='block'; actualizarCarritoUI(); }
+        function cerrarCarrito() { document.getElementById('cart-modal').style.display='none'; }
+
+        function actualizarCarritoUI() {
+            const cont = document.getElementById('cart-items');
+            if(carrito.length === 0) { cont.innerHTML = "Tu carrito está vacío"; return; }
+            cont.innerHTML = carrito.map((i, idx) => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #ddd; padding:5px;">
+                    <span>${i.nombre} (${i.pres})</span>
+                    <b>$${i.usd.toFixed(2)} <button onclick="quitar(${idx})" style="color:red; border:none; background:none;">[X]</button></b>
+                </div>
+            `).join('');
+            const tot = carrito.reduce((a, b) => a + b.usd, 0);
+            document.getElementById('cart-total').innerHTML = `TOTAL: $${tot.toFixed(2)}<br><small>Bs ${(tot * tasaBCV).toFixed(2)}</small>`;
         }
 
-        function abrirCarrito() {
-            document.getElementById('cart-modal').style.display = 'block';
-            const itemsDiv = document.getElementById('cart-items');
-            if(carrito.length === 0) {
-                itemsDiv.innerHTML = "<p style='text-align:center;'>El carrito está vacío</p>";
-                document.getElementById('cart-total').innerText = "";
-            } else {
-                itemsDiv.innerHTML = carrito.map((item, index) => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:10px 0;">
-                        <div><b>${item.nombre}</b><br><small>${item.pres}</small></div>
-                        <div>$${item.usd.toFixed(2)} <button onclick="quitar(${index})" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold; margin-left:10px;">X</button></div>
-                    </div>
-                `).join('');
-                const total = carrito.reduce((sum, item) => sum + item.usd, 0);
-                document.getElementById('cart-total').innerHTML = `Total: $${total.toFixed(2)}<br><small style="color:var(--vinotinto)">Bs ${(total * tasaBCV).toFixed(2)}</small>`;
-            }
-        }
-
-        function quitar(index) {
-            carrito.splice(index, 1);
-            abrirCarrito();
-            render();
-        }
-
-        function cerrarCarrito() { document.getElementById('cart-modal').style.display = 'none'; }
+        function quitar(i) { carrito.splice(i, 1); actualizarCarritoUI(); render(); }
 
         function enviarWhatsApp() {
-            if(carrito.length === 0) return alert("Agrega productos primero");
-            let msg = "🍯 *NUEVO PEDIDO EDP GOURMET*\n\n";
-            carrito.forEach(i => msg += `• ${i.nombre} (${i.pres}) - $${i.usd}\n`);
+            let msg = "🍯 *PEDIDO EDP GOURMET*\n\n";
+            carrito.forEach(i => msg += `• ${i.nombre} - $${i.usd}\n`);
             const total = carrito.reduce((a,b) => a + b.usd, 0);
-            msg += `\n*TOTAL A PAGAR: $${total.toFixed(2)}*\n`;
-            msg += `*Equivalente: Bs ${(total * tasaBCV).toFixed(2)}*\n`;
-            msg += `\n📍 *Envío:* ${document.getElementById('envio').value}`;
+            msg += `\n*TOTAL: $${total.toFixed(2)} (Bs ${(total * tasaBCV).toFixed(2)})*\n`;
+            msg += `*Entrega:* ${document.getElementById('envio').value}`;
             window.open(`https://wa.me/584121234567?text=${encodeURIComponent(msg)}`);
         }
 
