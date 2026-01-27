@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -197,7 +197,7 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val">Sincronizando...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val">Conectando...</span> Bs/USD
     </div>
 
     <nav class="cat-bar" id="cat-nav">
@@ -238,7 +238,7 @@
             <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
             <form id="auth-form">
                 <input type="text" id="user-name" placeholder="Nombre Completo" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 04121234567)" required>
+                <input type="tel" id="user-phone" placeholder="WhatsApp" required>
                 <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
             </form>
         </div>
@@ -261,12 +261,6 @@
                         <option value="MRW">Envió Nacional (MRW/Zoom)</option>
                         <option value="Delivery">Delivery (Valencia)</option>
                         <option value="Pickup">Pickup</option>
-                    </select>
-                    <select id="payment-method" required>
-                        <option value="" disabled selected>Método de pago</option>
-                        <option value="Pago Móvil">Pago Móvil</option>
-                        <option value="Zelle">Zelle</option>
-                        <option value="Efectivo">Efectivo</option>
                     </select>
                     <textarea id="shipping-address" placeholder="Dirección de entrega..." required></textarea>
                     <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR A WHATSAPP</button>
@@ -298,9 +292,10 @@
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
-        const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?gid=0&single=true&output=csv";
+        // TU ID REAL INTEGRADO
+        const EXCEL_ID = "1Yh-QqiudrYeuQm9fIRxXtnQnLZ3uzF9RJyhWMLs2A1c";
         
-        let tasaBCV = 39.50; // Valor de emergencia si todo falla
+        let tasaBCV = 40.00; 
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
@@ -345,29 +340,25 @@
             { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
         ];
 
-        async function cargarTasaDesdeSheets() {
+        async function cargarTasa() {
             try {
-                // Forzamos la descarga sin importar el formato
-                const response = await fetch(LINK_SHEETS + "?cache=" + Date.now());
-                const rawText = await response.text();
+                // Función "Anticaché" avanzada
+                const url = `https://docs.google.com/spreadsheets/d/${EXCEL_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1&cb=${new Date().getTime()}`;
+                const res = await fetch(url);
+                const text = await res.text();
                 
-                // Buscamos cualquier número decimal en el texto (ej: 40.5, 39,80, etc)
-                const matches = rawText.match(/(\d+[\.,]\d+)|(\d+)/);
-                
-                if (matches) {
-                    let valor = matches[0].replace(',', '.');
-                    let num = parseFloat(valor);
-                    
-                    if (!isNaN(num) && num > 10) { // Si el número es lógico (mayor a 10)
+                // Limpiamos comillas y buscamos el número
+                const match = text.match(/(\d+[\.,]\d+)|(\d+)/);
+                if (match) {
+                    let num = parseFloat(match[0].replace(',', '.'));
+                    if (num > 10) {
                         tasaBCV = num;
-                        localStorage.setItem('edp_tasa_last', num);
+                        localStorage.setItem('edp_tasa_respaldo', num);
                     }
                 }
             } catch (e) {
-                // Si hay error, intentamos recuperar la última guardada
-                tasaBCV = parseFloat(localStorage.getItem('edp_tasa_last')) || 39.50;
+                tasaBCV = parseFloat(localStorage.getItem('edp_tasa_respaldo')) || 40.00;
             }
-            
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             render();
         }
@@ -490,7 +481,7 @@
 
         window.onload = () => {
             if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display = 'flex';
-            cargarTasaDesdeSheets();
+            cargarTasa();
         };
     </script>
 </body>
