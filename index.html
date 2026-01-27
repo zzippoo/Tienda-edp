@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>E.D.P. Gourmet | Catálogo</title>
+    <title>E.D.P. Gourmet | Pedidos</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --vinotinto: #5a0d15; --dorado: #b8860b; --dorado-luz: #f1d592; --oscuro: #000000; --crema: #fdfaf5; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--crema); color: #333; }
         
-        /* HEADER Y HERO (RESTAURADOS) */
         header { background: var(--oscuro); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--dorado); }
         .logo-txt { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 24px; color: var(--dorado-luz); }
+
         .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; color: white; text-align: center; padding: 70px 20px; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin: 0; color: var(--dorado-luz); }
         .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; }
@@ -27,18 +27,24 @@
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid #eee; }
         .img-box { width: 100%; height: 260px; padding: 15px; display: flex; align-items: center; justify-content: center; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
         .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .titulo { font-family: 'Playfair Display', serif; font-size: 21px; margin: 5px 0; color: var(--vinotinto); font-weight: 700; }
         .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin: 10px 0; font-style: italic; }
+        
         .price-box { padding: 10px; background: #f9f9f9; border-radius: 8px; text-align: center; margin-top: auto; }
         .btn-add { background: var(--vinotinto); color: white; border: none; padding: 15px; width: 100%; font-weight: 800; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+
+        #cart-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; overflow-y:auto; padding: 20px; box-sizing: border-box; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--vinotinto); padding-bottom: 10px; }
+        .pago-box { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-txt" onclick="location.reload()">E.D.P. GOURMET</div>
-        <div style="font-weight: bold; color: var(--dorado-luz); cursor: pointer;" onclick="verCarrito()">🛒 <span id="cart-count">0</span></div>
+        <div class="logo-txt">E.D.P. GOURMET</div>
+        <div style="font-weight: bold; color: var(--dorado-luz); cursor: pointer;" onclick="abrirCarrito()">🛒 <span id="cart-count">0</span></div>
     </header>
 
     <div class="hero">
@@ -47,10 +53,10 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val" onclick="cambiarTasa()">Cargando...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val" onclick="accesoAdmin()">Cargando...</span> Bs/USD
     </div>
 
-    <nav class="cat-bar" id="cat-nav">
+    <nav class="cat-bar">
         <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
         <button class="cat-btn" onclick="filtrar('salsa sin picante')">Salsas sin Picante</button>
         <button class="cat-btn" onclick="filtrar('salsa con picante')">Salsas con Picante</button>
@@ -61,49 +67,69 @@
 
     <main id="catalog"></main>
 
+    <div id="cart-modal">
+        <div class="cart-header">
+            <h2 style="color:var(--vinotinto)">Mi Pedido</h2>
+            <button onclick="cerrarCarrito()" style="background:var(--vinotinto); color:white; border:none; padding:10px 15px; border-radius:5px;">CERRAR</button>
+        </div>
+        <div id="cart-items" style="margin-top:20px;"></div>
+        <div id="cart-total" style="font-size:20px; font-weight:800; margin-top:15px; text-align:right;"></div>
+        
+        <div class="pago-box">
+            <h3>💳 Pago Móvil</h3>
+            <p>Bancamiga (0172)<br>C.I. 12.345.678<br>Tlf: 0412-1234567</p>
+            <hr>
+            <h3>🚚 Método de Envío</h3>
+            <select id="envio" style="width:100%; padding:12px; border-radius:5px;">
+                <option value="Pick up (Altamira)">Pick up (Altamira)</option>
+                <option value="Delivery (Costo según zona)">Delivery (Costo según zona)</option>
+            </select>
+        </div>
+        <button class="btn-add" style="background:#25d366; font-size:18px; margin-top:20px;" onclick="enviarWhatsApp()">FINALIZAR POR WHATSAPP</button>
+    </div>
+
     <script>
         const CLAVE_ADMIN = "edp2026";
-        // Lógica de persistencia ultra-reforzada
-        let tasaBCV = parseFloat(localStorage.getItem('tasa_edp_v5')) || 55.50;
-        let carrito = JSON.parse(localStorage.getItem('carrito_edp')) || [];
+        let tasaBCV = parseFloat(localStorage.getItem('EDP_TASA_FINAL')) || 55.50;
+        let carrito = [];
         let catActual = 'todos';
 
         const productos = [
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas y ensaladas.", desc: "Salsa agridulce natural de la fruta con el toque artesanal de la casa." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo y barbacoas.", desc: "Salsa agridulce natural de la fruta con el toque artesanal de la casa." },
-            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Excelente para alitas de pollo y comida mexicana.", desc: "Nuestra clásica base de tamarindo con un equilibrio perfecto de picante." },
-            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Úsala para vegetales salteados con carácter.", desc: "Nuestra clásica base de tamarindo con un equilibrio perfecto de picante." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Va increíble con ensaladas tropicales.", desc: "Captura la esencia de la lechosa en una emulsión suave y aromática." },
-            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Especial para salmón o carpaccios.", desc: "La acidez de la parchita se une al frescor picante del jengibre." },
-            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Perfecta para quesos madurados.", desc: "La acidez de la parchita se une al frescor picante del jengibre." },
-            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Camarones rebozados o tacos de pescado.", desc: "El dulzor del mango seleccionado con el picor vibrante del jalapeño." },
-            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Acompaña carnes de cerdo al horno.", desc: "El dulzor del mango seleccionado con el picor vibrante del jalapeño." },
-            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "El mejor aliado para empanadas.", desc: "Sabor profundo andino con una selección de ajíes de la región." },
-            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Sabor profundo andino con una selección de ajíes de la región." },
-            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Sorprendente con queso crema.", desc: "Guayaba roja de calidad premium con una chispa cítrica de jengibre." },
-            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Pruébala en un jamón horneado.", desc: "Guayaba roja de calidad premium con una chispa cítrica de jengibre." },
-            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Eleva tus hamburguesas a gourmet.", desc: "Cebollas cocidas a fuego lento hasta lograr su dulzor natural." },
-            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Para tablas de quesos y embutidos.", desc: "Cebollas cocidas a fuego lento hasta lograr su dulzor natural." },
-            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Clásica para papas bravas.", desc: "Emulsión mediterránea cremosa con ajo natural, sin conservantes." },
-            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Para choripanes y sándwiches.", desc: "Nuestra receta de alioli con un toque de ají procesado." },
-            { id: 18, cat: "salsa sin picante", nombre: "Mojo de Cilantro", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Infaltable en yuca hervida o carnes.", desc: "Fresco, verde y aromático, hecho con hierbas seleccionadas." },
-            { id: 19, cat: "salsa sin picante", nombre: "Ají Dulce y Mayonesa", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "La salsa reina para tequeños.", desc: "Fusión del ají dulce venezolano con una mayonesa artesanal." },
-            { id: 20, cat: "salsa sin picante", nombre: "Ají Dulce y Mayonesa", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Úsala como base para sándwiches.", desc: "Fusión del ají dulce venezolano con una mayonesa artesanal." },
-            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Dale color a tus sofritos y hallacas.", desc: "Aceite de alta calidad infusionado con onoto de primera." },
-            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Color instantáneo para guisos.", desc: "Concentrado líquido de onoto listo para usar." },
-            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Presentación ideal para hostelería.", desc: "Concentrado líquido de onoto listo para usar." },
-            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Para grandes producciones de hallacas.", desc: "Pasta densa y potente, rinde hasta 10 veces más." },
-            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Uso doméstico para cocina criolla.", desc: "Pasta densa y potente, rinde hasta 10 veces más." },
-            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Marinar carnes y pollos.", desc: "Pasta densa y potente, rinde hasta 10 veces más." },
-            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "Perfecta para chefs exigentes.", desc: "Pasta densa y potente, rinde hasta 10 veces más." },
-            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Vinagretas únicas para ensaladas.", desc: "Vinagre artesanal infusionado con pulpa de tamarindo." },
-            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Marinar pescados y mariscos.", desc: "Vinagre artesanal infusionado con pulpa de tamarindo." },
-            { id: 30, cat: "dulce untable", nombre: "Untable de Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Desayunos con pan tostado.", desc: "Textura sedosa con el sabor característico del tamarindo." },
-            { id: 31, cat: "dulce untable", nombre: "Untable de Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno para repostería fina.", desc: "Textura sedosa con el sabor característico del tamarindo." },
-            { id: 32, cat: "dulce untable", nombre: "Untable de Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Combínala con galletas de mantequilla.", desc: "Aroma cítrico y dulce en una crema untable." },
-            { id: 33, cat: "dulce untable", nombre: "Untable de Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping para helados de crema.", desc: "Aroma cítrico y dulce en una crema untable." },
-            { id: 34, cat: "dulce untable", nombre: "Untable de Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Pruébala con queso blanco fresco.", desc: "Todo el sabor del mango maduro en formato untable." },
-            { id: 35, cat: "dulce untable", nombre: "Untable de Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Para postres y meriendas especiales.", desc: "Todo el sabor del mango maduro en formato untable." }
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas y ensaladas.", desc: "Salsa agridulce natural de la fruta." },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo.", desc: "Salsa agridulce natural de la fruta." },
+            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Excelente para alitas de pollo.", desc: "Equilibrio perfecto de picante." },
+            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Para vegetales salteados.", desc: "Equilibrio perfecto de picante." },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Va increíble con ensaladas tropicales.", desc: "Emulsión suave y aromática." },
+            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Especial para salmón o carpaccios.", desc: "Acidez y frescor picante." },
+            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Perfecta para quesos madurados.", desc: "Acidez y frescor picante." },
+            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Camarones rebozados o tacos.", desc: "Dulzor de mango y jalapeño." },
+            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Acompaña carnes de cerdo al horno.", desc: "Dulzor de mango y jalapeño." },
+            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "El mejor aliado para empanadas.", desc: "Sabor profundo andino." },
+            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Sabor profundo andino." },
+            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Sorprendente con queso crema.", desc: "Guayaba roja premium y jengibre." },
+            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Pruébala en un jamón horneado.", desc: "Guayaba roja premium y jengibre." },
+            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Eleva tus hamburguesas a gourmet.", desc: "Cocción lenta a fuego bajo." },
+            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Para tablas de quesos.", desc: "Cocción lenta a fuego bajo." },
+            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Clásica para papas bravas.", desc: "Emulsión mediterránea natural." },
+            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Para choripanes y sándwiches.", desc: "Base de ajo con ají procesado." },
+            { id: 18, cat: "salsa sin picante", nombre: "Mojo de Cilantro", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Infaltable en yuca hervida.", desc: "Fresco, verde y aromático." },
+            { id: 19, cat: "salsa sin picante", nombre: "Ají Dulce y Mayonesa", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "La salsa reina para tequeños.", desc: "Fusión criolla tradicional." },
+            { id: 20, cat: "salsa sin picante", nombre: "Ají Dulce y Mayonesa", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base para sándwiches gourmet.", desc: "Fusión criolla tradicional." },
+            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Para tus sofritos y hallacas.", desc: "Infusión de onoto de primera." },
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Color instantáneo para guisos.", desc: "Concentrado líquido de onoto." },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Uso profesional en cocina.", desc: "Concentrado líquido de onoto." },
+            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Grandes producciones de hallacas.", desc: "Pasta densa y potente." },
+            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Uso doméstico tradicional.", desc: "Pasta densa y potente." },
+            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Para marinar carnes y pollos.", desc: "Pasta densa y potente." },
+            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "Rendimiento máximo para chefs.", desc: "Pasta densa y potente." },
+            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Vinagretas únicas.", desc: "Infusión de pulpa natural." },
+            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Marinar pescados y mariscos.", desc: "Infusión de pulpa natural." },
+            { id: 30, cat: "dulce untable", nombre: "Untable de Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Desayunos con pan tostado.", desc: "Sabor original de tamarindo." },
+            { id: 31, cat: "dulce untable", nombre: "Untable de Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno de repostería.", desc: "Sabor original de tamarindo." },
+            { id: 32, cat: "dulce untable", nombre: "Untable de Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Con galletas de mantequilla.", desc: "Crema untable de maracuyá." },
+            { id: 33, cat: "dulce untable", nombre: "Untable de Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping para helados.", desc: "Crema untable de maracuyá." },
+            { id: 34, cat: "dulce untable", nombre: "Untable de Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Con queso blanco fresco.", desc: "Sabor a mango maduro." },
+            { id: 35, cat: "dulce untable", nombre: "Untable de Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Postres y meriendas especiales.", desc: "Sabor a mango maduro." }
         ];
 
         function render() {
@@ -115,12 +141,12 @@
                     <div class="info">
                         <span style="font-size:10px; color:var(--dorado); font-weight:800; text-transform:uppercase">${p.cat}</span>
                         <h3 class="titulo">${p.nombre}</h3>
-                        <div style="font-size:14px; color:#666;">${p.pres}</div>
-                        <div style="font-size:13px; margin:8px 0;">${p.desc}</div>
+                        <div style="font-size:14px; color:#666; font-weight:600;">Presentación: ${p.pres}</div>
+                        <div style="font-size:13px; margin:8px 0; color:#444;">${p.desc}</div>
                         <div class="chef-hint">👨‍🍳 <b>Tip del Chef:</b> ${p.chef}</div>
                         <div class="price-box">
-                            <span style="font-size:22px; font-weight:800; display:block;">$${p.usd.toFixed(2)}</span>
-                            <span style="color:var(--vinotinto); font-weight:700;">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
+                            <span style="font-size:24px; font-weight:800; display:block;">$${p.usd.toFixed(2)}</span>
+                            <span style="color:var(--vinotinto); font-weight:700; font-size:15px;">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
                         </div>
                         <button class="btn-add" onclick="agregar(${p.id})">AÑADIR AL PEDIDO</button>
                     </div>
@@ -130,16 +156,16 @@
             document.getElementById('cart-count').innerText = carrito.length;
         }
 
-        window.cambiarTasa = function() {
+        window.accesoAdmin = function() {
             const pass = prompt("Clave de Administrador:");
             if(pass === CLAVE_ADMIN) {
-                const nueva = prompt("Nueva tasa BCV:", tasaBCV);
+                const nueva = prompt("Nueva Tasa BCV:", tasaBCV);
                 if(nueva && !isNaN(nueva)) {
                     tasaBCV = parseFloat(nueva);
-                    localStorage.setItem('tasa_edp_v5', tasaBCV); // Guardado inmediato
+                    localStorage.setItem('EDP_TASA_FINAL', tasaBCV);
                     render();
                 }
-            } else if(pass !== null) { alert("Clave incorrecta"); }
+            } else if(pass !== null) { alert("Acceso Denegado"); }
         };
 
         function filtrar(c) {
@@ -149,18 +175,45 @@
         }
 
         function agregar(id) {
-            const p = productos.find(x => x.id === id);
-            carrito.push(p);
-            localStorage.setItem('carrito_edp', JSON.stringify(carrito));
+            carrito.push(productos.find(p => p.id === id));
             render();
         }
 
-        function verCarrito() {
-            if(carrito.length === 0) return alert("Tu carrito está vacío");
-            let resumen = "Tu Pedido EDP Gourmet:\n\n";
-            carrito.forEach(i => resumen += `- ${i.nombre} (${i.pres})\n`);
-            alert(resumen);
-            // Aquí irá la lógica de WhatsApp que definiremos luego
+        function abrirCarrito() {
+            document.getElementById('cart-modal').style.display = 'block';
+            const itemsDiv = document.getElementById('cart-items');
+            if(carrito.length === 0) {
+                itemsDiv.innerHTML = "<p style='text-align:center;'>El carrito está vacío</p>";
+                document.getElementById('cart-total').innerText = "";
+            } else {
+                itemsDiv.innerHTML = carrito.map((item, index) => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:10px 0;">
+                        <div><b>${item.nombre}</b><br><small>${item.pres}</small></div>
+                        <div>$${item.usd.toFixed(2)} <button onclick="quitar(${index})" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold; margin-left:10px;">X</button></div>
+                    </div>
+                `).join('');
+                const total = carrito.reduce((sum, item) => sum + item.usd, 0);
+                document.getElementById('cart-total').innerHTML = `Total: $${total.toFixed(2)}<br><small style="color:var(--vinotinto)">Bs ${(total * tasaBCV).toFixed(2)}</small>`;
+            }
+        }
+
+        function quitar(index) {
+            carrito.splice(index, 1);
+            abrirCarrito();
+            render();
+        }
+
+        function cerrarCarrito() { document.getElementById('cart-modal').style.display = 'none'; }
+
+        function enviarWhatsApp() {
+            if(carrito.length === 0) return alert("Agrega productos primero");
+            let msg = "🍯 *NUEVO PEDIDO EDP GOURMET*\n\n";
+            carrito.forEach(i => msg += `• ${i.nombre} (${i.pres}) - $${i.usd}\n`);
+            const total = carrito.reduce((a,b) => a + b.usd, 0);
+            msg += `\n*TOTAL A PAGAR: $${total.toFixed(2)}*\n`;
+            msg += `*Equivalente: Bs ${(total * tasaBCV).toFixed(2)}*\n`;
+            msg += `\n📍 *Envío:* ${document.getElementById('envio').value}`;
+            window.open(`https://wa.me/584121234567?text=${encodeURIComponent(msg)}`);
         }
 
         window.onload = render;
