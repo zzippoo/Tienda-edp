@@ -197,7 +197,7 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val">Conectando...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val">Cargando...</span> Bs/USD
     </div>
 
     <nav class="cat-bar" id="cat-nav">
@@ -292,10 +292,8 @@
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
-        // TU ID REAL INTEGRADO
-        const EXCEL_ID = "1Yh-QqiudrYeuQm9fIRxXtnQnLZ3uzF9RJyhWMLs2A1c";
         
-        let tasaBCV = 40.00; 
+        let tasaBCV = 40.00; // Valor por defecto
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
@@ -342,21 +340,16 @@
 
         async function cargarTasa() {
             try {
-                // Función "Anticaché" avanzada
-                const url = `https://docs.google.com/spreadsheets/d/${EXCEL_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1&cb=${new Date().getTime()}`;
-                const res = await fetch(url);
-                const text = await res.text();
+                // Buscamos tu archivo propio en GitHub/Vercel
+                const res = await fetch('tasa.json?v=' + Date.now());
+                const data = await res.json();
                 
-                // Limpiamos comillas y buscamos el número
-                const match = text.match(/(\d+[\.,]\d+)|(\d+)/);
-                if (match) {
-                    let num = parseFloat(match[0].replace(',', '.'));
-                    if (num > 10) {
-                        tasaBCV = num;
-                        localStorage.setItem('edp_tasa_respaldo', num);
-                    }
+                if (data.tasa && data.tasa > 10) {
+                    tasaBCV = data.tasa;
+                    localStorage.setItem('edp_tasa_respaldo', tasaBCV);
                 }
             } catch (e) {
+                console.log("Error leyendo tasa.json, usando respaldo local");
                 tasaBCV = parseFloat(localStorage.getItem('edp_tasa_respaldo')) || 40.00;
             }
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
