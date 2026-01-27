@@ -207,7 +207,7 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val" onclick="adminTasa()">...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val" onclick="adminTasa()">Cargando...</span> Bs/USD
     </div>
 
     <nav class="cat-bar" id="cat-nav">
@@ -328,54 +328,75 @@
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
+        const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?output=csv";
         
-        let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 55.50;
+        let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 398.92;
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
         let catActual = 'todos';
         let clicksLogo = 0;
 
-        // BASE DE DATOS COMPLETA - 35 PRODUCTOS
+        // BASE DE DATOS COMPLETA
         const productosBase = [
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo y langostinos.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural con un toque artesanal." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo a la barbacoa.", desc: "Versión familiar de nuestra explosión tropical." },
-            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Perfecta para alitas de pollo y tacos.", desc: "Fusionamos la base agridulce con ajíes seleccionados." },
-            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Dale un toque exótico a tus vegetales salteados.", desc: "Equilibrio perfecto entre picor y dulzor." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Úsala en ensaladas tropicales.", desc: "Opción ligera y fresca con notas cítricas." },
-            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón a la plancha.", desc: "Intensidad ácida de la parchita con el toque del jengibre." },
-            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Elegante para quesos madurados.", desc: "Sofisticación tropical en formato grande." },
-            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Acompáñala con camarones rebozados.", desc: "Pulpa de mango dulce con el carácter del jalapeño." },
-            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Vibrante para carnes de cerdo.", desc: "Sabor audaz que recorre todo el paladar." },
-            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Excelente para empanadas y tequeños.", desc: "Sabor profundo andino con un toque gourmet." },
-            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Rescata lo tradicional con un picor audaz." },
-            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Maravillosa con queso crema y galletas.", desc: "Dulzor de guayaba roja con chispa de jengibre." },
-            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Acompañante único para jamón horneado.", desc: "Una joya artesanal para tus carnes blancas." },
-            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Indispensable en hamburguesas gourmet.", desc: "Cocción lenta para un sabor profundo y sedoso." },
-            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Ideal para tablas de quesos.", desc: "El dulzor natural de la cebolla hecho crema." },
-            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo Española", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Perfecta para papas bravas.", desc: "Emulsión clásica mediterránea intensa y cremosa." },
-            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Ideal para choripanes y carnes rojas.", desc: "Cremosidad del ajo con mezcla secreta de ajíes." },
-            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro y Perejil", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Ideal para yuca hervida y carnes.", desc: "Hierbas frescas y especias para resaltar sabores." },
-            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping perfecto para tequeños.", desc: "Captura el aroma más emblemático de Venezuela." },
-            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base ideal para rellenos de sándwiches.", desc: "Suavidad artesanal con fragancia de ají dulce." },
-            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base para sofritos y hallacas.", desc: "Color y aroma natural sin colorantes artificiales." },
-            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Indispensable para guisos criollos.", desc: "Concentración superior de color tradicional." },
-            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor para restaurantes.", desc: "Máxima eficiencia para grandes preparaciones." },
-            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Secreto de hallacas industriales.", desc: "Nuestra presentación más concentrada." },
-            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Perfecta para el uso cotidiano en casa.", desc: "Toque de color tradicional fácil de usar." },
-            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar carnes.", desc: "Consistencia perfecta para aplicaciones directas." },
-            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "El aliado número uno de la cocina criolla.", desc: "El formato favorito de los cocineros profesionales." },
-            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Crea vinagretas únicas.", desc: "Vinagre artesanal con notas frutales refrescantes." },
-            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Para marinar pescados blancos.", desc: "Acidez natural del tamarindo embotellada." },
-            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Deliciosa con pan tostado.", desc: "Versión dulce y cremosa de nuestra fruta estrella." },
-            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno exquisito para repostería.", desc: "Sabor exótico equilibrado para meriendas." },
-            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Ideal para untar en pan dulce.", desc: "Esencia vibrante de la fruta de la pasión." },
-            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping ideal para helados.", desc: "Combinación cremosa con toque ácido único." },
-            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Acompáña quesos blancos frescos.", desc: "Pulpa de mango maduro suave y aromática." },
-            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar.", desc: "Sabor profundamente dulce y natural." }
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas y cerdo.", desc: "Salsa agridulce natural." },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas.", desc: "Versión familiar." },
+            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Perfecta para alitas y tacos.", desc: "Toque picante artesanal." },
+            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Dale un toque exótico.", desc: "Equilibrio perfecto." },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Úsala en ensaladas.", desc: "Opción ligera y fresca." },
+            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón.", desc: "Intensidad ácida." },
+            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Elegante para quesos.", desc: "Sofisticación tropical." },
+            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Camarones rebozados.", desc: "Pulpa de mango dulce." },
+            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Vibrante para carnes.", desc: "Sabor audaz." },
+            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Excelente para empanadas.", desc: "Sabor profundo andino." },
+            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Rescata lo tradicional." },
+            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Maravillosa con queso crema.", desc: "Dulzor de guayaba roja." },
+            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Jamón horneado.", desc: "Joya artesanal." },
+            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Hamburguesas gourmet.", desc: "Cocción lenta." },
+            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Ideal para tablas de quesos.", desc: "Dulzor natural." },
+            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo Española", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Perfecta para papas bravas.", desc: "Emulsión mediterránea." },
+            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Choripanes y carnes.", desc: "Cremosidad del ajo." },
+            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro y Perejil", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Ideal para yuca hervida.", desc: "Hierbas frescas." },
+            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping para tequeños.", desc: "Captura el aroma criollo." },
+            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base para sándwiches.", desc: "Suavidad artesanal." },
+            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base para sofritos.", desc: "Color y aroma natural." },
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Guisos criollos.", desc: "Concentración superior." },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor profesional.", desc: "Eficiencia máxima." },
+            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Secreto de hallacas.", desc: "Muy concentrada." },
+            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Uso cotidiano.", desc: "Color tradicional." },
+            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar.", desc: "Consistencia perfecta." },
+            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "Aliado cocina criolla.", desc: "Formato chef." },
+            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Vinagretas únicas.", desc: "Notas frutales." },
+            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Marinar pescados.", desc: "Acidez natural." },
+            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Pan tostado.", desc: "Dulce y cremosa." },
+            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno repostería.", desc: "Sabor exótico." },
+            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Pan dulce.", desc: "Esencia vibrante." },
+            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping helados.", desc: "Toque ácido único." },
+            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Quesos blancos.", desc: "Pulpa suave." },
+            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
         ];
 
-        // --- LÓGICA DE LA APP ---
+        // NUEVA FUNCIÓN: CARGAR TASA DESDE GOOGLE SHEETS
+        async function cargarTasaDesdeSheets() {
+            try {
+                const response = await fetch(LINK_SHEETS + "&cachebust=" + new Date().getTime());
+                const data = await response.text();
+                // Limpiamos el texto para obtener solo el número (cambiamos coma por punto para el cálculo)
+                let valor = data.trim().replace(',', '.');
+                let nuevaTasa = parseFloat(valor);
+                
+                if (!isNaN(nuevaTasa) && nuevaTasa > 0) {
+                    tasaBCV = nuevaTasa;
+                    localStorage.setItem('edp_tasa_manual', tasaBCV);
+                    console.log("Tasa actualizada desde Sheets:", tasaBCV);
+                }
+            } catch (error) {
+                console.error("Error cargando tasa desde Sheets:", error);
+            }
+            // Siempre renderizamos después de intentar cargar
+            render();
+            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+        }
 
         function filtrar(c) {
             catActual = c;
@@ -437,8 +458,6 @@
         function remove(i) { carrito.splice(i, 1); updateUI(); }
         function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
 
-        // --- ADMINISTRACIÓN ---
-
         function contarClicks() {
             clicksLogo++;
             if(clicksLogo >= 5) {
@@ -486,15 +505,13 @@
                 if(n) { 
                     tasaBCV = parseFloat(n); 
                     localStorage.setItem('edp_tasa_manual', tasaBCV); 
-                    render(); // Renderiza de una vez
+                    render();
                     document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
                 }
             }
         };
 
         window.reiniciarMetricas = () => { if(confirm("¿Borrar ventas?")) { metricas={pedidos:0,totalUSD:0}; localStorage.setItem('edp_metrics', JSON.stringify(metricas)); abrirAdmin(); } };
-
-        // --- ENVIAR PEDIDO ---
 
         document.getElementById('auth-form').onsubmit = (e) => {
             e.preventDefault();
@@ -515,20 +532,20 @@
             msg += `💳 *Pago:* ${document.getElementById('payment-method').value}\n`;
             msg += `📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n`;
             msg += `*PRODUCTOS:*\n`;
-            carrito.forEach(p => msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`);
-            msg += `\n💵 *TOTAL:* $${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
+            carrito.forEach(p => msg += `• ${p.nombre} ($${p.precioUSD})\n`);
+            msg += `\n*TOTAL: $${total.toFixed(2)} (Bs ${(total * tasaBCV).toFixed(2)})*`;
             
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
+            carrito = []; toggleCart(); updateUI();
         };
 
-        // INICIO
-        window.onload = async () => {
-            // Forzar lectura de la tasa más reciente al cargar
-            tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 55.50;
-            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
-            if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
-            render();
+        // Al cargar la página, primero intentamos traer la tasa de Sheets
+        window.onload = () => {
+            if (!localStorage.getItem('edp_user_name')) {
+                document.getElementById('auth-wall').style.display = 'flex';
+            }
+            cargarTasaDesdeSheets();
         };
     </script>
 </body>
-</html>
+</html> 
