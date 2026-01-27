@@ -6,38 +6,13 @@
     <title>E.D.P. Gourmet | Catálogo</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --vinotinto: #5a0d15;
-            --dorado: #b8860b;
-            --dorado-luz: #f1d592;
-            --oscuro: #000000;
-            --crema: #fdfaf5;
-        }
-
+        :root { --vinotinto: #5a0d15; --dorado: #b8860b; --dorado-luz: #f1d592; --oscuro: #000000; --crema: #fdfaf5; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--crema); color: #333; }
         
-        header { 
-            background: var(--oscuro); 
-            color: white; 
-            padding: 15px 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            border-bottom: 2px solid var(--dorado); 
-        }
+        /* HEADER Y HERO (RESTAURADOS) */
+        header { background: var(--oscuro); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--dorado); }
         .logo-txt { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 24px; color: var(--dorado-luz); }
-
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 70px 20px;
-        }
+        .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; color: white; text-align: center; padding: 70px 20px; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin: 0; color: var(--dorado-luz); }
         .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; }
 
@@ -50,28 +25,20 @@
 
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; padding: 30px 5%; }
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid #eee; }
-        .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: #fff; }
+        .img-box { width: 100%; height: 260px; padding: 15px; display: flex; align-items: center; justify-content: center; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
         .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; margin-bottom: 5px; }
-        .titulo { font-family: 'Playfair Display', serif; font-size: 21px; margin: 0 0 5px; color: var(--vinotinto); font-weight: 700; }
-        .pres { font-size: 14px; color: #777; font-weight: 600; margin-bottom: 10px; }
-        .desc { font-size: 13px; line-height: 1.4; color: #555; margin-bottom: 12px; }
-        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; }
-
-        .price-box { margin-bottom: 15px; padding: 10px; background: #f9f9f9; border-radius: 8px; text-align: center; }
-        .usd { font-size: 24px; font-weight: 800; display: block; color: var(--oscuro); }
-        .bs { font-size: 15px; color: var(--vinotinto); font-weight: 700; }
-
-        .btn-add { background: var(--vinotinto); color: white; border: none; padding: 15px; width: 100%; font-weight: 800; border-radius: 8px; cursor: pointer; }
+        .titulo { font-family: 'Playfair Display', serif; font-size: 21px; margin: 5px 0; color: var(--vinotinto); font-weight: 700; }
+        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin: 10px 0; font-style: italic; }
+        .price-box { padding: 10px; background: #f9f9f9; border-radius: 8px; text-align: center; margin-top: auto; }
+        .btn-add { background: var(--vinotinto); color: white; border: none; padding: 15px; width: 100%; font-weight: 800; border-radius: 8px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-txt">E.D.P. GOURMET</div>
-        <div style="font-weight: bold; color: var(--dorado-luz);">🛒 <span id="cart-count">0</span></div>
+        <div class="logo-txt" onclick="location.reload()">E.D.P. GOURMET</div>
+        <div style="font-weight: bold; color: var(--dorado-luz); cursor: pointer;" onclick="verCarrito()">🛒 <span id="cart-count">0</span></div>
     </header>
 
     <div class="hero">
@@ -80,7 +47,7 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val" onclick="cambiarTasa()">...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val" onclick="cambiarTasa()">Cargando...</span> Bs/USD
     </div>
 
     <nav class="cat-bar" id="cat-nav">
@@ -96,7 +63,9 @@
 
     <script>
         const CLAVE_ADMIN = "edp2026";
-        let tasaBCV = parseFloat(localStorage.getItem('tasa_manual_vfinal')) || 55.50;
+        // Lógica de persistencia ultra-reforzada
+        let tasaBCV = parseFloat(localStorage.getItem('tasa_edp_v5')) || 55.50;
+        let carrito = JSON.parse(localStorage.getItem('carrito_edp')) || [];
         let catActual = 'todos';
 
         const productos = [
@@ -144,29 +113,30 @@
                 <div class="card">
                     <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300?text=EDP+Gourmet'"></div>
                     <div class="info">
-                        <span class="tag">${p.cat}</span>
+                        <span style="font-size:10px; color:var(--dorado); font-weight:800; text-transform:uppercase">${p.cat}</span>
                         <h3 class="titulo">${p.nombre}</h3>
-                        <div class="pres">${p.pres}</div>
-                        <div class="desc">${p.desc}</div>
+                        <div style="font-size:14px; color:#666;">${p.pres}</div>
+                        <div style="font-size:13px; margin:8px 0;">${p.desc}</div>
                         <div class="chef-hint">👨‍🍳 <b>Tip del Chef:</b> ${p.chef}</div>
                         <div class="price-box">
-                            <span class="usd">$${p.usd.toFixed(2)}</span>
-                            <span class="bs">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
+                            <span style="font-size:22px; font-weight:800; display:block;">$${p.usd.toFixed(2)}</span>
+                            <span style="color:var(--vinotinto); font-weight:700;">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
                         </div>
-                        <button class="btn-add">AÑADIR AL PEDIDO</button>
+                        <button class="btn-add" onclick="agregar(${p.id})">AÑADIR AL PEDIDO</button>
                     </div>
                 </div>
             `).join('');
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+            document.getElementById('cart-count').innerText = carrito.length;
         }
 
         window.cambiarTasa = function() {
-            const pass = prompt("Clave de administrador:");
+            const pass = prompt("Clave de Administrador:");
             if(pass === CLAVE_ADMIN) {
                 const nueva = prompt("Nueva tasa BCV:", tasaBCV);
                 if(nueva && !isNaN(nueva)) {
                     tasaBCV = parseFloat(nueva);
-                    localStorage.setItem('tasa_manual_vfinal', tasaBCV);
+                    localStorage.setItem('tasa_edp_v5', tasaBCV); // Guardado inmediato
                     render();
                 }
             } else if(pass !== null) { alert("Clave incorrecta"); }
@@ -176,6 +146,21 @@
             catActual = c;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(c) || (c==='todos' && b.innerText==='Todos')));
             render();
+        }
+
+        function agregar(id) {
+            const p = productos.find(x => x.id === id);
+            carrito.push(p);
+            localStorage.setItem('carrito_edp', JSON.stringify(carrito));
+            render();
+        }
+
+        function verCarrito() {
+            if(carrito.length === 0) return alert("Tu carrito está vacío");
+            let resumen = "Tu Pedido EDP Gourmet:\n\n";
+            carrito.forEach(i => resumen += `- ${i.nombre} (${i.pres})\n`);
+            alert(resumen);
+            // Aquí irá la lógica de WhatsApp que definiremos luego
         }
 
         window.onload = render;
