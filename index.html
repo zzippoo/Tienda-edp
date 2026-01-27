@@ -176,7 +176,6 @@
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
         .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
 
-        /* Estilo para los datos de pago dentro del carrito */
         .payment-info {
             background: #eef2f3;
             padding: 12px;
@@ -269,8 +268,8 @@
 
                 <div class="payment-info">
                     <strong>MÉTODOS DE PAGO:</strong><br>
-                    • Pago Móvil: BNC (0191) - 12.636.552 - 0412.341.8345<br>
-                    • Transferencia: Banco Nacional de Crédito (BNC)<br>
+                    • Pago Móvil: Banesco - 5.375.295 - 0412.341.8345<br>
+                    • Transferencia: Banesco<br>
                     • Divisas: Efectivo (Solo Valencia) / Zelle
                 </div>
 
@@ -287,7 +286,7 @@
                     <select id="payment-method" required>
                         <option value="" disabled selected>Seleccione Forma de Pago</option>
                         <option value="Pago Movil">Pago Móvil</option>
-                        <option value="Transferencia BNC">Transferencia BNC</option>
+                        <option value="Transferencia Banesco">Transferencia Banesco</option>
                         <option value="Zelle">Zelle</option>
                         <option value="Efectivo">Efectivo (Solo Valencia)</option>
                     </select>
@@ -489,7 +488,6 @@
             document.getElementById('auth-wall').style.display = 'none';
         };
 
-        // LÓGICA DE WHATSAPP MEJORADA
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
