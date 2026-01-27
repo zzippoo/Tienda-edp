@@ -31,7 +31,6 @@
             scroll-behavior: smooth;
         }
 
-        /* --- HEADER & NAVIGATION --- */
         header {
             background: var(--oscuro);
             color: white;
@@ -68,7 +67,6 @@
             gap: 8px;
         }
 
-        /* --- HERO BANNER --- */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
@@ -81,7 +79,6 @@
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
         .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; line-height: 1.4; }
 
-        /* --- TASA BAR --- */
         .tasa-bar {
             background: white;
             text-align: center;
@@ -90,9 +87,8 @@
             font-weight: 700;
             border-bottom: 1px solid #eee;
         }
-        #tasa-val { color: var(--vinotinto); text-decoration: underline; cursor: pointer; }
+        #tasa-val { color: var(--vinotinto); }
 
-        /* --- CATEGORÍAS --- */
         .cat-bar {
             background: white;
             padding: 15px;
@@ -121,7 +117,6 @@
 
         .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
 
-        /* --- GRID DE PRODUCTOS --- */
         #catalog {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -140,7 +135,6 @@
             border: 1px solid #eee;
         }
         .card.agotado { opacity: 0.6; filter: grayscale(0.8); }
-        .card:hover { transform: translateY(-5px); border-color: var(--dorado); }
 
         .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; background: #fff; display: flex; align-items: center; justify-content: center; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -170,20 +164,16 @@
         }
         .btn-add:hover { background: var(--oscuro); }
 
-        /* --- FOOTER & POLÍTICAS --- */
         footer { background: var(--oscuro); color: #bbb; padding: 60px 5% 30px; font-size: 13px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
         .footer-h4 { color: var(--dorado-luz); font-family: 'Playfair Display', serif; margin-bottom: 15px; font-size: 18px; text-transform: uppercase; }
-        .policy-item { margin-bottom: 8px; display: block; line-height: 1.4; }
 
-        /* --- MODALES --- */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding: 10px; box-sizing: border-box; }
         .modal-content { background:white; width:100%; max-width:500px; border-radius:15px; overflow:hidden; position:relative; max-height: 90vh; display: flex; flex-direction: column; }
         .modal-header { background:var(--vinotinto); color:white; padding:18px; display:flex; justify-content:space-between; align-items: center; }
         .scroll-area { padding:20px; overflow-y:auto; flex-grow: 1; }
 
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
-        
         .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
 
         @media (max-width: 600px) {
@@ -207,7 +197,7 @@
     </div>
 
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val" onclick="adminTasa()">Cargando...</span> Bs/USD
+        Tasa Oficial BCV: <span id="tasa-val">Cargando...</span> Bs/USD
     </div>
 
     <nav class="cat-bar" id="cat-nav">
@@ -227,31 +217,25 @@
         <div class="footer-grid">
             <div>
                 <h4 class="footer-h4">E.D.P. GOURMET</h4>
-                <p>Artesanía culinaria desde Valencia, Venezuela. Fusionamos tradición e innovación.</p>
-                <p id="rif-display">RIF: (Pendiente)</p>
+                <p>Artesanía culinaria desde Valencia, Venezuela.</p>
+                <p>RIF: J-505436660</p>
             </div>
             <div>
                 <h4 class="footer-h4">ENVÍOS</h4>
-                <span class="policy-item">📦 Nacional: MRW, Zoom, Tealca (COD).</span>
-                <span class="policy-item">🛵 Local: Delivery Valencia / Pickup.</span>
-                <span class="policy-item">⏳ Despacho: 24-48h hábiles.</span>
+                <span style="display:block">📦 Nacional: MRW, Zoom, Tealca.</span>
+                <span style="display:block">🛵 Local: Delivery Valencia.</span>
             </div>
             <div>
                 <h4 class="footer-h4">CALIDAD</h4>
-                <span class="policy-item">🧪 Sin conservantes artificiales.</span>
-                <span class="policy-item">❄️ Refrigerar después de abrir.</span>
-                <span class="policy-item">⚠️ Garantía: 24h para reportes.</span>
+                <span style="display:block">🧪 Sin conservantes.</span>
+                <span style="display:block">❄️ Refrigerar al abrir.</span>
             </div>
-        </div>
-        <div style="text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid #333; opacity: 0.6;">
-            &copy; 2026 E.D.P. Gourmet. Todos los derechos reservados.
         </div>
     </footer>
 
     <div id="auth-wall" class="modal">
         <div class="modal-content" style="padding: 25px;">
             <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
-            <p style="text-align:center; margin-bottom: 20px; font-size: 14px;">Para una atención personalizada, ingresa tus datos:</p>
             <form id="auth-form">
                 <input type="text" id="user-name" placeholder="Nombre Completo" required>
                 <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 04121234567)" required>
@@ -263,24 +247,18 @@
     <div id="cart-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 style="margin:0; font-family: 'Playfair Display';">Tu Pedido</h3>
-                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+                <h3 style="margin:0;">Tu Pedido</h3>
+                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px;">✕</button>
             </div>
             <div id="cart-items" class="scroll-area"></div>
-            
-            <div style="padding: 15px; background: #fffde7; border-top: 1px solid #eee;">
-                <h4 style="margin:0 0 5px 0; font-size: 14px; color: var(--vinotinto);">💳 PAGO MÓVIL:</h4>
-                <div style="font-size: 12px;">Banesco | CI 5.375.295 | 0412-3418345</div>
-            </div>
-
             <div style="padding: 20px; background: #f9f9f9;">
-                <p style="font-size: 18px; margin: 0 0 15px 0; font-weight: bold; display: flex; justify-content: space-between;">
+                <p style="font-size: 18px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between;">
                     <span>Total:</span> <span id="total-info">$0.00</span>
                 </p>
                 <form id="checkout-form">
                     <select id="shipping-method" required>
                         <option value="" disabled selected>Método de envío</option>
-                        <option value="MRW">MRW / Zoom / Tealca</option>
+                        <option value="MRW">Envió Nacional (MRW/Zoom)</option>
                         <option value="Delivery">Delivery (Valencia)</option>
                         <option value="Pickup">Pickup</option>
                     </select>
@@ -289,16 +267,9 @@
                         <option value="Pago Móvil">Pago Móvil</option>
                         <option value="Zelle">Zelle</option>
                         <option value="Efectivo">Efectivo</option>
-                        <option value="Transferencia">Transferencia Banesco</option>
                     </select>
-                    <textarea id="shipping-address" placeholder="Dirección exacta o punto de referencia..." required></textarea>
-                    
-                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
-                        <input type="checkbox" id="terms-check" style="width: auto; margin-top: 4px;" required>
-                        <label for="terms-check" style="font-size: 11px; color: #666; cursor: pointer;">Acepto las condiciones de compra, garantía de 24h y tiempos de despacho (24-48h).</label>
-                    </div>
-
-                    <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO POR WHATSAPP</button>
+                    <textarea id="shipping-address" placeholder="Dirección de entrega..." required></textarea>
+                    <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR A WHATSAPP</button>
                 </form>
             </div>
         </div>
@@ -320,7 +291,6 @@
                     </div>
                 </div>
                 <div id="admin-product-list"></div>
-                <button onclick="reiniciarMetricas()" style="margin-top:20px; color:red; background:none; border:none; width:100%; cursor:pointer;">Reiniciar Métricas</button>
             </div>
         </div>
     </div>
@@ -330,7 +300,7 @@
         const WHATSAPP_ALFREDO = "584123418345";
         const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?gid=0&single=true&output=csv";
         
-        let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 398.92;
+        let tasaBCV = 1; 
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
@@ -375,29 +345,19 @@
             { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
         ];
 
-        // FUNCIÓN REFORZADA: CARGAR TASA CON ROMPE-CACHÉ
         async function cargarTasaDesdeSheets() {
             try {
-                // El parámetro &t= fuerza a Google a enviar el archivo más reciente
-                const response = await fetch(LINK_SHEETS + "&t=" + new Date().getTime());
+                const cacheBuster = "&t=" + new Date().getTime();
+                const response = await fetch(LINK_SHEETS + cacheBuster);
                 const data = await response.text();
-                
-                // Limpieza de datos
-                let valorLimpio = data.trim().replace(',', '.');
+                let valorLimpio = data.trim().replace(/\s/g, '').replace(',', '.');
                 let nuevaTasa = parseFloat(valorLimpio);
-                
                 if (!isNaN(nuevaTasa) && nuevaTasa > 0) {
                     tasaBCV = nuevaTasa;
-                    localStorage.setItem('edp_tasa_manual', tasaBCV);
-                    console.log("Tasa actualizada con éxito:", tasaBCV);
                 }
-            } catch (error) {
-                console.error("Error conectando con la tasa en línea:", error);
-            }
-            
-            // Actualizamos la interfaz
-            render();
+            } catch (e) { console.log("Error de conexión"); }
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+            render();
         }
 
         function filtrar(c) {
@@ -412,7 +372,6 @@
         function render() {
             const container = document.getElementById('catalog');
             const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
-            
             container.innerHTML = lista.map(p => {
                 const conf = configProductos[p.id] || { activo: true, precio: p.usd };
                 return `
@@ -429,7 +388,7 @@
                                 <span class="usd">$${conf.precio.toFixed(2)}</span>
                                 <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
                             </div>
-                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? 'var(--vinotinto)' : '#ccc'}">
+                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? '' : '#ccc'}">
                                 ${conf.activo ? 'AÑADIR AL PEDIDO' : 'AGOTADO'}
                             </button>
                         </div>
@@ -452,19 +411,18 @@
             document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
                     <span style="font-size:13px;">${p.nombre} (${p.pres})</span>
-                    <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
+                    <button onclick="remove(${i})" style="color:red; border:none; background:none;">✕</button>
                 </div>
             `).join('');
         }
 
         function remove(i) { carrito.splice(i, 1); updateUI(); }
         function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-
+        
         function contarClicks() {
             clicksLogo++;
             if(clicksLogo >= 5) {
-                const p = prompt("Clave Admin:");
-                if(p === CLAVE_ADMIN) abrirAdmin();
+                if(prompt("Clave Admin:") === CLAVE_ADMIN) abrirAdmin();
                 clicksLogo = 0;
             }
         }
@@ -479,8 +437,8 @@
                 return `
                     <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; align-items:center;">
                         <span style="font-size:11px; width:40%">${p.nombre}</span>
-                        <input type="number" step="0.01" value="${conf.precio}" onchange="cambiarPrecio(${p.id}, this.value)" style="width:60px; margin:0; padding:2px;">
-                        <button onclick="toggleActivo(${p.id})" style="background:${conf.activo ? 'green' : 'red'}; color:white; border:none; padding:4px; font-size:10px; border-radius:4px;">${conf.activo ? 'ACT' : 'AGOT'}</button>
+                        <input type="number" step="0.01" value="${conf.precio}" onchange="cambiarPrecio(${p.id}, this.value)" style="width:60px; margin:0;">
+                        <button onclick="toggleActivo(${p.id})" style="background:${conf.activo ? 'green' : 'red'}; color:white; border:none; padding:5px; border-radius:4px;">${conf.activo ? 'ACT' : 'AGOT'}</button>
                     </div>
                 `;
             }).join('');
@@ -500,25 +458,9 @@
             render();
         };
 
-        window.adminTasa = function() {
-            const p = prompt("Clave Tasa:");
-            if(p === CLAVE_ADMIN) {
-                const n = prompt("Nueva Tasa BCV:", tasaBCV);
-                if(n) { 
-                    tasaBCV = parseFloat(n); 
-                    localStorage.setItem('edp_tasa_manual', tasaBCV); 
-                    render();
-                    document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
-                }
-            }
-        };
-
-        window.reiniciarMetricas = () => { if(confirm("¿Borrar ventas?")) { metricas={pedidos:0,totalUSD:0}; localStorage.setItem('edp_metrics', JSON.stringify(metricas)); abrirAdmin(); } };
-
         document.getElementById('auth-form').onsubmit = (e) => {
             e.preventDefault();
             localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
-            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
             document.getElementById('auth-wall').style.display = 'none';
         };
 
@@ -527,24 +469,15 @@
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
             metricas.pedidos += 1; metricas.totalUSD += total;
             localStorage.setItem('edp_metrics', JSON.stringify(metricas));
-
-            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
-            msg += `👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n`;
-            msg += `🚚 *Método:* ${document.getElementById('shipping-method').value}\n`;
-            msg += `💳 *Pago:* ${document.getElementById('payment-method').value}\n`;
-            msg += `📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n`;
-            msg += `*PRODUCTOS:*\n`;
+            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n🚚 *Método:* ${document.getElementById('shipping-method').value}\n📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n*PRODUCTOS:*\n`;
             carrito.forEach(p => msg += `• ${p.nombre} ($${p.precioUSD})\n`);
             msg += `\n*TOTAL: $${total.toFixed(2)} (Bs ${(total * tasaBCV).toFixed(2)})*`;
-            
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
             carrito = []; toggleCart(); updateUI();
         };
 
         window.onload = () => {
-            if(!localStorage.getItem('edp_user_name')) {
-                document.getElementById('auth-wall').style.display = 'flex';
-            }
+            if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display = 'flex';
             cargarTasaDesdeSheets();
         };
     </script>
