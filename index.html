@@ -375,21 +375,27 @@
             { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
         ];
 
+        // FUNCIÓN REFORZADA: CARGAR TASA CON ROMPE-CACHÉ
         async function cargarTasaDesdeSheets() {
             try {
-                const response = await fetch(LINK_SHEETS + "&cachebust=" + new Date().getTime());
+                // El parámetro &t= fuerza a Google a enviar el archivo más reciente
+                const response = await fetch(LINK_SHEETS + "&t=" + new Date().getTime());
                 const data = await response.text();
-                let valor = data.trim().replace(',', '.');
-                let nuevaTasa = parseFloat(valor);
+                
+                // Limpieza de datos
+                let valorLimpio = data.trim().replace(',', '.');
+                let nuevaTasa = parseFloat(valorLimpio);
                 
                 if (!isNaN(nuevaTasa) && nuevaTasa > 0) {
                     tasaBCV = nuevaTasa;
                     localStorage.setItem('edp_tasa_manual', tasaBCV);
-                    console.log("Tasa actualizada desde Sheets:", tasaBCV);
+                    console.log("Tasa actualizada con éxito:", tasaBCV);
                 }
             } catch (error) {
-                console.error("Error cargando tasa desde Sheets:", error);
+                console.error("Error conectando con la tasa en línea:", error);
             }
+            
+            // Actualizamos la interfaz
             render();
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
         }
@@ -535,7 +541,6 @@
             carrito = []; toggleCart(); updateUI();
         };
 
-        // Al cargar la página
         window.onload = () => {
             if(!localStorage.getItem('edp_user_name')) {
                 document.getElementById('auth-wall').style.display = 'flex';
