@@ -336,7 +336,6 @@
         let catActual = 'todos';
         let clicksLogo = 0;
 
-        // BASE DE DATOS COMPLETA - 35 PRODUCTOS SEGÚN IMAGEN EXCEL
         const productosBase = [
             { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo y langostinos.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural de la fruta con un toque artesanal para resaltar tus platos favoritos." },
             { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo a la barbacoa.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural de la fruta con un toque artesanal para resaltar tus platos favoritos." },
@@ -375,8 +374,6 @@
             { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar en tus desayunos familiares.", desc: "Pulpa de mango maduro seleccionada para una experiencia suave y aromática." }
         ];
 
-        // --- LÓGICA DE LA APP ---
-
         function filtrar(c) {
             catActual = c;
             document.querySelectorAll('.cat-btn').forEach(b => {
@@ -389,7 +386,6 @@
         function render() {
             const container = document.getElementById('catalog');
             const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
-            
             container.innerHTML = lista.map(p => {
                 const conf = configProductos[p.id] || { activo: true, precio: p.usd };
                 return `
@@ -436,8 +432,6 @@
 
         function remove(i) { carrito.splice(i, 1); updateUI(); }
         function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-
-        // --- ADMINISTRACIÓN ---
 
         function contarClicks() {
             clicksLogo++;
@@ -494,8 +488,6 @@
 
         window.reiniciarMetricas = () => { if(confirm("¿Borrar ventas?")) { metricas={pedidos:0,totalUSD:0}; localStorage.setItem('edp_metrics', JSON.stringify(metricas)); abrirAdmin(); } };
 
-        // --- ENVIAR PEDIDO ---
-
         document.getElementById('auth-form').onsubmit = (e) => {
             e.preventDefault();
             localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
@@ -523,7 +515,17 @@
             carrito = []; updateUI(); toggleCart();
         };
 
-        window.onload = () => {
+        window.onload = async () => {
+            // INTENTO DE ACTUALIZACIÓN AUTOMÁTICA DE TASA
+            try {
+                const res = await fetch('https://pydolarve.org/api/v1/dollar?page=bcv');
+                const data = await res.json();
+                const oficial = data.monitors.usd.price;
+                if(oficial && !localStorage.getItem('edp_tasa_manual')) {
+                    tasaBCV = oficial;
+                }
+            } catch(e) { console.log("Usando tasa manual/cache"); }
+            
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
             render();
