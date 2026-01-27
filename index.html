@@ -282,4 +282,252 @@
                         <option value="" disabled selected>Método de envío</option>
                         <option value="MRW">MRW / Zoom / Tealca</option>
                         <option value="Delivery">Delivery (Valencia)</option>
-                        <option value="Pickup">Pickup</
+                        <option value="Pickup">Pickup</option>
+                    </select>
+                    <select id="payment-method" required>
+                        <option value="" disabled selected>Método de pago</option>
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Zelle">Zelle</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transferencia">Transferencia Banesco</option>
+                    </select>
+                    <textarea id="shipping-address" placeholder="Dirección exacta o punto de referencia..." required></textarea>
+                    
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
+                        <input type="checkbox" id="terms-check" style="width: auto; margin-top: 4px;" required>
+                        <label for="terms-check" style="font-size: 11px; color: #666; cursor: pointer;">Acepto las condiciones de compra, garantía de 24h y tiempos de despacho (24-48h).</label>
+                    </div>
+
+                    <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO POR WHATSAPP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #333;">
+                <h3 style="margin:0;">⚙️ Panel Admin</h3>
+                <button onclick="document.getElementById('admin-modal').style.display='none'" style="color:white; background:none; border:none; font-size:20px;">✕</button>
+            </div>
+            <div class="scroll-area">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div style="background:var(--vinotinto); color:white; padding:15px; border-radius:10px; text-align:center;">
+                        <small>PEDIDOS</small><div id="stat-pedidos" style="font-size:20px; font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:var(--dorado); color:var(--vinotinto); padding:15px; border-radius:10px; text-align:center;">
+                        <small>TOTAL USD</small><div id="stat-dinero" style="font-size:20px; font-weight:bold;">0</div>
+                    </div>
+                </div>
+                <div id="admin-product-list"></div>
+                <button onclick="reiniciarMetricas()" style="margin-top:20px; color:red; background:none; border:none; width:100%; cursor:pointer;">Reiniciar Métricas</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CLAVE_ADMIN = "edp2026";
+        const WHATSAPP_ALFREDO = "584123418345";
+        
+        let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 55.50;
+        let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
+        let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
+        let carrito = [];
+        let catActual = 'todos';
+        let clicksLogo = 0;
+
+        // BASE DE DATOS COMPLETA - 35 PRODUCTOS CON TEXTOS ORIGINALES
+        const productosBase = [
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para acompañar carnes blancas, cerdo y langostinos.", desc: "Nuestra Salsa de Tamarindo Agridulce combina la acidez natural de la fruta con un toque artesanal para resaltar tus platos favoritos." },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas de cerdo a la barbacoa.", desc: "Versión familiar de nuestra explosión tropical, perfecta para marinar o como dipping." },
+            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Perfecta para alitas de pollo y tacos.", desc: "Fusionamos la base agridulce con una selección de ajíes para quienes buscan una experiencia vibrante." },
+            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Dale un toque exótico a tus vegetales salteados.", desc: "El equilibrio perfecto entre el dulzor del tamarindo y un picor audaz pero elegante." },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Úsala en ensaladas tropicales y carnes blancas.", desc: "Un aderezo ligero y fresco que captura la esencia de la lechosa con notas cítricas." },
+            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón a la plancha.", desc: "La intensidad ácida de la parchita se encuentra con el frescor picante del jengibre." },
+            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Elegante para quesos madurados y tablas de embutidos.", desc: "Sofisticación tropical en formato grande para tus eventos especiales." },
+            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Acompáñala con camarones rebozados.", desc: "Pulpa de mango seleccionado con el carácter inconfundible del jalapeño." },
+            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Vibrante para carnes de cerdo y aves.", desc: "Sabor audaz que recorre todo el paladar con su textura sedosa." },
+            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Excelente para empanadas, tequeños y pasapalos.", desc: "Rescatamos el sabor profundo andino del tomate de árbol con un toque picante gourmet." },
+            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla y asados.", desc: "Tradición e innovación en una salsa robusta y llena de carácter." },
+            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Maravillosa con queso crema y galletas.", desc: "Dulzor natural de guayaba roja madura con la chispa picante del jengibre fresco." },
+            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Acompañante único para jamón horneado o carnes frías.", desc: "Una joya artesanal que equilibra aromas frutales y especiados." },
+            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Indispensable en hamburguesas gourmet y sándwiches.", desc: "Cocción lenta y precisa para extraer el dulzor natural de la cebolla." },
+            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Ideal para tablas de quesos y rellenos de carnes.", desc: "Sabor profundo y textura melosa para los paladares más exigentes." },
+            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo Española", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Perfecta para papas bravas, pescados y mariscos.", desc: "Emulsión clásica mediterránea, intensa en sabor y extremadamente cremosa." },
+            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Ideal para choripanes, carnes rojas y pizzas.", desc: "La fuerza del ajo se potencia con una mezcla secreta de ajíes seleccionados." },
+            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro y Perejil", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Ideal para yuca hervida, carnes blancas y ensaladas de grano.", desc: "Una explosión de hierbas frescas y especias que resaltan cualquier preparación." },
+            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping perfecto para tequeños y arepitas fritas.", desc: "Capturamos el aroma y sabor del ají dulce venezolano en una mayonesa artesanal." },
+            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base ideal para rellenos de sándwiches y ensaladas de pollo.", desc: "Suavidad artesanal con el perfume inconfundible de nuestra tierra." },
+            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base perfecta para tus sofritos y hallacas tradicionales.", desc: "Extraído de semillas seleccionadas para dar color y aroma natural sin químicos." },
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Indispensable para guisos criollos y arroces coloridos.", desc: "Concentración superior de color onotado en una textura líquida fácil de usar." },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Formato rendidor para restaurantes y cocinas de alto volumen.", desc: "Máxima eficiencia y rendimiento para tus recetas a gran escala." },
+            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "El secreto para hallacas industriales y grandes producciones.", desc: "Nuestra presentación más concentrada para un color intenso e inmediato." },
+            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Perfecta para el uso cotidiano en casa para carnes y granos.", desc: "Toque de color tradicional en una pasta densa y muy rendidora." },
+            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar carnes al horno y aves.", desc: "Consistencia perfecta para aplicaciones directas en carnes antes de cocinar." },
+            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "El aliado número uno de la cocina criolla profesional.", desc: "El formato favorito de los cocineros que buscan tradición y calidad." },
+            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Crea vinagretas únicas para ensaladas verdes.", desc: "Vinagre artesanal infusionado con la acidez característica del tamarindo." },
+            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Para marinar pescados blancos y aves al horno.", desc: "Aporta una nota frutal y ácida que transforma tus platos sencillos en gourmet." },
+            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Deliciosa con pan tostado o rellenos de crepes.", desc: "Versión dulce, untable y cremosa de nuestra fruta estrella tropical." },
+            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno exquisito para repostería y pastelería fina.", desc: "Sabor exótico equilibrado para las meriendas más especiales de la familia." },
+            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Ideal para untar en pan dulce o galletas de mantequilla.", desc: "Toda la esencia vibrante de la fruta de la pasión en una crema sedosa." },
+            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping ideal para helados de vainilla o cheesecakes.", desc: "Combinación perfecta de cremosidad con el toque ácido único de la parchita." },
+            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Acompáña quesos blancos frescos para un contraste dulce-salado.", desc: "Pulpa de mango maduro seleccionada para una experiencia suave y aromática." },
+            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar en tus desayunos familiares.", desc: "Sabor profundamente dulce, natural y sin colorantes artificiales." }
+        ];
+
+        // --- LÓGICA DE LA APP ---
+
+        function filtrar(c) {
+            catActual = c;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                const txt = b.innerText.toLowerCase();
+                b.classList.toggle('active', txt === c || (c === 'todos' && txt === 'todos'));
+            });
+            render();
+        }
+
+        function render() {
+            const container = document.getElementById('catalog');
+            const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
+            
+            container.innerHTML = lista.map(p => {
+                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
+                return `
+                    <div class="card ${conf.activo ? '' : 'agotado'}">
+                        ${conf.activo ? '' : '<div class="badge-agotado">PRODUCTO AGOTADO</div>'}
+                        <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+GOURMET'"></div>
+                        <div class="info">
+                            <span class="tag">${p.cat}</span>
+                            <h3 class="titulo">${p.nombre}</h3>
+                            <div class="pres">${p.pres}</div>
+                            <div class="desc">${p.desc}</div>
+                            <div class="chef-hint">👨‍🍳 ${p.chef}</div>
+                            <div class="price-box">
+                                <span class="usd">$${conf.precio.toFixed(2)}</span>
+                                <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
+                            </div>
+                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? 'var(--vinotinto)' : '#ccc'}">
+                                ${conf.activo ? 'AÑADIR AL PEDIDO' : 'AGOTADO'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToCart(id) {
+            const p = productosBase.find(x => x.id === id);
+            const conf = configProductos[id] || { precio: p.usd };
+            carrito.push({...p, precioUSD: conf.precio});
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('cart-count').innerText = carrito.length;
+            const total = carrito.reduce((s, p) => s + p.precioUSD, 0);
+            document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
+            document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span style="font-size:13px;">${p.nombre} (${p.pres})</span>
+                    <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function remove(i) { carrito.splice(i, 1); updateUI(); }
+        function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+
+        // --- ADMINISTRACIÓN ---
+
+        function contarClicks() {
+            clicksLogo++;
+            if(clicksLogo >= 5) {
+                const p = prompt("Clave Admin:");
+                if(p === CLAVE_ADMIN) abrirAdmin();
+                clicksLogo = 0;
+            }
+        }
+
+        function abrirAdmin() {
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('stat-pedidos').innerText = metricas.pedidos;
+            document.getElementById('stat-dinero').innerText = metricas.totalUSD.toFixed(2);
+            const list = document.getElementById('admin-product-list');
+            list.innerHTML = productosBase.map(p => {
+                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
+                return `
+                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; align-items:center;">
+                        <span style="font-size:11px; width:40%">${p.nombre}</span>
+                        <input type="number" step="0.01" value="${conf.precio}" onchange="cambiarPrecio(${p.id}, this.value)" style="width:60px; margin:0; padding:2px;">
+                        <button onclick="toggleActivo(${p.id})" style="background:${conf.activo ? 'green' : 'red'}; color:white; border:none; padding:4px; font-size:10px; border-radius:4px;">${conf.activo ? 'ACT' : 'AGOT'}</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.toggleActivo = (id) => {
+            if(!configProductos[id]) configProductos[id] = { activo: true, precio: productosBase.find(x=>x.id==id).usd };
+            configProductos[id].activo = !configProductos[id].activo;
+            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
+            abrirAdmin(); render();
+        };
+
+        window.cambiarPrecio = (id, v) => {
+            if(!configProductos[id]) configProductos[id] = { activo: true, precio: 0 };
+            configProductos[id].precio = parseFloat(v);
+            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
+            render();
+        };
+
+        window.adminTasa = function() {
+            const p = prompt("Clave Tasa:");
+            if(p === CLAVE_ADMIN) {
+                const n = prompt("Nueva Tasa BCV:", tasaBCV);
+                if(n) { 
+                    tasaBCV = parseFloat(n); 
+                    localStorage.setItem('edp_tasa_manual', tasaBCV); 
+                    render(); 
+                    document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+                }
+            }
+        };
+
+        window.reiniciarMetricas = () => { if(confirm("¿Borrar ventas?")) { metricas={pedidos:0,totalUSD:0}; localStorage.setItem('edp_metrics', JSON.stringify(metricas)); abrirAdmin(); } };
+
+        // --- ENVIAR PEDIDO ---
+
+        document.getElementById('auth-form').onsubmit = (e) => {
+            e.preventDefault();
+            localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
+            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
+            document.getElementById('auth-wall').style.display = 'none';
+        };
+
+        document.getElementById('checkout-form').onsubmit = (e) => {
+            e.preventDefault();
+            const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
+            metricas.pedidos += 1; metricas.totalUSD += total;
+            localStorage.setItem('edp_metrics', JSON.stringify(metricas));
+
+            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
+            msg += `👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n`;
+            msg += `🚚 *Método:* ${document.getElementById('shipping-method').value}\n`;
+            msg += `💳 *Pago:* ${document.getElementById('payment-method').value}\n`;
+            msg += `📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n`;
+            msg += `*PRODUCTOS:*\n`;
+            carrito.forEach(p => msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`);
+            msg += `\n*TOTAL:* $${total.toFixed(2)} (Bs ${(total * tasaBCV).toFixed(2)})\n`;
+            msg += `_Tasa: ${tasaBCV.toFixed(2)} Bs/USD_`;
+
+            window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`, '_blank');
+            carrito = []; updateUI(); toggleCart();
+        };
+
+        window.onload = () => {
+            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+            if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
+            render();
+        };
+    </script>
+</body>
+</html>
