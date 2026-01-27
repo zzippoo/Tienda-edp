@@ -371,7 +371,7 @@
             { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Ideal para untar en pan dulce o galletas de mantequilla.", desc: "Toda la esencia vibrante de la fruta de la pasión en una crema sedosa." },
             { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping ideal para helados de vainilla o cheesecakes.", desc: "Toda la esencia vibrante de la fruta de la pasión en una crema sedosa." },
             { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Acompáña quesos blancos frescos para un contraste dulce-salado.", desc: "Pulpa de mango maduro seleccionada para una experiencia suave y aromática." },
-            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar en tus desayunos familiares.", desc: "Pulpa de mango maduro seleccionada para una experiencia suave y aromática." }
+            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical para untar en tus dsayunos familiares.", desc: "Pulpa de mango maduro seleccionada para una experiencia suave y aromática." }
         ];
 
         function filtrar(c) {
@@ -516,15 +516,33 @@
         };
 
         window.onload = async () => {
-            // INTENTO DE ACTUALIZACIÓN AUTOMÁTICA DE TASA
-            try {
-                const res = await fetch('https://pydolarve.org/api/v1/dollar?page=bcv');
-                const data = await res.json();
-                const oficial = data.monitors.usd.price;
-                if(oficial && !localStorage.getItem('edp_tasa_manual')) {
-                    tasaBCV = oficial;
+            // SISTEMA REFORZADO DE TASA (3 Fuentes)
+            const fuentes = [
+                'https://ve.dolarapi.com/v1/dolares/oficial',
+                'https://pydolarve.org/api/v1/dollar?page=bcv',
+                'https://open.er-api.com/v6/latest/USD'
+            ];
+
+            // Solo actualiza si NO hay una manual bloqueándola
+            if (!localStorage.getItem('edp_tasa_manual')) {
+                for (let url of fuentes) {
+                    try {
+                        const res = await fetch(url);
+                        const data = await res.json();
+                        let valor = 0;
+                        if (data.promedio) valor = data.promedio; 
+                        else if (data.monitors) valor = data.monitors.usd.price;
+                        else if (data.rates) valor = data.rates.VES;
+
+                        if (valor > 10) { 
+                            tasaBCV = valor;
+                            break; 
+                        }
+                    } catch (e) { console.log("Reintentando fuente..."); }
                 }
-            } catch(e) { console.log("Usando tasa manual/cache"); }
+            } else {
+                tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual'));
+            }
             
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
@@ -532,4 +550,4 @@
         };
     </script>
 </body>
-</html>
+</html> 
