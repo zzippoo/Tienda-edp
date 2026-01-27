@@ -176,6 +176,16 @@
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
         .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
 
+        /* Estilo para los datos de pago dentro del carrito */
+        .payment-info {
+            background: #eef2f3;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--vinotinto);
+        }
+
         @media (max-width: 600px) {
             .hero h1 { font-size: 30px; }
             #catalog { grid-template-columns: 1fr; }
@@ -251,19 +261,40 @@
                 <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px;">✕</button>
             </div>
             <div id="cart-items" class="scroll-area"></div>
+            
             <div style="padding: 20px; background: #f9f9f9;">
-                <p style="font-size: 18px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between;">
+                <p style="font-size: 18px; margin-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between;">
                     <span>Total:</span> <span id="total-info">$0.00</span>
                 </p>
+
+                <div class="payment-info">
+                    <strong>MÉTODOS DE PAGO:</strong><br>
+                    • Pago Móvil: BNC (0191) - 12.636.552 - 0412.341.8345<br>
+                    • Transferencia: Banco Nacional de Crédito (BNC)<br>
+                    • Divisas: Efectivo (Solo Valencia) / Zelle
+                </div>
+
                 <form id="checkout-form">
                     <select id="shipping-method" required>
-                        <option value="" disabled selected>Método de envío</option>
-                        <option value="MRW">Envió Nacional (MRW/Zoom)</option>
-                        <option value="Delivery">Delivery (Valencia)</option>
-                        <option value="Pickup">Pickup</option>
+                        <option value="" disabled selected>Seleccione Envío/Entrega</option>
+                        <option value="MRW">Nacional: MRW</option>
+                        <option value="Zoom">Nacional: Zoom</option>
+                        <option value="Tealca">Nacional: Tealca</option>
+                        <option value="Delivery Valencia">Delivery en Valencia</option>
+                        <option value="Pickup Valencia">Pickup en Valencia (Previa Cita)</option>
                     </select>
-                    <textarea id="shipping-address" placeholder="Dirección de entrega..." required></textarea>
-                    <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR A WHATSAPP</button>
+                    
+                    <select id="payment-method" required>
+                        <option value="" disabled selected>Seleccione Forma de Pago</option>
+                        <option value="Pago Movil">Pago Móvil</option>
+                        <option value="Transferencia BNC">Transferencia BNC</option>
+                        <option value="Zelle">Zelle</option>
+                        <option value="Efectivo">Efectivo (Solo Valencia)</option>
+                    </select>
+
+                    <textarea id="shipping-address" placeholder="Dirección detallada o Agencia de Envío..." required></textarea>
+                    
+                    <button type="submit" class="btn-add" style="background: var(--verde);">FINALIZAR POR WHATSAPP</button>
                 </form>
             </div>
         </div>
@@ -293,7 +324,7 @@
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
         
-        let tasaBCV = 40.00; // Valor por defecto
+        let tasaBCV = 40.00;
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
@@ -340,16 +371,13 @@
 
         async function cargarTasa() {
             try {
-                // Buscamos tu archivo propio en GitHub/Vercel
                 const res = await fetch('tasa.json?v=' + Date.now());
                 const data = await res.json();
-                
                 if (data.tasa && data.tasa > 10) {
                     tasaBCV = data.tasa;
                     localStorage.setItem('edp_tasa_respaldo', tasaBCV);
                 }
             } catch (e) {
-                console.log("Error leyendo tasa.json, usando respaldo local");
                 tasaBCV = parseFloat(localStorage.getItem('edp_tasa_respaldo')) || 40.00;
             }
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
@@ -457,19 +485,48 @@
         document.getElementById('auth-form').onsubmit = (e) => {
             e.preventDefault();
             localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
+            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
             document.getElementById('auth-wall').style.display = 'none';
         };
 
+        // LÓGICA DE WHATSAPP MEJORADA
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
+            const metodoEnvio = document.getElementById('shipping-method').value;
+            const metodoPago = document.getElementById('payment-method').value;
+            const direccion = document.getElementById('shipping-address').value;
+            const cliente = localStorage.getItem('edp_user_name');
+            const tlf = localStorage.getItem('edp_user_phone');
+
             metricas.pedidos += 1; metricas.totalUSD += total;
             localStorage.setItem('edp_metrics', JSON.stringify(metricas));
-            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n👤 *Cliente:* ${localStorage.getItem('edp_user_name')}\n🚚 *Método:* ${document.getElementById('shipping-method').value}\n📍 *Dirección:* ${document.getElementById('shipping-address').value}\n\n*PRODUCTOS:*\n`;
-            carrito.forEach(p => msg += `• ${p.nombre} ($${p.precioUSD})\n`);
-            msg += `\n*TOTAL: $${total.toFixed(2)} (Bs ${(total * tasaBCV).toFixed(2)})*`;
+
+            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
+            msg += `━━━━━━━━━━━━━━━\n`;
+            msg += `👤 *Cliente:* ${cliente}\n`;
+            msg += `📱 *WhatsApp:* ${tlf}\n`;
+            msg += `🚚 *Envío:* ${metodoEnvio}\n`;
+            msg += `💳 *Pago:* ${metodoPago}\n`;
+            msg += `📍 *Dirección:* ${direccion}\n\n`;
+            msg += `*PRODUCTOS:*\n`;
+            
+            carrito.forEach(p => {
+                msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`;
+            });
+
+            msg += `\n*TOTAL A PAGAR:*\n`;
+            msg += `💰 *USD:* $${total.toFixed(2)}\n`;
+            msg += `🇻🇪 *Bs:* ${(total * tasaBCV).toFixed(2)}\n`;
+            msg += `_(Tasa BCV: ${tasaBCV})_\n`;
+            msg += `━━━━━━━━━━━━━━━\n`;
+            msg += `_Por favor, adjunte su comprobante de pago._`;
+
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
-            carrito = []; toggleCart(); updateUI();
+            
+            carrito = []; 
+            toggleCart(); 
+            updateUI();
         };
 
         window.onload = () => {
