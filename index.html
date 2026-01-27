@@ -298,9 +298,10 @@
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
+        // LINK ACTUALIZADO:
         const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?gid=0&single=true&output=csv";
         
-        let tasaBCV = 1; 
+        let tasaBCV = 398.92; // Valor de respaldo
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
         let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
         let carrito = [];
@@ -347,15 +348,21 @@
 
         async function cargarTasaDesdeSheets() {
             try {
-                const cacheBuster = "&t=" + new Date().getTime();
-                const response = await fetch(LINK_SHEETS + cacheBuster);
-                const data = await response.text();
-                let valorLimpio = data.trim().replace(/\s/g, '').replace(',', '.');
-                let nuevaTasa = parseFloat(valorLimpio);
-                if (!isNaN(nuevaTasa) && nuevaTasa > 0) {
-                    tasaBCV = nuevaTasa;
+                // Forzamos actualización con marca de tiempo
+                const response = await fetch(LINK_SHEETS + "&t=" + Date.now());
+                const text = await response.text();
+                
+                // Limpieza profunda: extrae solo números y el punto/coma decimal
+                let matches = text.match(/[\d,.]+/);
+                if (matches) {
+                    let numStr = matches[0].replace(',', '.');
+                    let nuevaTasa = parseFloat(numStr);
+                    if (!isNaN(nuevaTasa) && nuevaTasa > 1) {
+                        tasaBCV = nuevaTasa;
+                    }
                 }
-            } catch (e) { console.log("Error de conexión"); }
+            } catch (e) { console.error("Error al cargar tasa"); }
+            
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
             render();
         }
