@@ -328,7 +328,7 @@
     <script>
         const CLAVE_ADMIN = "edp2026";
         const WHATSAPP_ALFREDO = "584123418345";
-        const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?output=csv";
+        const LINK_SHEETS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ78rx4VUS2K5qka0W08Eh_aZDUNPA-CjS3y-sRQR1LR51FJPdNgsnva6Vj9qC_lGQsPatizn8_hkKu/pub?gid=0&single=true&output=csv";
         
         let tasaBCV = parseFloat(localStorage.getItem('edp_tasa_manual')) || 398.92;
         let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
@@ -337,7 +337,6 @@
         let catActual = 'todos';
         let clicksLogo = 0;
 
-        // BASE DE DATOS COMPLETA
         const productosBase = [
             { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas y cerdo.", desc: "Salsa agridulce natural." },
             { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas.", desc: "Versión familiar." },
@@ -376,12 +375,10 @@
             { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
         ];
 
-        // NUEVA FUNCIÓN: CARGAR TASA DESDE GOOGLE SHEETS
         async function cargarTasaDesdeSheets() {
             try {
                 const response = await fetch(LINK_SHEETS + "&cachebust=" + new Date().getTime());
                 const data = await response.text();
-                // Limpiamos el texto para obtener solo el número (cambiamos coma por punto para el cálculo)
                 let valor = data.trim().replace(',', '.');
                 let nuevaTasa = parseFloat(valor);
                 
@@ -393,7 +390,6 @@
             } catch (error) {
                 console.error("Error cargando tasa desde Sheets:", error);
             }
-            // Siempre renderizamos después de intentar cargar
             render();
             document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
         }
@@ -539,13 +535,13 @@
             carrito = []; toggleCart(); updateUI();
         };
 
-        // Al cargar la página, primero intentamos traer la tasa de Sheets
+        // Al cargar la página
         window.onload = () => {
-            if (!localStorage.getItem('edp_user_name')) {
+            if(!localStorage.getItem('edp_user_name')) {
                 document.getElementById('auth-wall').style.display = 'flex';
             }
             cargarTasaDesdeSheets();
         };
     </script>
 </body>
-</html> 
+</html>
