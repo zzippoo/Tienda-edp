@@ -177,13 +177,26 @@
         .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
 
         .payment-info {
-            background: #eef2f3;
-            padding: 12px;
+            background: #fdf2f3;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 11px;
+            font-size: 12px;
             margin-bottom: 15px;
-            border-left: 4px solid var(--vinotinto);
+            border: 1px dashed var(--vinotinto);
         }
+
+        .terms-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 11px;
+            color: #555;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .terms-container input { width: auto; margin-bottom: 0; margin-top: 2px; }
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 30px; }
@@ -247,7 +260,7 @@
             <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
             <form id="auth-form">
                 <input type="text" id="user-name" placeholder="Nombre Completo" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp" required>
+                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 04121234567)" required>
                 <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
             </form>
         </div>
@@ -267,10 +280,10 @@
                 </p>
 
                 <div class="payment-info">
-                    <strong>MÉTODOS DE PAGO:</strong><br>
-                    • Pago Móvil: Banesco - 5.375.295 - 0412.341.8345<br>
-                    • Transferencia: Banesco<br>
-                    • Divisas: Efectivo (Solo Valencia) / Zelle
+                    <strong>DATOS PARA PAGO MÓVIL:</strong><br>
+                    Banco: <b>Banesco</b><br>
+                    Cédula: <b>5.375.295</b><br>
+                    Teléfono: <b>0412-3418345</b>
                 </div>
 
                 <form id="checkout-form">
@@ -293,6 +306,11 @@
 
                     <textarea id="shipping-address" placeholder="Dirección detallada o Agencia de Envío..." required></textarea>
                     
+                    <div class="terms-container">
+                        <input type="checkbox" id="terms-check" required>
+                        <label for="terms-check">Acepto los términos de compra (No hay devoluciones por mal manejo de refrigeración y el envío corre por cuenta del cliente).</label>
+                    </div>
+
                     <button type="submit" class="btn-add" style="background: var(--verde);">FINALIZAR POR WHATSAPP</button>
                 </form>
             </div>
@@ -490,6 +508,12 @@
 
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
+            
+            if(carrito.length === 0) {
+                alert("Tu pedido está vacío");
+                return;
+            }
+
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
             const metodoEnvio = document.getElementById('shipping-method').value;
             const metodoPago = document.getElementById('payment-method').value;
@@ -518,6 +542,7 @@
             msg += `🇻🇪 *Bs:* ${(total * tasaBCV).toFixed(2)}\n`;
             msg += `_(Tasa BCV: ${tasaBCV})_\n`;
             msg += `━━━━━━━━━━━━━━━\n`;
+            msg += `_He aceptado los términos de compra._\n`;
             msg += `_Por favor, adjunte su comprobante de pago._`;
 
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
