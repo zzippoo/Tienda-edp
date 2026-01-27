@@ -3,289 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="EDP Gourmet">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#5a0d15">
-    
-    <title>E.D.P. Gourmet | Fusión e Integración</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>E.D.P. Gourmet | Catálogo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --vinotinto: #5a0d15;
-            --dorado: #b8860b;
-            --dorado-luz: #f1d592;
-            --oscuro: #121212;
-            --crema: #fdfaf5;
-            --blanco: #ffffff;
-            --verde: #28a745;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            background-color: var(--crema);
-            color: #333;
-            scroll-behavior: smooth;
-        }
-
-        header {
-            background: var(--oscuro);
-            color: white;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--dorado);
-        }
-
-        .logo-txt { 
-            font-family: 'Playfair Display', serif;
-            font-weight: 900; 
-            font-size: 24px; 
-            color: var(--dorado-luz);
-            letter-spacing: 1px;
-        }
-
-        .cart-btn {
-            background: var(--dorado);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
-        .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 10px auto; font-weight: 300; }
-
-        .tasa-bar {
-            background: white;
-            text-align: center;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            border-bottom: 1px solid #eee;
-        }
-        #tasa-val { 
-            color: var(--vinotinto); 
-            text-decoration: underline; 
-            cursor: pointer; 
-            padding: 4px 8px;
-            background: #fff8f8;
-            border-radius: 4px;
-        }
-
-        .cat-bar {
-            background: white;
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            position: sticky;
-            top: 68px;
-            z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .cat-btn {
-            padding: 8px 18px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
-
-        #catalog {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            padding: 30px 5%;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #eee;
-        }
-        .card.agotado { opacity: 0.6; filter: grayscale(0.8); }
-        
-        .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; background: #fff; display: flex; align-items: center; justify-content: center; }
+        :root { --vinotinto: #5a0d15; --dorado: #b8860b; --oscuro: #121212; --crema: #fdfaf5; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--crema); color: #333; }
+        header { background: var(--oscuro); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--dorado); }
+        .logo-txt { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 22px; color: #f1d592; }
+        .tasa-bar { background: #fff; text-align: center; padding: 10px; font-weight: 800; border-bottom: 1px solid #ddd; font-size: 14px; }
+        #tasa-val { color: var(--vinotinto); text-decoration: underline; cursor: pointer; padding: 2px 10px; background: #fff0f0; border-radius: 5px; }
+        .cat-bar { background: white; padding: 10px; display: flex; gap: 8px; overflow-x: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .cat-btn { padding: 8px 15px; border: 1px solid #ddd; background: white; border-radius: 20px; white-space: nowrap; font-size: 12px; font-weight: 600; }
+        .cat-btn.active { background: var(--vinotinto); color: white; }
+        #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 5%; }
+        .card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; }
+        .img-box { height: 200px; padding: 10px; display: flex; align-items: center; justify-content: center; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; margin-bottom: 5px; }
-        .titulo { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 5px; color: var(--vinotinto); font-weight: 700; }
-        .pres { font-size: 15px; color: #777; font-weight: 600; margin-bottom: 10px; }
-        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; }
-
-        .price-box { margin-bottom: 15px; padding: 12px; background: #f9f9f9; border-radius: 8px; text-align: center; }
-        .usd { font-size: 24px; font-weight: 800; display: block; color: var(--oscuro); }
-        .bs { font-size: 15px; color: var(--vinotinto); font-weight: 700; }
-
-        .btn-add {
-            background: var(--vinotinto);
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        footer { background: var(--oscuro); color: #bbb; padding: 30px 5%; font-size: 13px; text-align: center; }
-
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding: 10px; box-sizing: border-box; }
-        .modal-content { background:white; width:100%; max-width:500px; border-radius:15px; overflow:hidden; max-height: 90vh; display: flex; flex-direction: column; }
-        .modal-header { background:var(--vinotinto); color:white; padding:18px; display:flex; justify-content:space-between; align-items: center; }
-        .scroll-area { padding:20px; overflow-y:auto; flex-grow: 1; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
-        .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
+        .info { padding: 15px; flex-grow: 1; text-align: center; }
+        .price-box { background: #f9f9f9; padding: 10px; border-radius: 8px; margin: 10px 0; }
+        .usd { font-size: 22px; font-weight: 800; color: var(--oscuro); display: block; }
+        .bs { font-size: 14px; color: var(--vinotinto); font-weight: 700; }
+        .btn-add { background: var(--vinotinto); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center; }
+        .modal-content { background:white; width:90%; max-width:400px; padding: 20px; border-radius:15px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-txt">E.D.P. GOURMET</div>
-        <button class="cart-btn" onclick="toggleCart()">
-            🛒 <span id="cart-count">0</span>
-        </button>
+        <div style="font-weight: bold;">🛒 <span id="cart-count">0</span></div>
     </header>
 
-    <div class="hero">
-        <h1>E.D.P. GOURMET</h1>
-        <p>“Fusión e integración envasadas”</p>
-    </div>
-
     <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val" onclick="actualizarTasaManual()">...</span> Bs/USD
+        Tasa BCV: <span id="tasa-val" onclick="cambiarTasa()">Cargando...</span> Bs/USD
     </div>
 
-    <nav class="cat-bar" id="cat-nav">
+    <nav class="cat-bar">
         <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
-        <button class="cat-btn" onclick="filtrar('salsa sin picante')">Salsas</button>
+        <button class="cat-btn" onclick="filtrar('salsa')">Salsas</button>
         <button class="cat-btn" onclick="filtrar('aceite')">Aceites</button>
         <button class="cat-btn" onclick="filtrar('en pasta')">Pastas</button>
-        <button class="cat-btn" onclick="filtrar('dulce untable')">Dulces</button>
+        <button class="cat-btn" onclick="filtrar('dulce')">Dulces</button>
     </nav>
 
     <main id="catalog"></main>
 
-    <footer>
-        <p>&copy; 2026 E.D.P. Gourmet. Valencia, Venezuela.</p>
-    </footer>
-
     <div id="auth-wall" class="modal">
-        <div class="modal-content" style="padding: 25px;">
-            <h2 style="text-align:center; color: var(--vinotinto);">¡Bienvenido!</h2>
-            <form id="auth-form">
-                <input type="text" id="user-name" placeholder="Tu Nombre" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp" required>
-                <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="cart-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin:0;">Tu Pedido</h3>
-                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px;">✕</button>
-            </div>
-            <div id="cart-items" class="scroll-area"></div>
-            <div style="padding: 20px; background: #f9f9f9;">
-                <p style="font-size: 18px; font-weight: bold; display: flex; justify-content: space-between;">
-                    <span>Total:</span> <span id="total-info">$0.00</span>
-                </p>
-                <form id="checkout-form">
-                    <select id="shipping-method" required>
-                        <option value="" disabled selected>Método de Envío</option>
-                        <option value="MRW">MRW / Zoom</option>
-                        <option value="Delivery">Delivery Valencia</option>
-                        <option value="Pickup">Pickup</option>
-                    </select>
-                    <textarea id="shipping-address" placeholder="Dirección exacta..." required></textarea>
-                    <button type="submit" class="btn-add" style="background: var(--verde);">ENVIAR PEDIDO</button>
-                </form>
-            </div>
+            <h2 style="text-align:center; color: var(--vinotinto);">Bienvenido</h2>
+            <input type="text" id="user-name" placeholder="Tu Nombre">
+            <button class="btn-add" onclick="login()">ENTRAR</button>
         </div>
     </div>
 
     <script>
         const CLAVE_ADMIN = "edp2026";
-        const WHATSAPP_ALFREDO = "584123418345";
-        
-        let tasaBCV = parseFloat(localStorage.getItem('edp_tasa')) || 55.50;
-        let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
-        let carrito = [];
+        // Aquí intentamos recuperar la tasa guardada, si no existe, usamos 55.50 por primera vez
+        let tasaBCV = parseFloat(localStorage.getItem('tasa_manual_edp')) || 55.50;
         let catActual = 'todos';
 
-        const productosBase = [
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas.", desc: "Acidez natural de la fruta." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas.", desc: "Acidez natural de la fruta." },
-            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Para alitas y tacos.", desc: "Base agridulce con ajíes." },
-            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Para vegetales.", desc: "Base agridulce con ajíes." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Ensaladas tropicales.", desc: "Captura la esencia de la lechosa." },
-            { id: 6, cat: "salsa con picante", nombre: "Maracuyá Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón.", desc: "Parchita y frescor de jengibre." },
-            { id: 7, cat: "salsa con picante", nombre: "Maracuyá Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Quesos madurados.", desc: "Parchita y frescor de jengibre." },
-            { id: 8, cat: "salsa con picante", nombre: "Mango Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Camarones rebozados.", desc: "Mango con carácter." },
-            { id: 9, cat: "salsa con picante", nombre: "Mango Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Carnes de cerdo.", desc: "Mango con carácter." },
-            { id: 10, cat: "salsa con picante", nombre: "Tomate Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Para empanadas.", desc: "Sabor profundo andino." },
-            { id: 11, cat: "salsa con picante", nombre: "Tomate Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Carnes parrilla.", desc: "Sabor profundo andino." },
-            { id: 12, cat: "salsa con picante", nombre: "Guayaba Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Con queso crema.", desc: "Guayaba roja y jengibre." },
-            { id: 13, cat: "salsa con picante", nombre: "Guayaba Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Jamón horneado.", desc: "Guayaba roja y jengibre." },
-            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Hamburguesas.", desc: "Dulzor natural de cebolla." },
-            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Tablas de quesos.", desc: "Dulzor natural de cebolla." },
-            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Papas bravas.", desc: "Mediterránea cremosa." },
-            { id: 17, cat: "salsa con picante", nombre: "Alioli Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Choripanes.", desc: "Mediterránea cremosa." },
-            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Yuca hervida.", desc: "Hierbas frescas." },
-            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Para tequeños.", desc: "Ají dulce venezolano." },
-            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Sándwiches.", desc: "Ají dulce venezolano." },
-            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Sofritos.", desc: "Color y aroma natural." },
-            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Guisos.", desc: "Color onotado líquido." },
-            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor.", desc: "Color onotado líquido." },
-            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Producción.", desc: "Color onotado líquido." },
-            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Para casa.", desc: "Pasta densa rendidora." },
-            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Marinar carnes.", desc: "Pasta densa rendidora." },
-            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "Cocina criolla.", desc: "Pasta densa rendidora." },
-            { id: 28, cat: "vinagre", nombre: "Vinagre Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Vinagretas.", desc: "Infusionado artesanal." },
-            { id: 29, cat: "vinagre", nombre: "Vinagre Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Pescados.", desc: "Infusionado artesanal." },
-            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Pan tostado.", desc: "Versión dulce cremosa." },
-            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Repostería.", desc: "Versión dulce cremosa." },
-            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Galletas.", desc: "Parchita pura." },
-            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Toppings.", desc: "Parchita pura." },
-            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Quesos frescos.", desc: "Mango seleccionado." },
-            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Desayunos.", desc: "Mango seleccionado." }
+        const productos = [
+            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg" },
+            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg" },
+            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg" },
+            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg" },
+            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg" },
+            { id: 6, cat: "salsa con picante", nombre: "Maracuyá Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg" },
+            { id: 7, cat: "salsa con picante", nombre: "Maracuyá Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg" },
+            { id: 8, cat: "salsa con picante", nombre: "Mango Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg" },
+            { id: 9, cat: "salsa con picante", nombre: "Mango Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg" },
+            { id: 10, cat: "salsa con picante", nombre: "Tomate Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg" },
+            { id: 11, cat: "salsa con picante", nombre: "Tomate Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg" },
+            { id: 12, cat: "salsa con picante", nombre: "Guayaba Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg" },
+            { id: 13, cat: "salsa con picante", nombre: "Guayaba Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg" },
+            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg" },
+            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg" },
+            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg" },
+            { id: 17, cat: "salsa con picante", nombre: "Alioli Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg" },
+            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg" },
+            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg" },
+            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg" },
+            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg" },
+            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg" },
+            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg" },
+            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg" },
+            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg" },
+            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg" },
+            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg" },
+            { id: 28, cat: "vinagre", nombre: "Vinagre Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg" },
+            { id: 29, cat: "vinagre", nombre: "Vinagre Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg" },
+            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg" },
+            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg" },
+            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg" },
+            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg" },
+            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg" },
+            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg" }
         ];
+
+        function render() {
+            const container = document.getElementById('catalog');
+            const lista = catActual === 'todos' ? productos : productos.filter(p => p.cat.includes(catActual));
+            container.innerHTML = lista.map(p => `
+                <div class="card">
+                    <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/250?text=EDP'"></div>
+                    <div class="info">
+                        <div style="font-size:11px; color:var(--dorado); font-weight:800;">${p.cat.toUpperCase()}</div>
+                        <h3 style="margin:5px 0; font-family:'Playfair Display';">${p.nombre}</h3>
+                        <div style="color:#777; font-size:13px; margin-bottom:10px;">Presentación: ${p.pres}</div>
+                        <div class="price-box">
+                            <span class="usd">$${p.usd.toFixed(2)}</span>
+                            <span class="bs">Bs ${(p.usd * tasaBCV).toFixed(2)}</span>
+                        </div>
+                        <button class="btn-add">PEDIR</button>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
+        }
+
+        window.cambiarTasa = function() {
+            const pass = prompt("Clave de administrador:");
+            if(pass === CLAVE_ADMIN) {
+                const nueva = prompt("Nueva tasa BCV (Ej: 56.20):", tasaBCV);
+                if(nueva && !isNaN(nueva)) {
+                    tasaBCV = parseFloat(nueva);
+                    // GUARDADO CLAVE: Esto asegura que no se pierda al recargar
+                    localStorage.setItem('tasa_manual_edp', tasaBCV);
+                    render();
+                    alert("Tasa actualizada.");
+                }
+            } else if(pass !== null) {
+                alert("Clave incorrecta.");
+            }
+        };
 
         function filtrar(c) {
             catActual = c;
@@ -293,94 +145,16 @@
             render();
         }
 
-        function render() {
-            const container = document.getElementById('catalog');
-            const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat.includes(catActual));
-            container.innerHTML = lista.map(p => {
-                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
-                return `
-                    <div class="card ${conf.activo ? '' : 'agotado'}">
-                        ${conf.activo ? '' : '<div class="badge-agotado">PRODUCTO AGOTADO</div>'}
-                        <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300?text=EDP'"></div>
-                        <div class="info">
-                            <span class="tag">${p.cat}</span>
-                            <h3 class="titulo">${p.nombre}</h3>
-                            <div class="pres">${p.pres}</div>
-                            <div class="chef-hint">👨‍🍳 ${p.chef}</div>
-                            <div class="price-box">
-                                <span class="usd">$${conf.precio.toFixed(2)}</span>
-                                <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
-                            </div>
-                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? 'var(--vinotinto)' : '#ccc'}">
-                                ${conf.activo ? 'AÑADIR AL PEDIDO' : 'AGOTADO'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function addToCart(id) {
-            const p = productosBase.find(x => x.id === id);
-            const conf = configProductos[id] || { precio: p.usd };
-            carrito.push({...p, precioUSD: conf.precio});
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('cart-count').innerText = carrito.length;
-            const total = carrito.reduce((s, p) => s + p.precioUSD, 0);
-            document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
-            document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
-                <div style="padding:10px; border-bottom:1px solid #eee;">
-                    ${p.nombre} - $${p.precioUSD} 
-                    <button onclick="remove(${i})" style="color:red; border:none; background:none; float:right;">✕</button>
-                </div>
-            `).join('');
-        }
-
-        function remove(i) { carrito.splice(i, 1); updateUI(); }
-        function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-
-        // ACTUALIZACIÓN DIRECTA SOBRE LA TASA
-        window.actualizarTasaManual = function() {
-            const clave = prompt("Clave de Seguridad:");
-            if(clave === CLAVE_ADMIN) {
-                const nuevaTasa = prompt("Ingrese la Tasa BCV del día:", tasaBCV);
-                if(nuevaTasa && !isNaN(nuevaTasa)) {
-                    tasaBCV = parseFloat(nuevaTasa);
-                    localStorage.setItem('edp_tasa', tasaBCV);
-                    document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
-                    render();
-                    updateUI();
-                    alert("Tasa actualizada con éxito.");
-                }
-            } else if(clave !== null) {
-                alert("Clave incorrecta.");
+        function login() {
+            const n = document.getElementById('user-name').value;
+            if(n) {
+                localStorage.setItem('edp_user', n);
+                document.getElementById('auth-wall').style.display = 'none';
             }
-        };
-
-        document.getElementById('auth-form').onsubmit = (e) => {
-            e.preventDefault();
-            localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
-            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
-            document.getElementById('auth-wall').style.display = 'none';
-        };
-
-        document.getElementById('checkout-form').onsubmit = (e) => {
-            e.preventDefault();
-            const totalUSD = carrito.reduce((s,p)=>s+p.precioUSD,0);
-            let msg = `*PEDIDO EDP GOURMET*\n`;
-            msg += `Cliente: ${localStorage.getItem('edp_user_name')}\n`;
-            msg += `Envío: ${document.getElementById('shipping-method').value}\n`;
-            msg += `Dirección: ${document.getElementById('shipping-address').value}\n\n`;
-            msg += `*Total: $${totalUSD.toFixed(2)} / Bs ${(totalUSD * tasaBCV).toFixed(2)}*`;
-            window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`, '_blank');
-        };
+        }
 
         window.onload = () => {
-            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
-            if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display='flex';
+            if(!localStorage.getItem('edp_user')) document.getElementById('auth-wall').style.display='flex';
             render();
         };
     </script>
