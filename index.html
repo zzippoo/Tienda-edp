@@ -248,12 +248,34 @@
                 <span style="display:block">🛵 Local: Delivery Valencia.</span>
             </div>
             <div>
-                <h4 class="footer-h4">CALIDAD</h4>
-                <span style="display:block">🧪 Sin conservantes.</span>
+                <h4 class="footer-h4">INFORMACIÓN</h4>
+                <span style="display:block; cursor:pointer; color:var(--dorado-luz);" onclick="openTerms()">📜 Términos y Devoluciones</span>
                 <span style="display:block">❄️ Refrigerar al abrir.</span>
             </div>
         </div>
     </footer>
+
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin:0;">Términos y Privacidad</h3>
+                <button onclick="document.getElementById('terms-modal').style.display='none'" style="background:none; border:none; color:white; font-size:24px;">✕</button>
+            </div>
+            <div class="scroll-area" style="font-size:14px; line-height:1.6; color:#333;">
+                <h4 style="color:var(--vinotinto);">1. Políticas de Refrigeración</h4>
+                <p>Nuestros productos son 100% artesanales y libres de conservantes químicos. Es <strong>estrictamente obligatorio</strong> mantener el producto refrigerado (0°C a 4°C) una vez abierto el sello de seguridad.</p>
+                
+                <h4 style="color:var(--vinotinto);">2. Envíos y Entregas</h4>
+                <p>Los envíos nacionales se realizan cobro a destino. E.D.P. Gourmet no se hace responsable por retrasos o maltrato de la mercancía por parte de las empresas de encomienda (MRW, Zoom, Tealca), aunque garantizamos un embalaje de alta protección.</p>
+                
+                <h4 style="color:var(--vinotinto);">3. Devoluciones</h4>
+                <p>Por tratarse de productos alimenticios perecederos, no se aceptan devoluciones una vez que el cliente haya recibido el producto y este haya salido de nuestra cadena de custodia inmediata. No hay reembolso por daños causados por romper la cadena de frío tras la recepción.</p>
+                
+                <h4 style="color:var(--vinotinto);">4. Privacidad</h4>
+                <p>Sus datos personales (nombre y teléfono) son utilizados exclusivamente para procesar su pedido vía WhatsApp. No compartimos su información con terceros.</p>
+            </div>
+        </div>
+    </div>
 
     <div id="auth-wall" class="modal">
         <div class="modal-content" style="padding: 25px;">
@@ -460,6 +482,8 @@
         function remove(i) { carrito.splice(i, 1); updateUI(); }
         function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
         
+        function openTerms() { document.getElementById('terms-modal').style.display = 'flex'; }
+
         function contarClicks() {
             clicksLogo++;
             if(clicksLogo >= 5) {
@@ -508,11 +532,7 @@
 
         document.getElementById('checkout-form').onsubmit = (e) => {
             e.preventDefault();
-            
-            if(carrito.length === 0) {
-                alert("Tu pedido está vacío");
-                return;
-            }
+            if(carrito.length === 0) { alert("Tu pedido está vacío"); return; }
 
             const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
             const metodoEnvio = document.getElementById('shipping-method').value;
@@ -533,9 +553,7 @@
             msg += `📍 *Dirección:* ${direccion}\n\n`;
             msg += `*PRODUCTOS:*\n`;
             
-            carrito.forEach(p => {
-                msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`;
-            });
+            carrito.forEach(p => { msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`; });
 
             msg += `\n*TOTAL A PAGAR:*\n`;
             msg += `💰 *USD:* $${total.toFixed(2)}\n`;
@@ -546,10 +564,7 @@
             msg += `_Por favor, adjunte su comprobante de pago._`;
 
             window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
-            
-            carrito = []; 
-            toggleCart(); 
-            updateUI();
+            carrito = []; toggleCart(); updateUI();
         };
 
         window.onload = () => {
