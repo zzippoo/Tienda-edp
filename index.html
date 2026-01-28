@@ -2,560 +2,277 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="EDP Gourmet">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#5a0d15">
-    
-    <title>E.D.P. Gourmet | Fusión e Integración</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.D.P. Gourmet - Catálogo Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --vinotinto: #5a0d15;
-            --dorado: #b8860b;
-            --dorado-luz: #f1d592;
-            --oscuro: #121212;
-            --crema: #fdfaf5;
-            --blanco: #ffffff;
-            --verde: #28a745;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            background-color: var(--crema);
-            color: #333;
-            scroll-behavior: smooth;
-        }
-
-        header {
-            background: var(--oscuro);
+        .category-pill.active {
+            background-color: #ef4444;
             color: white;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--dorado);
         }
-
-        .logo-txt { 
-            font-family: 'Playfair Display', serif;
-            font-weight: 900; 
-            font-size: 24px; 
-            color: var(--dorado-luz);
-            cursor: pointer;
-            letter-spacing: 1px;
+        .modal {
+            transition: opacity 0.25s ease;
         }
-
-        .cart-btn {
-            background: var(--dorado);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 50px); margin: 0; color: var(--dorado-luz); }
-        .hero p { font-style: italic; font-size: 18px; max-width: 650px; margin: 15px auto; font-weight: 300; line-height: 1.4; }
-
-        .tasa-bar {
-            background: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            border-bottom: 1px solid #eee;
-        }
-        #tasa-val { color: var(--vinotinto); }
-
-        .cat-bar {
-            background: white;
-            padding: 15px;
-            display: flex;
-            justify-content: flex-start;
-            gap: 10px;
-            overflow-x: auto;
-            position: sticky;
-            top: 68px;
-            z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .cat-btn {
-            padding: 8px 18px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .cat-btn.active { background: var(--vinotinto); color: white; border-color: var(--vinotinto); }
-
-        #catalog {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            padding: 30px 5%;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
+        body.modal-active {
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            transition: 0.3s;
-            border: 1px solid #eee;
         }
-        .card.agotado { opacity: 0.6; filter: grayscale(0.8); }
-
-        .img-box { width: 100%; height: 260px; padding: 15px; box-sizing: border-box; background: #fff; display: flex; align-items: center; justify-content: center; }
-        .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .tag { font-size: 10px; text-transform: uppercase; color: var(--dorado); font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; }
-        .titulo { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 5px; color: var(--vinotinto); font-weight: 700; }
-        .pres { font-size: 15px; color: #777; font-weight: 600; margin-bottom: 10px; }
-        .desc { font-size: 13px; line-height: 1.5; color: #555; margin-bottom: 15px; flex-grow: 1; }
-        
-        .chef-hint { background: #fffde7; border-left: 3px solid var(--dorado); padding: 10px; font-size: 12px; margin-bottom: 15px; font-style: italic; }
-
-        .price-box { margin-bottom: 15px; padding: 12px; background: #f9f9f9; border-radius: 8px; text-align: center; }
-        .usd { font-size: 24px; font-weight: 800; display: block; color: var(--oscuro); }
-        .bs { font-size: 15px; color: var(--vinotinto); font-weight: 700; }
-
-        .btn-add {
-            background: var(--vinotinto);
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        #cart-sidebar {
+            transition: transform 0.3s ease-in-out;
         }
-        .btn-add:hover { background: var(--oscuro); }
-
-        footer { background: var(--oscuro); color: #bbb; padding: 60px 5% 30px; font-size: 13px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .footer-h4 { color: var(--dorado-luz); font-family: 'Playfair Display', serif; margin-bottom: 15px; font-size: 18px; text-transform: uppercase; }
-
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding: 10px; box-sizing: border-box; }
-        .modal-content { background:white; width:100%; max-width:500px; border-radius:15px; overflow:hidden; position:relative; max-height: 90vh; display: flex; flex-direction: column; }
-        .modal-header { background:var(--vinotinto); color:white; padding:18px; display:flex; justify-content:space-between; align-items: center; }
-        .scroll-area { padding:20px; overflow-y:auto; flex-grow: 1; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
-        .badge-agotado { background: #ff4444; color: white; padding: 5px; text-align: center; font-weight: bold; font-size: 12px; }
-
-        .payment-info {
-            background: #fdf2f3;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-bottom: 15px;
-            border: 1px dashed var(--vinotinto);
-        }
-
-        .terms-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 11px;
-            color: #555;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        .terms-container input { width: auto; margin-bottom: 0; margin-top: 2px; }
-
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 30px; }
-            #catalog { grid-template-columns: 1fr; }
+        #cart-sidebar.translate-x-full {
+            transform: translateX(100%);
         }
     </style>
 </head>
-<body>
-
-    <header>
-        <div class="logo-txt" onclick="contarClicks()">E.D.P. GOURMET</div>
-        <button class="cart-btn" onclick="toggleCart()">
-            🛒 <span id="cart-count">0</span>
-        </button>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-red-600">E.D.P. GOURMET</h1>
+            <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
+                <i class="fas fa-shopping-cart text-2xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+            </button>
+        </div>
     </header>
 
-    <div class="hero">
-        <h1>E.D.P. GOURMET</h1>
-        <p>“Somos fusión e integración envasadas para llevar tus sentidos a otro nivel”</p>
-    </div>
-
-    <div class="tasa-bar">
-        Tasa Oficial BCV: <span id="tasa-val">Cargando...</span> Bs/USD
-    </div>
-
-    <nav class="cat-bar" id="cat-nav">
-        <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
-        <button class="cat-btn" onclick="filtrar('salsa sin picante')">Salsa sin picante</button>
-        <button class="cat-btn" onclick="filtrar('salsa con picante')">Salsa con picante</button>
-        <button class="cat-btn" onclick="filtrar('aceite')">Aceite</button>
-        <button class="cat-btn" onclick="filtrar('en pasta')">En Pasta</button>
-        <button class="cat-btn" onclick="filtrar('vinagre')">Vinagre</button>
-        <button class="cat-btn" onclick="filtrar('dulce untable')">Dulce Untable</button>
-        <button class="cat-btn" onclick="filtrar('dulce en almibar')">Dulce en Almíbar</button>
-    </nav>
-
-    <main id="catalog"></main>
-
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <h4 class="footer-h4">E.D.P. GOURMET</h4>
-                <p>Artesanía culinaria desde Valencia, Venezuela.</p>
-                <p>RIF: J-505436660</p>
-            </div>
-            <div>
-                <h4 class="footer-h4">ENVÍOS</h4>
-                <span style="display:block">📦 Nacional: MRW, Zoom, Tealca.</span>
-                <span style="display:block">🛵 Local: Delivery Valencia.</span>
-            </div>
-            <div>
-                <h4 class="footer-h4">CALIDAD</h4>
-                <span style="display:block">🧪 Sin conservantes.</span>
-                <span style="display:block">❄️ Refrigerar al abrir.</span>
-            </div>
-        </div>
-    </footer>
-
-    <div id="auth-wall" class="modal">
-        <div class="modal-content" style="padding: 25px;">
-            <h2 style="text-align:center; color: var(--vinotinto); font-family: 'Playfair Display';">¡Bienvenido!</h2>
-            <form id="auth-form">
-                <input type="text" id="user-name" placeholder="Nombre Completo" required>
-                <input type="tel" id="user-phone" placeholder="WhatsApp (Ej: 04121234567)" required>
-                <button type="submit" class="btn-add">ENTRAR AL CATÁLOGO</button>
-            </form>
+    <div class="bg-white border-b overflow-x-auto whitespace-nowrap px-4 py-3 sticky top-[64px] z-30">
+        <div id="categories-container" class="max-w-7xl mx-auto flex gap-2">
+            <button onclick="filterProducts('TODO')" class="category-pill active px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">TODO</button>
+            <button onclick="filterProducts('SALSA SIN PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">SALSA SIN PICANTE</button>
+            <button onclick="filterProducts('SALSA PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">SALSA PICANTE</button>
+            <button onclick="filterProducts('GOURMET')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">GOURMET</button>
+            <button onclick="filterProducts('DULCE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">DULCE</button>
+            <button onclick="filterProducts('DULCE UNTABLE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">DULCE UNTABLE</button>
         </div>
     </div>
 
-    <div id="cart-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin:0;">Tu Pedido</h3>
-                <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:24px;">✕</button>
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             </div>
-            <div id="cart-items" class="scroll-area"></div>
+    </main>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 translate-x-full">
+        <div class="flex flex-col h-full">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h2 class="text-xl font-bold text-gray-800">Tu Pedido</h2>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-red-600 text-2xl">&times;</button>
+            </div>
             
-            <div style="padding: 20px; background: #f9f9f9;">
-                <p style="font-size: 18px; margin-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between;">
-                    <span>Total:</span> <span id="total-info">$0.00</span>
-                </p>
-
-                <div class="payment-info">
-                    <strong>DATOS PARA PAGO MÓVIL:</strong><br>
-                    Banco: <b>Banesco</b><br>
-                    Cédula: <b>5.375.295</b><br>
-                    Teléfono: <b>0412-3418345</b>
+            <div id="cart-items" class="flex-grow overflow-y-auto p-4 space-y-4">
                 </div>
 
-                <form id="checkout-form">
-                    <select id="shipping-method" required>
-                        <option value="" disabled selected>Seleccione Envío/Entrega</option>
-                        <option value="MRW">Nacional: MRW</option>
-                        <option value="Zoom">Nacional: Zoom</option>
-                        <option value="Tealca">Nacional: Tealca</option>
-                        <option value="Delivery Valencia">Delivery en Valencia</option>
-                        <option value="Pickup Valencia">Pickup en Valencia (Previa Cita)</option>
-                    </select>
-                    
-                    <select id="payment-method" required>
-                        <option value="" disabled selected>Seleccione Forma de Pago</option>
-                        <option value="Pago Movil">Pago Móvil</option>
-                        <option value="Transferencia Banesco">Transferencia Banesco</option>
-                        <option value="Zelle">Zelle</option>
-                        <option value="Efectivo">Efectivo (Solo Valencia)</option>
-                    </select>
-
-                    <textarea id="shipping-address" placeholder="Dirección detallada o Agencia de Envío..." required></textarea>
-                    
-                    <div class="terms-container">
-                        <input type="checkbox" id="terms-check" required>
-                        <label for="terms-check">Acepto los términos de compra (No hay devoluciones por mal manejo de refrigeración y el envío corre por cuenta del cliente).</label>
-                    </div>
-
-                    <button type="submit" class="btn-add" style="background: var(--verde);">FINALIZAR POR WHATSAPP</button>
-                </form>
+            <div class="p-4 border-t bg-gray-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-600">Total:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-red-600">$0.00</span>
+                </div>
+                <button onclick="sendWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                    <i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header" style="background: #333;">
-                <h3 style="margin:0;">⚙️ Panel Admin</h3>
-                <button onclick="document.getElementById('admin-modal').style.display='none'" style="color:white; background:none; border:none; font-size:20px;">✕</button>
-            </div>
-            <div class="scroll-area">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <div style="background:var(--vinotinto); color:white; padding:15px; border-radius:10px; text-align:center;">
-                        <small>PEDIDOS</small><div id="stat-pedidos" style="font-size:20px; font-weight:bold;">0</div>
-                    </div>
-                    <div style="background:var(--dorado); color:var(--vinotinto); padding:15px; border-radius:10px; text-align:center;">
-                        <small>TOTAL USD</small><div id="stat-dinero" style="font-size:20px; font-weight:bold;">0</div>
-                    </div>
+    <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative p-6">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            <img id="modal-img" src="" alt="" class="w-full h-64 object-contain rounded-lg mb-6">
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+            <p id="modal-presentation" class="text-red-600 font-semibold mb-4"></p>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-bold text-gray-700">Descripción:</h4>
+                    <p id="modal-description" class="text-gray-600"></p>
                 </div>
-                <div id="admin-product-list"></div>
+                <div>
+                    <h4 class="font-bold text-gray-700">Sugerencias del Chef:</h4>
+                    <p id="modal-suggestion" class="text-gray-600"></p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const CLAVE_ADMIN = "edp2026";
-        const WHATSAPP_ALFREDO = "584123418345";
-        
-        let tasaBCV = 40.00;
-        let metricas = JSON.parse(localStorage.getItem('edp_metrics')) || { pedidos: 0, totalUSD: 0 };
-        let configProductos = JSON.parse(localStorage.getItem('edp_config_prod')) || {};
-        let carrito = [];
-        let catActual = 'todos';
-        let clicksLogo = 0;
-
-        const productosBase = [
-            { id: 1, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridukce-150-ml.jpg", chef: "Ideal para carnes blancas y cerdo.", desc: "Salsa agridulce natural." },
-            { id: 2, cat: "salsa sin picante", nombre: "Tamarindo Agridulce", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", chef: "Ideal para costillitas.", desc: "Versión familiar." },
-            { id: 3, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tamarindo-agridulce-picante-150-ml.jpg", chef: "Perfecta para alitas y tacos.", desc: "Toque picante artesanal." },
-            { id: 4, cat: "salsa con picante", nombre: "Tamarindo Picante", pres: "255 ml", usd: 3.72, foto: "salsa-tamarindo-agridulce-picante-255-ml.jpg", chef: "Dale un toque exótico.", desc: "Equilibrio perfecto." },
-            { id: 5, cat: "salsa sin picante", nombre: "Salsa Papaya Aderezo", pres: "150 ml", usd: 2.70, foto: "salsa-papaya-aderezo-150-ml.jpg", chef: "Úsala en ensaladas.", desc: "Opción ligera y fresca." },
-            { id: 6, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-maracuya-picante-con-jengibre-150-ml.jpg", chef: "Ideal para salmón.", desc: "Intensidad ácida." },
-            { id: 7, cat: "salsa con picante", nombre: "Maracuyá con Jengibre", pres: "255 ml", usd: 3.72, foto: "salsa-maracuya-picante-con-jengibre-255-ml.jpg", chef: "Elegante para quesos.", desc: "Sofisticación tropical." },
-            { id: 8, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "150 ml", usd: 2.70, foto: "salsa-mango-agridulce-con-Jalapeño-150-ml.jpg", chef: "Camarones rebozados.", desc: "Pulpa de mango dulce." },
-            { id: 9, cat: "salsa con picante", nombre: "Mango con Jalapeño", pres: "255 ml", usd: 3.72, foto: "salsa-mango-agridulce-con-Jalapeño-255-ml.jpg", chef: "Vibrante para carnes.", desc: "Sabor audaz." },
-            { id: 10, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "150 ml", usd: 2.70, foto: "salsa-tomate-de-arbol-picante-150-ml.jpg", chef: "Excelente para empanadas.", desc: "Sabor profundo andino." },
-            { id: 11, cat: "salsa con picante", nombre: "Tomate de Árbol Picante", pres: "255 ml", usd: 3.72, foto: "nodisponible-1.jpg", chef: "Ideal para carnes a la parrilla.", desc: "Rescata lo tradicional." },
-            { id: 12, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "150 ml", usd: 2.70, foto: "salsa-guayaba-picante-con-jengibre-150-ml.jpg", chef: "Maravillosa con queso crema.", desc: "Dulzor de guayaba roja." },
-            { id: 13, cat: "salsa con picante", nombre: "Guayaba con Jengibre", pres: "255 ml", usd: 3.72, foto: "Salsa-Guayaba-Picante-con-Jengibre-255-ml.jpg", chef: "Jamón horneado.", desc: "Joya artesanal." },
-            { id: 14, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "150 ml", usd: 2.70, foto: "salsa-cebolla-150-ml.jpg", chef: "Hamburguesas gourmet.", desc: "Cocción lenta." },
-            { id: 15, cat: "salsa sin picante", nombre: "Cebolla Caramelizada", pres: "255 ml", usd: 3.72, foto: "salsa-cebolla-caramelizada-255-ml.jpg", chef: "Ideal para tablas de quesos.", desc: "Dulzor natural." },
-            { id: 16, cat: "salsa sin picante", nombre: "Alioli de Ajo Española", pres: "150 ml", usd: 3.00, foto: "salsa-aioli-de-ajo-Española-natural-150-ml.jpg", chef: "Perfecta para papas bravas.", desc: "Emulsión mediterránea." },
-            { id: 17, cat: "salsa con picante", nombre: "Alioli de Ajo Picante", pres: "150 ml", usd: 3.10, foto: "salsa-aioli-de-ajo-Española-picante-150-ml.jpg", chef: "Choripanes y carnes.", desc: "Cremosidad del ajo." },
-            { id: 18, cat: "salsa sin picante", nombre: "Mojo Cilantro y Perejil", pres: "150 ml", usd: 3.10, foto: "salsa-mojo-cilantro-y-perejil-150-ml.jpg", chef: "Ideal para yuca hervida.", desc: "Hierbas frescas." },
-            { id: 19, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "150 ml", usd: 3.00, foto: "salsa-aji-dulce-&-mayonesa-150-ml.jpg", chef: "Dipping para tequeños.", desc: "Captura el aroma criollo." },
-            { id: 20, cat: "salsa sin picante", nombre: "Salsa Ají Dulce & Mayo", pres: "260 ml", usd: 4.72, foto: "salsa-aji-dulce-&-mayonesa-260-ml.jpg", chef: "Base para sándwiches.", desc: "Suavidad artesanal." },
-            { id: 21, cat: "aceite", nombre: "Aceite de Onoto", pres: "150 ml", usd: 3.10, foto: "aceite-de-onoto-150-ml.jpg", chef: "Base para sofritos.", desc: "Color y aroma natural." },
-            { id: 22, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "150 ml", usd: 3.50, foto: "salsa-de-onoto-150-ml.jpg", chef: "Guisos criollos.", desc: "Concentración superior." },
-            { id: 23, cat: "salsa sin picante", nombre: "Salsa de Onoto", pres: "500 ml", usd: 6.50, foto: "salsa-onoto-500-ml.jpg", chef: "Rendidor profesional.", desc: "Eficiencia máxima." },
-            { id: 24, cat: "en pasta", nombre: "Pasta De Onoto", pres: "330 ml", usd: 5.50, foto: "pasta-onoto-330-ml.jpg", chef: "Secreto de hallacas.", desc: "Muy concentrada." },
-            { id: 25, cat: "en pasta", nombre: "Pasta de Onoto", pres: "200 gr", usd: 2.92, foto: "pasta-de-onoto-200-gr.jpg", chef: "Uso cotidiano.", desc: "Color tradicional." },
-            { id: 26, cat: "en pasta", nombre: "Pasta de Onoto", pres: "300 gr", usd: 3.80, foto: "pasta-de-onoto-300-gr.jpg", chef: "Ideal para marinar.", desc: "Consistencia perfecta." },
-            { id: 27, cat: "en pasta", nombre: "Pasta de Onoto", pres: "480 gr", usd: 5.10, foto: "pasta-de-onoto-480-gr.jpg", chef: "Aliado cocina criolla.", desc: "Formato chef." },
-            { id: 28, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "150 ml", usd: 2.00, foto: "vinagre-de-tamarindo-150-ml.jpg", chef: "Vinagretas únicas.", desc: "Notas frutales." },
-            { id: 29, cat: "vinagre", nombre: "Vinagre de Tamarindo", pres: "500 ml", usd: 5.20, foto: "vinagre-de-tamarindo-500-ml.jpg", chef: "Marinar pescados.", desc: "Acidez natural." },
-            { id: 30, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "200 gr", usd: 2.92, foto: "crema-untable-tamarindo-200-gr.jpg", chef: "Pan tostado.", desc: "Dulce y cremosa." },
-            { id: 31, cat: "dulce untable", nombre: "Untable Tamarindo", pres: "400 gr", usd: 5.90, foto: "crema-untable-tamarindo-400-gr.jpg", chef: "Relleno repostería.", desc: "Sabor exótico." },
-            { id: 32, cat: "dulce untable", nombre: "Untable Parchita", pres: "200 gr", usd: 2.92, foto: "crema-untable.parchita-200-gr.jpg", chef: "Pan dulce.", desc: "Esencia vibrante." },
-            { id: 33, cat: "dulce untable", nombre: "Untable Parchita", pres: "400 gr", usd: 5.90, foto: "crema-untable.parchita-400-gr.jpg", chef: "Topping helados.", desc: "Toque ácido único." },
-            { id: 34, cat: "dulce untable", nombre: "Untable Mango", pres: "200 gr", usd: 2.92, foto: "crema.untable-mango-200-gr.jpg", chef: "Quesos blancos.", desc: "Pulpa suave." },
-            { id: 35, cat: "dulce untable", nombre: "Untable Mango", pres: "400 gr", usd: 5.90, foto: "crema.untable-mango-400-gr.jpg", chef: "Puro sol tropical.", desc: "Dulce y natural." }
+        const productos = [
+            { id: 1, nombre: "Salsa Tamarindo Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-agridukce-150-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"La versatilidad del fruto más deseado." La esencia pura del fruto. El balance perfecto entre acidez y dulzor, ideal para quienes buscan el sabor original sin el toque de fuego.', categoria: "SALSA SIN PICANTE" },
+            { id: 2, nombre: "Salsa Tamarindo Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"La versatilidad del fruto más deseado." La esencia pura del fruto. El balance perfecto entre acidez y dulzor, ideal para quienes buscan el sabor original sin el toque de fuego.', categoria: "SALSA SIN PICANTE" },
+            { id: 3, nombre: "Salsa Tamarindo Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-picante-150-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"El equilibrio perfecto entre el trópico y el fuego." El balance ideal entre la acidez del tamarindo y el picante justo.', categoria: "SALSA PICANTE" },
+            { id: 4, nombre: "Salsa Tamarindo Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-picante-255-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"El equilibrio perfecto entre el trópico y el fuego." El balance ideal entre la acidez del tamarindo y el picante justo.', categoria: "SALSA PICANTE" },
+            { id: 5, nombre: "Salsa Mango Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-agridulce-150-ml.jpg", sugerencia: "Salsa de Mango (sin picante), sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Dulzura tropical en cada gota." Captura la esencia del mango maduro en una textura sedosa.', categoria: "SALSA SIN PICANTE" },
+            { id: 6, nombre: "Salsa Mango Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-agridulce-255-ml.jpg", sugerencia: "Salsa de Mango (sin picante), sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Dulzura tropical en cada gota." Captura la esencia del mango maduro en una textura sedosa.', categoria: "SALSA SIN PICANTE" },
+            { id: 7, nombre: "Salsa Mango Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-picante-150-ml.jpg", sugerencia: "Salsa de Mango Picante, sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Explosión de sabor con carácter." La dulzura del mango se encuentra con un picante audaz.', categoria: "SALSA PICANTE" },
+            { id: 8, nombre: "Salsa Mango Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-picante-255-ml.jpg", sugerencia: "Salsa de Mango Picante, sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Explosión de sabor con carácter." La dulzura del mango se encuentra con un picante audaz.', categoria: "SALSA PICANTE" },
+            { id: 9, nombre: "Salsa Parchita Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-agridulce-150-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Aroma exótico que cautiva." La intensidad aromática de la fruta de la pasión en una salsa equilibrada.', categoria: "SALSA SIN PICANTE" },
+            { id: 10, nombre: "Salsa Parchita Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-agridulce-255-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Aroma exótico que cautiva." La intensidad aromática de la fruta de la pasión en una salsa equilibrada.', categoria: "SALSA SIN PICANTE" },
+            { id: 11, nombre: "Salsa Parchita Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-picante-150-ml.jpg", sugerencia: "Salsa de Parchita Picante, sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Un viaje sensorial de altura." El perfume de la parchita realzado con un toque picante elegante.', categoria: "SALSA PICANTE" },
+            { id: 12, nombre: "Salsa Parchita Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-picante-255-ml.jpg", sugerencia: "Salsa de Parchita Picante, sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Un viaje sensorial de altura." El perfume de la parchita realzado con un toque picante elegante.', categoria: "SALSA PICANTE" },
+            { id: 13, nombre: "Pimientos Caramelizados", presentacion: "190 gr", precio: 3.65, foto: "pimientos-caramelizados-190-gr.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: '"Dulzura vibrante y colorida." Deliciosos pimientos seleccionados, cocinados lentamente hasta alcanzar su punto perfecto de caramelización.', categoria: "GOURMET" },
+            { id: 14, nombre: "Cebolla Caramelizada", presentacion: "190 gr", precio: 3.32, foto: "cebolla-caramelizada-190-gr.jpg", sugerencia: "Ideal para degustar con carnes rojas y blancas, para realizar salsas de mayor complejidad; también para pasapalos de queso, embutidos y de masa frita u horneada; excelente para hamburguesas, sándwich y galletas saladas.", descripcion: "Un toque dulce y sofisticado que realza cualquier plato.", categoria: "GOURMET" },
+            { id: 15, nombre: "Pesto Tradicional", presentacion: "150 gr", precio: 4.8, foto: "pesto-tradicional-150-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, ensaladas tipo capresa, carnes blancas y rellenos de panes artesanales.", descripcion: "Sabor clásico italiano con albahaca fresca y frutos secos.", categoria: "GOURMET" },
+            { id: 16, nombre: "Alioli Tradicional", presentacion: "150 gr", precio: 3.12, foto: "alioli-tradicional-150-gr.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para aderezar ensaladas blancas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: '"El alma del Mediterráneo en tu mesa." Crema de ajo suave y equilibrada, perfecta para acompañar desde carnes hasta tapas.', categoria: "GOURMET" },
+            { id: 17, nombre: "Salsa Ají Dulce Tradicional", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-tradicional-150-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
+            { id: 18, nombre: "Salsa Ají Dulce Tradicional", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-tradicional-255-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
+            { id: 19, nombre: "Salsa Ají Dulce & Mayo", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-mayo-150-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
+            { id: 20, nombre: "Salsa Ají Dulce & Mayo", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-mayo-255-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
+            { id: 21, nombre: "Aceite de Onoto", presentacion: "150 ml", precio: 2.12, foto: "aceite-de-onoto-150-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas; dándole color y un sabor característico a tus platos.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
+            { id: 22, nombre: "Aceite de Onoto", presentacion: "255 ml", precio: 2.82, foto: "aceite-de-onoto-255-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas; dándole color y un sabor característico a tus platos.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
+            { id: 23, nombre: "Salsa Bolognesa", presentacion: "190 gr", precio: 3.12, foto: "salsa-bolognesa-190-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Salsa de carne rica y tradicional, lista para servir.", categoria: "GOURMET" },
+            { id: 24, nombre: "Salsa Napolitana", presentacion: "190 gr", precio: 2.82, foto: "salsa-napolitana-190-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Clásica salsa de tomate con hierbas frescas.", categoria: "GOURMET" },
+            { id: 25, nombre: "Mermelada de Piña", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-190-gr.jpg", sugerencia: "Mermelada de Piña, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Dulzura dorada en cada bocado." Elaborada con las piñas más dulces y jugosas, nuestra mermelada es un estallido de sabor tropical. Ideal para acompañar tus desayunos, merendar con galletas o darle un toque especial a tus postres favoritos.', categoria: "DULCE" },
+            { id: 26, nombre: "Mermelada de Guayaba", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-190-gr.jpg", sugerencia: "Mermelada de Guayaba, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"El aroma inconfundible del hogar." Disfruta del sabor tradicional de la guayaba en una textura suave y deliciosa. Perfecta para untar en pan, rellenar pasteles o simplemente disfrutar a cucharadas. ¡Un clásico que nunca falla!', categoria: "DULCE" },
+            { id: 27, nombre: "Mermelada de Fresa", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-190-gr.jpg", sugerencia: "Mermelada de Fresa, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Frescura y pasión en tu mesa." Hecha con fresas seleccionadas, nuestra mermelada conserva todo el sabor y aroma de la fruta natural. Ideal para tus tostadas, yogures o como ingrediente estrella en tu repostería casera.', categoria: "DULCE" },
+            { id: 28, nombre: "Mermelada de Durazno", presentacion: "190 gr", precio: 2.32, foto: "mermelada-durazno-190-gr.jpg", sugerencia: "Mermelada de Durazno, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Sutileza y dulzor en perfecta armonía." La delicadeza del durazno se convierte en una mermelada exquisita, perfecta para realzar tus meriendas. Su textura ligera y sabor balanceado la hacen la compañera ideal para cualquier momento del día.', categoria: "DULCE" },
+            { id: 29, nombre: "Crema Untable Parchita", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-parchita-200-gr.jpg", sugerencia: "Dulce untable de Parchita, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche, relleno de tortas frias, postres fríos, ensalada de frutas, untar croissants.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de parchita. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
+            { id: 30, nombre: "Crema Untable Parchita", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-parchita-400-gr.jpg", sugerencia: "Dulce untable de Parchita, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche, relleno de tortas frias, postres fríos, ensalada de frutas, untar croissants.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de parchita. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
+            { id: 31, nombre: "Crema Untable Mango", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-mango-200-gr.jpg", sugerencia: "Dulce untable de Mango, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de mango. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
+            { id: 32, nombre: "Crema Untable Mango", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-mango-400-gr.jpg", sugerencia: "Dulce untable de Mango, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de mango. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
+            { id: 33, nombre: "Mermelada Guayaba & Queso", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-queso-190-gr.jpg", sugerencia: "Mermelada de Guayaba & Queso, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"La pareja perfecta en un frasco." La dulzura de la guayaba se funde con la suavidad del queso para crear un sabor único y nostálgico. Disfrútala en tus meriendas, como relleno de postres o simplemente para consentirte con un toque especial.', categoria: "DULCE" },
+            { id: 34, nombre: "Mermelada Fresa & Chocolate", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-chocolate-190-gr.jpg", sugerencia: "Mermelada de Fresa & Chocolate, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Un romance dulce e irresistible." La frescura de la fresa se encuentra con la intensidad del chocolate en esta mermelada gourmet. Perfecta para postres, untar en pan de leche o disfrutar en ocasiones especiales. ¡Una tentación que te encantará!', categoria: "DULCE" },
+            { id: 35, nombre: "Mermelada Piña & Coco", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-coco-190-gr.jpg", sugerencia: "Mermelada de Piña & Coco, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"El paraíso en cada cucharada." Viaja al Caribe con esta mezcla refrescante de piña y coco. Su sabor exótico y textura única la hacen ideal para tus desayunos, merendar con estilo o darle un giro tropical a tu repostería.', categoria: "DULCE" }
         ];
 
-        async function cargarTasa() {
-            try {
-                const res = await fetch('tasa.json?v=' + Date.now());
-                const data = await res.json();
-                if (data.tasa && data.tasa > 10) {
-                    tasaBCV = data.tasa;
-                    localStorage.setItem('edp_tasa_respaldo', tasaBCV);
-                }
-            } catch (e) {
-                tasaBCV = parseFloat(localStorage.getItem('edp_tasa_respaldo')) || 40.00;
-            }
-            document.getElementById('tasa-val').innerText = tasaBCV.toFixed(2);
-            render();
-        }
+        let cart = [];
 
-        function filtrar(c) {
-            catActual = c;
-            document.querySelectorAll('.cat-btn').forEach(b => {
-                const txt = b.innerText.toLowerCase();
-                b.classList.toggle('active', txt === c || (c === 'todos' && txt === 'todos'));
-            });
-            render();
-        }
-
-        function render() {
-            const container = document.getElementById('catalog');
-            const lista = catActual === 'todos' ? productosBase : productosBase.filter(p => p.cat === catActual);
-            container.innerHTML = lista.map(p => {
-                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
-                return `
-                    <div class="card ${conf.activo ? '' : 'agotado'}">
-                        ${conf.activo ? '' : '<div class="badge-agotado">PRODUCTO AGOTADO</div>'}
-                        <div class="img-box"><img src="img/${p.foto}" onerror="this.src='https://via.placeholder.com/300x300?text=EDP+GOURMET'"></div>
-                        <div class="info">
-                            <span class="tag">${p.cat}</span>
-                            <h3 class="titulo">${p.nombre}</h3>
-                            <div class="pres">${p.pres}</div>
-                            <div class="desc">${p.desc}</div>
-                            <div class="chef-hint">👨‍🍳 ${p.chef}</div>
-                            <div class="price-box">
-                                <span class="usd">$${conf.precio.toFixed(2)}</span>
-                                <span class="bs">Bs ${(conf.precio * tasaBCV).toFixed(2)}</span>
+        function renderProducts(filter = 'TODO') {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'TODO' ? productos : productos.filter(p => p.categoria === filter);
+            
+            filtered.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-gray-100 flex flex-col">
+                        <div class="relative cursor-pointer" onclick="showDetails(${p.id})">
+                            <img src="${p.foto}" alt="${p.nombre}" class="w-full h-48 object-contain bg-gray-50 p-4">
+                            <div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-red-600 shadow-sm border">
+                                ${p.presentacion}
                             </div>
-                            <button class="btn-add" onclick="${conf.activo ? `addToCart(${p.id})` : ''}" style="background:${conf.activo ? '' : '#ccc'}">
-                                ${conf.activo ? 'AÑADIR AL PEDIDO' : 'AGOTADO'}
-                            </button>
+                        </div>
+                        <div class="p-4 flex-grow flex flex-col">
+                            <h3 class="font-bold text-gray-800 text-lg mb-1 line-clamp-1">${p.nombre}</h3>
+                            <p class="text-sm text-gray-500 mb-3 uppercase tracking-wider font-semibold text-[10px]">${p.categoria}</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-gray-900">$${p.precio.toFixed(2)}</span>
+                                <button onclick="addToCart(${p.id})" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors flex items-center gap-2">
+                                    <i class="fas fa-plus"></i> <span class="text-sm font-bold">AGREGAR</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
-            }).join('');
+            });
+        }
+
+        function filterProducts(cat) {
+            document.querySelectorAll('.category-pill').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText === cat) btn.classList.add('active');
+            });
+            renderProducts(cat);
+        }
+
+        function showDetails(id) {
+            const p = productos.find(x => x.id === id);
+            document.getElementById('modal-img').src = p.foto;
+            document.getElementById('modal-title').innerText = p.nombre;
+            document.getElementById('modal-presentation').innerText = p.presentacion;
+            document.getElementById('modal-description').innerText = p.descripcion;
+            document.getElementById('modal-suggestion').innerText = p.sugerencia;
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.classList.remove('modal-active');
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('translate-x-full');
         }
 
         function addToCart(id) {
-            const p = productosBase.find(x => x.id === id);
-            const conf = configProductos[id] || { precio: p.usd };
-            carrito.push({...p, precioUSD: conf.precio});
-            updateUI();
+            const p = productos.find(x => x.id === id);
+            const exists = cart.find(x => x.id === id);
+            if(exists) exists.quantity++;
+            else cart.push({...p, quantity: 1});
+            updateCart();
         }
 
-        function updateUI() {
-            document.getElementById('cart-count').innerText = carrito.length;
-            const total = carrito.reduce((s, p) => s + p.precioUSD, 0);
-            document.getElementById('total-info').innerText = `$${total.toFixed(2)} / Bs ${(total * tasaBCV).toFixed(2)}`;
-            document.getElementById('cart-items').innerHTML = carrito.map((p, i) => `
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                    <span style="font-size:13px;">${p.nombre} (${p.pres})</span>
-                    <button onclick="remove(${i})" style="color:red; border:none; background:none;">✕</button>
-                </div>
-            `).join('');
+        function removeFromCart(id) {
+            cart = cart.filter(x => x.id !== id);
+            updateCart();
         }
 
-        function remove(i) { carrito.splice(i, 1); updateUI(); }
-        function toggleCart() { const m = document.getElementById('cart-modal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-        
-        function contarClicks() {
-            clicksLogo++;
-            if(clicksLogo >= 5) {
-                if(prompt("Clave Admin:") === CLAVE_ADMIN) abrirAdmin();
-                clicksLogo = 0;
+        function changeQuantity(id, delta) {
+            const item = cart.find(x => x.id === id);
+            if(item) {
+                item.quantity += delta;
+                if(item.quantity < 1) removeFromCart(id);
+                updateCart();
             }
         }
 
-        function abrirAdmin() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('stat-pedidos').innerText = metricas.pedidos;
-            document.getElementById('stat-dinero').innerText = metricas.totalUSD.toFixed(2);
-            const list = document.getElementById('admin-product-list');
-            list.innerHTML = productosBase.map(p => {
-                const conf = configProductos[p.id] || { activo: true, precio: p.usd };
-                return `
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; align-items:center;">
-                        <span style="font-size:11px; width:40%">${p.nombre}</span>
-                        <input type="number" step="0.01" value="${conf.precio}" onchange="cambiarPrecio(${p.id}, this.value)" style="width:60px; margin:0;">
-                        <button onclick="toggleActivo(${p.id})" style="background:${conf.activo ? 'green' : 'red'}; color:white; border:none; padding:5px; border-radius:4px;">${conf.activo ? 'ACT' : 'AGOT'}</button>
+        function updateCart() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const totalElement = document.getElementById('cart-total');
+            
+            container.innerHTML = '';
+            let total = 0;
+            let itemsCount = 0;
+
+            cart.forEach(item => {
+                total += item.precio * item.quantity;
+                itemsCount += item.quantity;
+                container.innerHTML += `
+                    <div class="flex gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                        <img src="${item.foto}" class="w-16 h-16 object-contain">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-gray-800 text-sm">${item.nombre}</h4>
+                            <p class="text-xs text-red-600 font-semibold mb-2">${item.presentacion}</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-3 border rounded-lg px-2 py-1">
+                                    <button onclick="changeQuantity(${item.id}, -1)" class="text-red-600 font-bold">-</button>
+                                    <span class="text-sm font-bold w-4 text-center">${item.quantity}</span>
+                                    <button onclick="changeQuantity(${item.id}, 1)" class="text-red-600 font-bold">+</button>
+                                </div>
+                                <span class="font-bold text-gray-700">$${(item.precio * item.quantity).toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-gray-300 hover:text-red-600 transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
-            }).join('');
-        }
-
-        window.toggleActivo = (id) => {
-            if(!configProductos[id]) configProductos[id] = { activo: true, precio: productosBase.find(x=>x.id==id).usd };
-            configProductos[id].activo = !configProductos[id].activo;
-            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
-            abrirAdmin(); render();
-        };
-
-        window.cambiarPrecio = (id, v) => {
-            if(!configProductos[id]) configProductos[id] = { activo: true, precio: 0 };
-            configProductos[id].precio = parseFloat(v);
-            localStorage.setItem('edp_config_prod', JSON.stringify(configProductos));
-            render();
-        };
-
-        document.getElementById('auth-form').onsubmit = (e) => {
-            e.preventDefault();
-            localStorage.setItem('edp_user_name', document.getElementById('user-name').value);
-            localStorage.setItem('edp_user_phone', document.getElementById('user-phone').value);
-            document.getElementById('auth-wall').style.display = 'none';
-        };
-
-        document.getElementById('checkout-form').onsubmit = (e) => {
-            e.preventDefault();
-            
-            if(carrito.length === 0) {
-                alert("Tu pedido está vacío");
-                return;
-            }
-
-            const total = carrito.reduce((s,p)=>s+p.precioUSD,0);
-            const metodoEnvio = document.getElementById('shipping-method').value;
-            const metodoPago = document.getElementById('payment-method').value;
-            const direccion = document.getElementById('shipping-address').value;
-            const cliente = localStorage.getItem('edp_user_name');
-            const tlf = localStorage.getItem('edp_user_phone');
-
-            metricas.pedidos += 1; metricas.totalUSD += total;
-            localStorage.setItem('edp_metrics', JSON.stringify(metricas));
-
-            let msg = `*NUEVO PEDIDO E.D.P. GOURMET*\n`;
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `👤 *Cliente:* ${cliente}\n`;
-            msg += `📱 *WhatsApp:* ${tlf}\n`;
-            msg += `🚚 *Envío:* ${metodoEnvio}\n`;
-            msg += `💳 *Pago:* ${metodoPago}\n`;
-            msg += `📍 *Dirección:* ${direccion}\n\n`;
-            msg += `*PRODUCTOS:*\n`;
-            
-            carrito.forEach(p => {
-                msg += `• ${p.nombre} (${p.pres}) - $${p.precioUSD.toFixed(2)}\n`;
             });
 
-            msg += `\n*TOTAL A PAGAR:*\n`;
-            msg += `💰 *USD:* $${total.toFixed(2)}\n`;
-            msg += `🇻🇪 *Bs:* ${(total * tasaBCV).toFixed(2)}\n`;
-            msg += `_(Tasa BCV: ${tasaBCV})_\n`;
-            msg += `━━━━━━━━━━━━━━━\n`;
-            msg += `_He aceptado los términos de compra._\n`;
-            msg += `_Por favor, adjunte su comprobante de pago._`;
+            count.innerText = itemsCount;
+            count.classList.toggle('hidden', itemsCount === 0);
+            totalElement.innerText = `$${total.toFixed(2)}`;
+        }
 
-            window.open(`https://wa.me/${WHATSAPP_ALFREDO}?text=${encodeURIComponent(msg)}`);
+        function sendWhatsApp() {
+            if(cart.length === 0) return alert("Tu carrito está vacío");
             
-            carrito = []; 
-            toggleCart(); 
-            updateUI();
-        };
+            let message = "*¡Hola E.D.P. Gourmet!* 👋\nQuiero realizar el siguiente pedido:\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                message += `• *${item.nombre}* (${item.presentacion})\n`;
+                message += `  Cantidad: ${item.quantity} x $${item.precio.toFixed(2)} = *$${(item.precio * item.quantity).toFixed(2)}*\n\n`;
+                total += item.precio * item.quantity;
+            });
+            
+            message += `*TOTAL A PAGAR: $${total.toFixed(2)}*`;
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/584241234567?text=${encoded}`, '_blank');
+        }
 
-        window.onload = () => {
-            if(!localStorage.getItem('edp_user_name')) document.getElementById('auth-wall').style.display = 'flex';
-            cargarTasa();
-        };
+        // Inicializar
+        renderProducts();
     </script>
 </body>
 </html>
