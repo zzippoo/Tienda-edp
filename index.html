@@ -7,29 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .category-pill.active {
-            background-color: #ef4444;
-            color: white;
-        }
-        .modal {
-            transition: opacity 0.25s ease;
-        }
-        body.modal-active {
-            overflow: hidden;
-        }
-        #cart-sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
-        #cart-sidebar.translate-x-full {
-            transform: translateX(100%);
-        }
+        .category-pill.active { background-color: #ef4444; color: white; }
+        #cart-sidebar { transition: transform 0.3s ease-in-out; }
     </style>
 </head>
 <body class="bg-gray-50">
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-red-600">E.D.P. GOURMET</h1>
-            <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
+            <button onclick="toggleCart()" class="relative p-2 text-gray-600">
                 <i class="fas fa-shopping-cart text-2xl"></i>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
             </button>
@@ -37,99 +23,90 @@
     </header>
 
     <div class="bg-white border-b overflow-x-auto whitespace-nowrap px-4 py-3 sticky top-[64px] z-30">
-        <div id="categories-container" class="max-w-7xl mx-auto flex gap-2">
-            <button onclick="filterProducts('TODO')" class="category-pill active px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">TODO</button>
-            <button onclick="filterProducts('SALSA SIN PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">SALSA SIN PICANTE</button>
-            <button onclick="filterProducts('SALSA PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">SALSA PICANTE</button>
-            <button onclick="filterProducts('GOURMET')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">GOURMET</button>
-            <button onclick="filterProducts('DULCE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">DULCE</button>
-            <button onclick="filterProducts('DULCE UNTABLE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium transition-all hover:border-red-600">DULCE UNTABLE</button>
+        <div class="max-w-7xl mx-auto flex gap-2">
+            <button onclick="filterProducts('TODO')" class="category-pill active px-4 py-2 rounded-full border text-sm font-medium">TODO</button>
+            <button onclick="filterProducts('SALSA SIN PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium">SALSA SIN PICANTE</button>
+            <button onclick="filterProducts('SALSA PICANTE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium">SALSA PICANTE</button>
+            <button onclick="filterProducts('GOURMET')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium">GOURMET</button>
+            <button onclick="filterProducts('DULCE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium">DULCE</button>
+            <button onclick="filterProducts('DULCE UNTABLE')" class="category-pill px-4 py-2 rounded-full border text-sm font-medium">DULCE UNTABLE</button>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            </div>
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </main>
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 translate-x-full">
         <div class="flex flex-col h-full">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
                 <h2 class="text-xl font-bold text-gray-800">Tu Pedido</h2>
-                <button onclick="toggleCart()" class="text-gray-500 hover:text-red-600 text-2xl">&times;</button>
+                <button onclick="toggleCart()" class="text-gray-500 text-2xl">&times;</button>
             </div>
-            
-            <div id="cart-items" class="flex-grow overflow-y-auto p-4 space-y-4">
-                </div>
-
+            <div id="cart-items" class="flex-grow overflow-y-auto p-4 space-y-4"></div>
             <div class="p-4 border-t bg-gray-50">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-lg font-semibold text-gray-600">Total:</span>
+                    <span class="text-lg font-semibold">Total:</span>
                     <span id="cart-total" class="text-2xl font-bold text-red-600">$0.00</span>
                 </div>
-                <button onclick="sendWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
-                    <i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp
+                <button onclick="sendWhatsApp()" class="w-full bg-green-500 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp"></i> Enviar Pedido
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50">
         <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative p-6">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
-            <img id="modal-img" src="" alt="" class="w-full h-64 object-contain rounded-lg mb-6">
-            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">&times;</button>
+            <img id="modal-img" src="" class="w-full h-64 object-contain mb-6">
+            <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
             <p id="modal-presentation" class="text-red-600 font-semibold mb-4"></p>
-            <div class="space-y-4">
-                <div>
-                    <h4 class="font-bold text-gray-700">Descripción:</h4>
-                    <p id="modal-description" class="text-gray-600"></p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-gray-700">Sugerencias del Chef:</h4>
-                    <p id="modal-suggestion" class="text-gray-600"></p>
-                </div>
+            <div class="space-y-4 text-left">
+                <div><h4 class="font-bold">Descripción:</h4><p id="modal-description" class="text-gray-600 text-sm"></p></div>
+                <div><h4 class="font-bold">Sugerencias:</h4><p id="modal-suggestion" class="text-gray-600 text-sm"></p></div>
             </div>
         </div>
     </div>
 
     <script>
+        // Los 35 productos con la data del Excel
         const productos = [
-            { id: 1, nombre: "Salsa Tamarindo Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-agridukce-150-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"La versatilidad del fruto más deseado." La esencia pura del fruto. El balance perfecto entre acidez y dulzor, ideal para quienes buscan el sabor original sin el toque de fuego.', categoria: "SALSA SIN PICANTE" },
-            { id: 2, nombre: "Salsa Tamarindo Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"La versatilidad del fruto más deseado." La esencia pura del fruto. El balance perfecto entre acidez y dulzor, ideal para quienes buscan el sabor original sin el toque de fuego.', categoria: "SALSA SIN PICANTE" },
-            { id: 3, nombre: "Salsa Tamarindo Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-picante-150-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"El equilibrio perfecto entre el trópico y el fuego." El balance ideal entre la acidez del tamarindo y el picante justo.', categoria: "SALSA PICANTE" },
-            { id: 4, nombre: "Salsa Tamarindo Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-picante-255-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, sus usos mas conocidos: glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: '"El equilibrio perfecto entre el trópico y el fuego." El balance ideal entre la acidez del tamarindo y el picante justo.', categoria: "SALSA PICANTE" },
-            { id: 5, nombre: "Salsa Mango Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-agridulce-150-ml.jpg", sugerencia: "Salsa de Mango (sin picante), sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Dulzura tropical en cada gota." Captura la esencia del mango maduro en una textura sedosa.', categoria: "SALSA SIN PICANTE" },
-            { id: 6, nombre: "Salsa Mango Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-agridulce-255-ml.jpg", sugerencia: "Salsa de Mango (sin picante), sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Dulzura tropical en cada gota." Captura la esencia del mango maduro en una textura sedosa.', categoria: "SALSA SIN PICANTE" },
-            { id: 7, nombre: "Salsa Mango Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-picante-150-ml.jpg", sugerencia: "Salsa de Mango Picante, sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Explosión de sabor con carácter." La dulzura del mango se encuentra con un picante audaz.', categoria: "SALSA PICANTE" },
-            { id: 8, nombre: "Salsa Mango Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-picante-255-ml.jpg", sugerencia: "Salsa de Mango Picante, sus usos mas conocidos: glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: '"Explosión de sabor con carácter." La dulzura del mango se encuentra con un picante audaz.', categoria: "SALSA PICANTE" },
-            { id: 9, nombre: "Salsa Parchita Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-agridulce-150-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Aroma exótico que cautiva." La intensidad aromática de la fruta de la pasión en una salsa equilibrada.', categoria: "SALSA SIN PICANTE" },
-            { id: 10, nombre: "Salsa Parchita Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-agridulce-255-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Aroma exótico que cautiva." La intensidad aromática de la fruta de la pasión en una salsa equilibrada.', categoria: "SALSA SIN PICANTE" },
-            { id: 11, nombre: "Salsa Parchita Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-picante-150-ml.jpg", sugerencia: "Salsa de Parchita Picante, sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Un viaje sensorial de altura." El perfume de la parchita realzado con un toque picante elegante.', categoria: "SALSA PICANTE" },
-            { id: 12, nombre: "Salsa Parchita Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-picante-255-ml.jpg", sugerencia: "Salsa de Parchita Picante, sus usos mas conocidos: glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, base para salsas de postres salados, marinar mariscos, dip para quesos madurados, topping para cheesecake salado.", descripcion: '"Un viaje sensorial de altura." El perfume de la parchita realzado con un toque picante elegante.', categoria: "SALSA PICANTE" },
-            { id: 13, nombre: "Pimientos Caramelizados", presentacion: "190 gr", precio: 3.65, foto: "pimientos-caramelizados-190-gr.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: '"Dulzura vibrante y colorida." Deliciosos pimientos seleccionados, cocinados lentamente hasta alcanzar su punto perfecto de caramelización.', categoria: "GOURMET" },
-            { id: 14, nombre: "Cebolla Caramelizada", presentacion: "190 gr", precio: 3.32, foto: "cebolla-caramelizada-190-gr.jpg", sugerencia: "Ideal para degustar con carnes rojas y blancas, para realizar salsas de mayor complejidad; también para pasapalos de queso, embutidos y de masa frita u horneada; excelente para hamburguesas, sándwich y galletas saladas.", descripcion: "Un toque dulce y sofisticado que realza cualquier plato.", categoria: "GOURMET" },
-            { id: 15, nombre: "Pesto Tradicional", presentacion: "150 gr", precio: 4.8, foto: "pesto-tradicional-150-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, ensaladas tipo capresa, carnes blancas y rellenos de panes artesanales.", descripcion: "Sabor clásico italiano con albahaca fresca y frutos secos.", categoria: "GOURMET" },
-            { id: 16, nombre: "Alioli Tradicional", presentacion: "150 gr", precio: 3.12, foto: "alioli-tradicional-150-gr.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para aderezar ensaladas blancas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: '"El alma del Mediterráneo en tu mesa." Crema de ajo suave y equilibrada, perfecta para acompañar desde carnes hasta tapas.', categoria: "GOURMET" },
-            { id: 17, nombre: "Salsa Ají Dulce Tradicional", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-tradicional-150-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
-            { id: 18, nombre: "Salsa Ají Dulce Tradicional", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-tradicional-255-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
-            { id: 19, nombre: "Salsa Ají Dulce & Mayo", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-mayo-150-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
-            { id: 20, nombre: "Salsa Ají Dulce & Mayo", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-mayo-255-ml.jpg", sugerencia: "Ideal para degustar con carnes blancas (pollo, pescado o cerdo), excelente para aderezar ensaladas; también para pasapalos de queso, embutidos y de masa frita u horneada.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
-            { id: 21, nombre: "Aceite de Onoto", presentacion: "150 ml", precio: 2.12, foto: "aceite-de-onoto-150-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas; dándole color y un sabor característico a tus platos.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
-            { id: 22, nombre: "Aceite de Onoto", presentacion: "255 ml", precio: 2.82, foto: "aceite-de-onoto-255-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas; dándole color y un sabor característico a tus platos.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
-            { id: 23, nombre: "Salsa Bolognesa", presentacion: "190 gr", precio: 3.12, foto: "salsa-bolognesa-190-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Salsa de carne rica y tradicional, lista para servir.", categoria: "GOURMET" },
-            { id: 24, nombre: "Salsa Napolitana", presentacion: "190 gr", precio: 2.82, foto: "salsa-napolitana-190-gr.jpg", sugerencia: "Ideal para realizar todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Clásica salsa de tomate con hierbas frescas.", categoria: "GOURMET" },
-            { id: 25, nombre: "Mermelada de Piña", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-190-gr.jpg", sugerencia: "Mermelada de Piña, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Dulzura dorada en cada bocado." Elaborada con las piñas más dulces y jugosas, nuestra mermelada es un estallido de sabor tropical. Ideal para acompañar tus desayunos, merendar con galletas o darle un toque especial a tus postres favoritos.', categoria: "DULCE" },
-            { id: 26, nombre: "Mermelada de Guayaba", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-190-gr.jpg", sugerencia: "Mermelada de Guayaba, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"El aroma inconfundible del hogar." Disfruta del sabor tradicional de la guayaba en una textura suave y deliciosa. Perfecta para untar en pan, rellenar pasteles o simplemente disfrutar a cucharadas. ¡Un clásico que nunca falla!', categoria: "DULCE" },
-            { id: 27, nombre: "Mermelada de Fresa", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-190-gr.jpg", sugerencia: "Mermelada de Fresa, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Frescura y pasión en tu mesa." Hecha con fresas seleccionadas, nuestra mermelada conserva todo el sabor y aroma de la fruta natural. Ideal para tus tostadas, yogures o como ingrediente estrella en tu repostería casera.', categoria: "DULCE" },
-            { id: 28, nombre: "Mermelada de Durazno", presentacion: "190 gr", precio: 2.32, foto: "mermelada-durazno-190-gr.jpg", sugerencia: "Mermelada de Durazno, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Sutileza y dulzor en perfecta armonía." La delicadeza del durazno se convierte en una mermelada exquisita, perfecta para realzar tus meriendas. Su textura ligera y sabor balanceado la hacen la compañera ideal para cualquier momento del día.', categoria: "DULCE" },
-            { id: 29, nombre: "Crema Untable Parchita", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-parchita-200-gr.jpg", sugerencia: "Dulce untable de Parchita, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche, relleno de tortas frias, postres fríos, ensalada de frutas, untar croissants.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de parchita. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
-            { id: 30, nombre: "Crema Untable Parchita", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-parchita-400-gr.jpg", sugerencia: "Dulce untable de Parchita, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche, relleno de tortas frias, postres fríos, ensalada de frutas, untar croissants.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de parchita. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
-            { id: 31, nombre: "Crema Untable Mango", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-mango-200-gr.jpg", sugerencia: "Dulce untable de Mango, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de mango. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
-            { id: 32, nombre: "Crema Untable Mango", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-mango-400-gr.jpg", sugerencia: "Dulce untable de Mango, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Caprichos que se derriten en tu boca." Sumérgete en la dulzura tropical con esta crema untable de mango. Ideal para tus tostadas del desayuno, acompañar galletas, rellenar postres o darle un toque exótico a tus meriendas. ¡Un placer irresistible en cada cucharada!', categoria: "DULCE UNTABLE" },
-            { id: 33, nombre: "Mermelada Guayaba & Queso", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-queso-190-gr.jpg", sugerencia: "Mermelada de Guayaba & Queso, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"La pareja perfecta en un frasco." La dulzura de la guayaba se funde con la suavidad del queso para crear un sabor único y nostálgico. Disfrútala en tus meriendas, como relleno de postres o simplemente para consentirte con un toque especial.', categoria: "DULCE" },
-            { id: 34, nombre: "Mermelada Fresa & Chocolate", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-chocolate-190-gr.jpg", sugerencia: "Mermelada de Fresa & Chocolate, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"Un romance dulce e irresistible." La frescura de la fresa se encuentra con la intensidad del chocolate en esta mermelada gourmet. Perfecta para postres, untar en pan de leche o disfrutar en ocasiones especiales. ¡Una tentación que te encantará!', categoria: "DULCE" },
-            { id: 35, nombre: "Mermelada Piña & Coco", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-coco-190-gr.jpg", sugerencia: "Mermelada de Piña & Coco, sus usos mas conocidos: rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces, acompañar yogur, preparación de muffins, untar pan de leche.", descripcion: '"El paraíso en cada cucharada." Viaja al Caribe con esta mezcla refrescante de piña y coco. Su sabor exótico y textura única la hacen ideal para tus desayunos, merendar con estilo o darle un giro tropical a tu repostería.', categoria: "DULCE" }
+            { id: 1, nombre: "Salsa Tamarindo Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-agridukce-150-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: "La versatilidad del fruto más deseado. La esencia pura del fruto. El balance perfecto entre acidez y dulzor.", categoria: "SALSA SIN PICANTE" },
+            { id: 2, nombre: "Salsa Tamarindo Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-agridulce-255-ml.jpg", sugerencia: "Salsa de Tamarindo (sin picante), glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: "La versatilidad del fruto más deseado. La esencia pura del fruto. El balance perfecto entre acidez y dulzor.", categoria: "SALSA SIN PICANTE" },
+            { id: 3, nombre: "Salsa Tamarindo Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-tamarindo-picante-150-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: "El equilibrio perfecto entre el trópico y el fuego. El balance ideal entre la acidez del tamarindo y el picante justo.", categoria: "SALSA PICANTE" },
+            { id: 4, nombre: "Salsa Tamarindo Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-tamarindo-picante-255-ml.jpg", sugerencia: "Salsa de Tamarindo Picante, glasear costillas de cerdo, aderezar ensaladas de repollo, bañar brochetas de pollo, acompañar nuggets artesanales, base para salsas de barbacoa, marinar carnes blancas, dip para deditos de queso, topping para comida asiática.", descripcion: "El equilibrio perfecto entre el trópico y el fuego. El balance ideal entre la acidez del tamarindo y el picante justo.", categoria: "SALSA PICANTE" },
+            { id: 5, nombre: "Salsa Mango Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-agridulce-150-ml.jpg", sugerencia: "Salsa de Mango (sin picante), glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: "Dulzura tropical en cada gota. Captura la esencia del mango maduro en una textura sedosa.", categoria: "SALSA SIN PICANTE" },
+            { id: 6, nombre: "Salsa Mango Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-agridulce-255-ml.jpg", sugerencia: "Salsa de Mango (sin picante), glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: "Dulzura tropical en cada gota. Captura la esencia del mango maduro en una textura sedosa.", categoria: "SALSA SIN PICANTE" },
+            { id: 7, nombre: "Salsa Mango Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-mango-picante-150-ml.jpg", sugerencia: "Salsa de Mango Picante, glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: "Explosión de sabor con carácter. La dulzura del mango se encuentra con un picante audaz.", categoria: "SALSA PICANTE" },
+            { id: 8, nombre: "Salsa Mango Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-mango-picante-255-ml.jpg", sugerencia: "Salsa de Mango Picante, glasear camarones, aderezar ensaladas verdes, bañar pollo a la plancha, acompañar ceviches, base para vinagretas tropicales, marinar pescados blancos, dip para galletas saladas, topping para tacos de pescado.", descripcion: "Explosión de sabor con carácter. La dulzura del mango se encuentra con un picante audaz.", categoria: "SALSA PICANTE" },
+            { id: 9, nombre: "Salsa Parchita Agridulce", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-agridulce-150-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, marinar mariscos, dip para quesos madurados.", descripcion: "Aroma exótico que cautiva. La intensidad aromática de la fruta de la pasión.", categoria: "SALSA SIN PICANTE" },
+            { id: 10, nombre: "Salsa Parchita Agridulce", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-agridulce-255-ml.jpg", sugerencia: "Salsa de Parchita (sin picante), glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, marinar mariscos, dip para quesos madurados.", descripcion: "Aroma exótico que cautiva. La intensidad aromática de la fruta de la pasión.", categoria: "SALSA SIN PICANTE" },
+            { id: 11, nombre: "Salsa Parchita Picante", presentacion: "150 ml", precio: 2.7, foto: "salsa-parchita-picante-150-ml.jpg", sugerencia: "Salsa de Parchita Picante, glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, marinar mariscos, dip para quesos madurados.", descripcion: "Un viaje sensorial de altura. El perfume de la parchita realzado con un toque picante elegante.", categoria: "SALSA PICANTE" },
+            { id: 12, nombre: "Salsa Parchita Picante", presentacion: "255 ml", precio: 3.72, foto: "salsa-parchita-picante-255-ml.jpg", sugerencia: "Salsa de Parchita Picante, glasear lomo de cerdo, aderezar ensaladas cítricas, bañar salmón, acompañar carpaccios, marinar mariscos, dip para quesos madurados.", descripcion: "Un viaje sensorial de altura. El perfume de la parchita realzado con un toque picante elegante.", categoria: "SALSA PICANTE" },
+            { id: 13, nombre: "Pimientos Caramelizados", presentacion: "190 gr", precio: 3.65, foto: "pimientos-caramelizados-190-gr.jpg", sugerencia: "Ideal para carnes blancas, pollo, pescado o cerdo, aderezar ensaladas, pasapalos de queso, embutidos y masa frita u horneada.", descripcion: "Dulzura vibrante y colorida. Pimientos seleccionados cocinados lentamente.", categoria: "GOURMET" },
+            { id: 14, nombre: "Cebolla Caramelizada", presentacion: "190 gr", precio: 3.32, foto: "cebolla-caramelizada-190-gr.jpg", sugerencia: "Ideal para carnes rojas y blancas, salsas de mayor complejidad, pasapalos de queso, hamburguesas y sándwich.", descripcion: "Un toque dulce y sofisticado que realza cualquier plato.", categoria: "GOURMET" },
+            { id: 15, nombre: "Pesto Tradicional", presentacion: "150 gr", precio: 4.8, foto: "pesto-tradicional-150-gr.jpg", sugerencia: "Ideal para todo tipo de pastas, base para pizzas, ensaladas tipo capresa, carnes blancas y rellenos de panes.", descripcion: "Sabor clásico italiano con albahaca fresca y frutos secos.", categoria: "GOURMET" },
+            { id: 16, nombre: "Alioli Tradicional", presentacion: "150 gr", precio: 3.12, foto: "alioli-tradicional-150-gr.jpg", sugerencia: "Ideal para la base de todos tus guisos, aderezar ensaladas blancas, pasapalos de queso, embutidos y masa frita.", descripcion: "El alma del Mediterráneo en tu mesa. Crema de ajo suave y equilibrada.", categoria: "GOURMET" },
+            { id: 17, nombre: "Salsa Ají Dulce Tradicional", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-tradicional-150-ml.jpg", sugerencia: "Ideal para carnes blancas, ensaladas, pasapalos de queso y embutidos.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
+            { id: 18, nombre: "Salsa Ají Dulce Tradicional", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-tradicional-255-ml.jpg", sugerencia: "Ideal para carnes blancas, ensaladas, pasapalos de queso y embutidos.", descripcion: "Esencia de la cocina venezolana en una salsa suave.", categoria: "SALSA SIN PICANTE" },
+            { id: 19, nombre: "Salsa Ají Dulce & Mayo", presentacion: "150 ml", precio: 3.12, foto: "salsa-aji-dulce-mayo-150-ml.jpg", sugerencia: "Ideal para carnes blancas, ensaladas, pasapalos de queso y embutidos.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
+            { id: 20, nombre: "Salsa Ají Dulce & Mayo", presentacion: "255 ml", precio: 4.24, foto: "salsa-aji-dulce-mayo-255-ml.jpg", sugerencia: "Ideal para carnes blancas, ensaladas, pasapalos de queso y embutidos.", descripcion: "La combinación perfecta del aroma del ají dulce con la cremosidad de la mayonesa.", categoria: "GOURMET" },
+            { id: 21, nombre: "Aceite de Onoto", presentacion: "150 ml", precio: 2.12, foto: "aceite-de-onoto-150-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
+            { id: 22, nombre: "Aceite de Onoto", presentacion: "255 ml", precio: 2.82, foto: "aceite-de-onoto-255-ml.jpg", sugerencia: "Ideal para realizar la base de todos tus guisos, excelente para arroces, granos, carnes rojas y blancas.", descripcion: "Base esencial para la cocina criolla con color y aroma natural.", categoria: "GOURMET" },
+            { id: 23, nombre: "Salsa Bolognesa", presentacion: "190 gr", precio: 3.12, foto: "salsa-bolognesa-190-gr.jpg", sugerencia: "Ideal para todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Salsa de carne rica y tradicional, lista para servir.", categoria: "GOURMET" },
+            { id: 24, nombre: "Salsa Napolitana", presentacion: "190 gr", precio: 2.82, foto: "salsa-napolitana-190-gr.jpg", sugerencia: "Ideal para todo tipo de pastas, base para pizzas, pastichos y rellenos de panes artesanales.", descripcion: "Clásica salsa de tomate con hierbas frescas.", categoria: "GOURMET" },
+            { id: 25, nombre: "Mermelada de Piña", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Dulzura dorada en cada bocado. Elaborada con las piñas más dulces y jugosas.", categoria: "DULCE" },
+            { id: 26, nombre: "Mermelada de Guayaba", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "El aroma inconfundible del hogar. Disfruta del sabor tradicional de la guayaba.", categoria: "DULCE" },
+            { id: 27, nombre: "Mermelada de Fresa", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Frescura y pasión en tu mesa. Hecha con fresas seleccionadas.", categoria: "DULCE" },
+            { id: 28, nombre: "Mermelada de Durazno", presentacion: "190 gr", precio: 2.32, foto: "mermelada-durazno-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Sutileza y dulzor en perfecta armonía. La delicadeza del durazno.", categoria: "DULCE" },
+            { id: 29, nombre: "Crema Untable Parchita", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-parchita-200-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Caprichos que se derriten en tu boca. Dulzura tropical de parchita.", categoria: "DULCE UNTABLE" },
+            { id: 30, nombre: "Crema Untable Parchita", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-parchita-400-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Caprichos que se derriten en tu boca. Dulzura tropical de parchita.", categoria: "DULCE UNTABLE" },
+            { id: 31, nombre: "Crema Untable Mango", presentacion: "200 gr", precio: 2.92, foto: "crema.untable-mango-200-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Caprichos que se derriten en tu boca. Dulzura tropical de mango.", categoria: "DULCE UNTABLE" },
+            { id: 32, nombre: "Crema Untable Mango", presentacion: "400 gr", precio: 5.9, foto: "crema.untable-mango-400-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Caprichos que se derriten en tu boca. Dulzura tropical de mango.", categoria: "DULCE UNTABLE" },
+            { id: 33, nombre: "Mermelada Guayaba & Queso", presentacion: "190 gr", precio: 2.32, foto: "mermelada-guayaba-queso-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "La pareja perfecta en un frasco. Dulzura de guayaba y suavidad de queso.", categoria: "DULCE" },
+            { id: 34, nombre: "Mermelada Fresa & Chocolate", presentacion: "190 gr", precio: 2.32, foto: "mermelada-fresa-chocolate-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "Un romance dulce e irresistible. Frescura de fresa e intensidad de chocolate.", categoria: "DULCE" },
+            { id: 35, nombre: "Mermelada Piña & Coco", presentacion: "190 gr", precio: 2.32, foto: "mermelada-pina-coco-190-gr.jpg", sugerencia: "Rellenar bizcochos, tostadas francesas, queso crema con galletas, topping de helados, empanaditas dulces.", descripcion: "El paraíso en cada cucharada. Mezcla refrescante de piña y coco.", categoria: "DULCE" }
         ];
 
         let cart = [];
@@ -137,38 +114,28 @@
         function renderProducts(filter = 'TODO') {
             const grid = document.getElementById('products-grid');
             grid.innerHTML = '';
-            
             const filtered = filter === 'TODO' ? productos : productos.filter(p => p.categoria === filter);
             
             filtered.forEach(p => {
                 grid.innerHTML += `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-gray-100 flex flex-col">
-                        <div class="relative cursor-pointer" onclick="showDetails(${p.id})">
-                            <img src="${p.foto}" alt="${p.nombre}" class="w-full h-48 object-contain bg-gray-50 p-4">
-                            <div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-red-600 shadow-sm border">
-                                ${p.presentacion}
+                    <div class="bg-white rounded-xl shadow-md border overflow-hidden flex flex-col">
+                        <div class="relative cursor-pointer h-48 flex items-center justify-center bg-white p-4" onclick="showDetails(${p.id})">
+                            <img src="${p.foto}" class="max-h-full max-w-full object-contain">
+                            <span class="absolute top-2 right-2 bg-white px-2 py-1 rounded text-xs font-bold text-red-600 border">${p.presentacion}</span>
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow text-center">
+                            <h3 class="font-bold text-gray-800 text-sm mb-1">${p.nombre}</h3>
+                            <div class="mt-auto flex justify-between items-center pt-2">
+                                <span class="text-lg font-bold text-gray-900">$${p.precio.toFixed(2)}</span>
+                                <button onclick="addToCart(${p.id})" class="bg-red-600 text-white p-2 rounded-lg"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
-                        <div class="p-4 flex-grow flex flex-col">
-                            <h3 class="font-bold text-gray-800 text-lg mb-1 line-clamp-1">${p.nombre}</h3>
-                            <p class="text-sm text-gray-500 mb-3 uppercase tracking-wider font-semibold text-[10px]">${p.categoria}</p>
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-xl font-bold text-gray-900">$${p.precio.toFixed(2)}</span>
-                                <button onclick="addToCart(${p.id})" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors flex items-center gap-2">
-                                    <i class="fas fa-plus"></i> <span class="text-sm font-bold">AGREGAR</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
         function filterProducts(cat) {
-            document.querySelectorAll('.category-pill').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText === cat) btn.classList.add('active');
-            });
+            document.querySelectorAll('.category-pill').forEach(btn => btn.classList.toggle('active', btn.innerText === cat));
             renderProducts(cat);
         }
 
@@ -180,98 +147,47 @@
             document.getElementById('modal-description').innerText = p.descripcion;
             document.getElementById('modal-suggestion').innerText = p.sugerencia;
             document.getElementById('modal').classList.remove('hidden');
-            document.body.classList.add('modal-active');
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-            document.body.classList.remove('modal-active');
-        }
-
-        function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            sidebar.classList.toggle('translate-x-full');
-        }
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
         function addToCart(id) {
             const p = productos.find(x => x.id === id);
             const exists = cart.find(x => x.id === id);
-            if(exists) exists.quantity++;
-            else cart.push({...p, quantity: 1});
+            if(exists) exists.quantity++; else cart.push({...p, quantity: 1});
             updateCart();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(x => x.id !== id);
-            updateCart();
-        }
-
-        function changeQuantity(id, delta) {
-            const item = cart.find(x => x.id === id);
-            if(item) {
-                item.quantity += delta;
-                if(item.quantity < 1) removeFromCart(id);
-                updateCart();
-            }
         }
 
         function updateCart() {
             const container = document.getElementById('cart-items');
-            const count = document.getElementById('cart-count');
-            const totalElement = document.getElementById('cart-total');
-            
             container.innerHTML = '';
-            let total = 0;
-            let itemsCount = 0;
-
+            let total = 0, count = 0;
             cart.forEach(item => {
                 total += item.precio * item.quantity;
-                itemsCount += item.quantity;
+                count += item.quantity;
                 container.innerHTML += `
-                    <div class="flex gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                        <img src="${item.foto}" class="w-16 h-16 object-contain">
-                        <div class="flex-grow">
-                            <h4 class="font-bold text-gray-800 text-sm">${item.nombre}</h4>
-                            <p class="text-xs text-red-600 font-semibold mb-2">${item.presentacion}</p>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-3 border rounded-lg px-2 py-1">
-                                    <button onclick="changeQuantity(${item.id}, -1)" class="text-red-600 font-bold">-</button>
-                                    <span class="text-sm font-bold w-4 text-center">${item.quantity}</span>
-                                    <button onclick="changeQuantity(${item.id}, 1)" class="text-red-600 font-bold">+</button>
-                                </div>
-                                <span class="font-bold text-gray-700">$${(item.precio * item.quantity).toFixed(2)}</span>
-                            </div>
+                    <div class="flex items-center gap-3 bg-white p-2 rounded border">
+                        <img src="${item.foto}" class="w-10 h-10 object-contain">
+                        <div class="flex-grow text-xs">
+                            <h4 class="font-bold">${item.nombre}</h4>
+                            <p class="text-red-600 font-bold">${item.presentacion} x${item.quantity}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.id})" class="text-gray-300 hover:text-red-600 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
+                        <span class="font-bold text-sm">$${(item.precio * item.quantity).toFixed(2)}</span>
+                    </div>`;
             });
-
-            count.innerText = itemsCount;
-            count.classList.toggle('hidden', itemsCount === 0);
-            totalElement.innerText = `$${total.toFixed(2)}`;
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('cart-count').classList.toggle('hidden', count === 0);
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
         }
 
         function sendWhatsApp() {
-            if(cart.length === 0) return alert("Tu carrito está vacío");
-            
-            let message = "*¡Hola E.D.P. Gourmet!* 👋\nQuiero realizar el siguiente pedido:\n\n";
-            let total = 0;
-            
-            cart.forEach(item => {
-                message += `• *${item.nombre}* (${item.presentacion})\n`;
-                message += `  Cantidad: ${item.quantity} x $${item.precio.toFixed(2)} = *$${(item.precio * item.quantity).toFixed(2)}*\n\n`;
-                total += item.precio * item.quantity;
-            });
-            
-            message += `*TOTAL A PAGAR: $${total.toFixed(2)}*`;
-            const encoded = encodeURIComponent(message);
-            window.open(`https://wa.me/584241234567?text=${encoded}`, '_blank');
+            if(!cart.length) return alert("Carrito vacío");
+            let msg = "*Pedido E.D.P. Gourmet*\n\n";
+            cart.forEach(i => msg += `• ${i.nombre} (${i.presentacion}) x${i.quantity}\n`);
+            window.open(`https://wa.me/584241234567?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Inicializar
         renderProducts();
     </script>
 </body>
